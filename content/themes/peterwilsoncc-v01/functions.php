@@ -220,7 +220,7 @@ class PWCC_theme {
 		
 		if ( '' == $title ) {
 
-			$cats = get_the_category( $_post->ID );
+			$cats = get_the_category( $post->ID );
 			$num_terms = count( $cats );
 			if ( $cats ) {
 				$term = $cats[0]; // only care about the first cat
@@ -232,7 +232,9 @@ class PWCC_theme {
 				}
 				$title .= ' ';
 			}
-			
+			else if ( 'pwcc_notes' == $post->post_type ) {
+				$title .= 'Noted ';
+			}
 			// Date it
 			$title .= get_the_date( get_option( 'date_format' ), $post->id );
 		}
@@ -241,7 +243,7 @@ class PWCC_theme {
 	}
 	
 	function filter_wpseo_title( $title ) {
-		if ( is_singular() ) {
+		if ( is_singular() || is_single() ) {
 			global $post;
 			if ( wpseo_replace_vars( '%%page%% %%sep%% %%sitename%%', $post ) == $title ) {
 				
@@ -259,6 +261,11 @@ class PWCC_theme {
 					$pwcc_title .= get_the_date( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ) );
 				
 				}
+				else if ( 'pwcc_notes' == $post->post_type ) {
+					$pwcc_title .= 'Noted ';
+					$pwcc_title .= get_the_date( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ) );
+				}
+				
 				
 				$title = wpseo_replace_vars( $pwcc_title . ' %%page%% %%sep%% %%sitename%%', $post );
 			}
@@ -494,7 +501,7 @@ class PWCC_theme {
 		$twitter_permalink = get_post_meta( $post->ID, 'twitter_permalink', true );
 		$instagram_url = get_post_meta( $post->ID, 'instagram_url', true );
 		
-		if ( $twitter_permalink || $instagram_id ) {
+		if ( $twitter_permalink || $instagram_url ) {
 			echo '<div class="EntryMeta EntryMeta-Footer">';
 			echo ' <span class="EntryMeta_Item">Also on ';
 			$seperator = ', ';
