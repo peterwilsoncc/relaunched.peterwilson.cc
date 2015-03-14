@@ -21,7 +21,7 @@
 	
 	
 		if ( !is_page() ) {
-			pwcc_theme_entry_meta();
+			pwcc_theme_entry_meta( $post );
 		}
 		echo '<div class="' . ( is_singular() ? ' Section ' : ' ' ) . ' Article_Body js-Article_Body entry-content e-content util-cf">';
 		if ( has_post_thumbnail() && ! post_password_required() && ! is_attachment() ) {
