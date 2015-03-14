@@ -575,6 +575,8 @@ function pwccindieweb_notes_save_post( $post_id, $post, $update ) {
 
 	$note = get_post_meta( $post_id, '_pwccindieweb-note', true );
 	$note[ 'text' ] = isset( $note['text'] ) ? trim( $note['text'] ) : '';
+	$attachments = is_array( $note[ 'images' ] ) ? $note[ 'images' ] : array();
+	
 	
 	if ( '' == trim( get_post_field( 'post_content', $post_id ) ) ) {
 		// the content needs to change
@@ -592,6 +594,17 @@ function pwccindieweb_notes_save_post( $post_id, $post, $update ) {
 			$new_content = preg_replace('/(^|\s)@([a-z0-9_]+)/i',
 							'$1<a href="https://twitter.com/$2">@$2</a>',
 							$new_content);
+			
+			foreach ( $attachments as $media_id ) {
+				if ( false == wp_attachment_is_image( $media_id ) ) {
+					continue;
+				}
+				
+				$new_content .= "\n\n" . wp_get_attachment_image( $media_id, 'full', false, array(
+					'class' => 'attachment-full aligncenter'
+				) );
+			}
+			
 		}
 		
 		if ( '' != trim( $new_content ) ) {
@@ -611,8 +624,6 @@ function pwccindieweb_notes_save_post( $post_id, $post, $update ) {
 		$twitter_url = get_post_meta( $post_id, 'twitter_permalink', true );
 		
 		$append_permalink = isset( $note[ 'append_url' ] )? true : false;
-		
-		$attachments = is_array( $note[ 'images' ] ) ? $note[ 'images' ] : array();
 		
 		if ( '' == $twitter_id ) {
 			// never been tweeted
@@ -634,7 +645,7 @@ function pwccindieweb_notes_save_post( $post_id, $post, $update ) {
 			
 			$tweet_text = $note[ 'text' ] . $tweet_text;
 			
-			echo $tweet_text;
+			// echo $tweet_text;
 		}
 		else {
 			$tweet_this = false;
@@ -675,10 +686,10 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 function pwccindieweb_send_tweet( $text, $media = array(), $in_reply_to_status_id = '' ) {
 
 	if ( 
-		!defined( PWCC_TWTTR_CONSUMER_KEY ) ||
-		!defined( PWCC_TWTTR_CONSUMER_SECRET ) ||
-		!defined( PWCC_TWTTR_ACCESS_TOKEN ) ||
-		!defined( PWCC_TWTTR_ACCESS_SECRET ) 
+		!defined( 'PWCC_TWTTR_CONSUMER_KEY' ) ||
+		!defined( 'PWCC_TWTTR_CONSUMER_SECRET' ) ||
+		!defined( 'PWCC_TWTTR_ACCESS_TOKEN' ) ||
+		!defined( 'PWCC_TWTTR_ACCESS_SECRET' ) 
 	   ) {
 		// nothing can be done
 		return false;
