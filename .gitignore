@@ -1,6 +1,7 @@
 *.sass-cache/
 *.codekit-cache/
 /shared
+/content/languages
 /local-config.php
 /sql-dump-*.sql
 /db-sync
