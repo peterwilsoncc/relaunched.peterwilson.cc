@@ -42,6 +42,19 @@
     RedirectMatch 301 /shared/content/uploads/(.*) /content/uploads/$1
 </IfModule>
 
+# ------------------------------------------------------------------------------
+# | various redirects                                                          |
+# ------------------------------------------------------------------------------
+
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+  RewriteRule ^1664/?$ https://%{HTTP_HOST}/status-1664/ [NC,R=301,L]
+  RewriteRule ^1697/?$ https://%{HTTP_HOST}/status-1697/ [NC,R=301,L]
+  RewriteRule ^SunshineCoastDaily.21-08-2007.pdf$ https://%{HTTP_HOST}/profinvest/ [NC,R=301,L]
+  RewriteRule ^cool-i-think-i-broke-we-mentions-either-that-or-im-impatient-we-shall-see/?$ https://%{HTTP_HOST}/status-1777/ [NC,R=301,L]
+</IfModule>
+
+
 
 
 # ------------------------------------------------------------------------------
