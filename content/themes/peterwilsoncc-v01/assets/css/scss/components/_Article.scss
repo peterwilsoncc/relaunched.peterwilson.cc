@@ -1,0 +1,51 @@
+.Article {}
+
+
+	.Article_Body {
+//		padding-left: 1em;
+//		padding-right: 1em;
+	}
+	
+	.Article_FullWidthBlock.Article_FullWidthBlock  {
+		// specificity hack to deal with wp-caption
+		// having a margin on it.
+		margin-left: -1em;
+		margin-right: -1em;
+		max-width: calc( 100% + 2em );
+	}
+	
+	.Article_FullWidthBlock > code {
+		display: block;
+		padding-left: 1em;
+		padding-right: 1em;
+	}
+	
+	pre.Aricle_FullWidthBlock {
+	    white-space: pre-wrap;       /* css-3 */
+	    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+	    white-space: -pre-wrap;      /* Opera 4-6 */
+	    white-space: -o-pre-wrap;    /* Opera 7 */
+	    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+	}
+	
+	@media only screen and ( min-width: $pwccMq_mediumUp ) {
+		.Article_Body {
+//			padding-left: 6em;
+//			padding-right: 6em;
+		}
+
+		.Article_FullWidthBlock.Article_FullWidthBlock  {
+			// specificity hack to deal with wp-caption
+			// having a margin on it.
+			margin-left: -6em;
+			margin-right: -6em;
+			max-width: calc( 100% + 12em );
+		}
+
+		.Article_FullWidthBlock > code {
+			padding-left: 6em;
+			padding-right: 6em;
+		}
+	
+	}
+	

@@ -1,0 +1,4 @@
+.util-font-size--small {
+	@include font-size(13/16);
+	line-height: (16/13);
+}

@@ -1,0 +1,120 @@
+.t-Singular .Headline,
+.t-Singular .EntryMeta,
+.Pagination-PrevNextPost {
+	margin-left: 1rem;
+	margin-right: 1rem;
+
+	@media only screen and ( min-width: $pwccMq_mediumUp ) {
+		margin-left: 6rem;
+		margin-right: 6rem;
+	}
+
+}
+
+.Pagination-PrevNextPost {
+	margin-bottom: 3rem;
+}
+
+
+.EntryMeta {
+	position: relative;
+	
+	
+	.SocialShare_List > li {
+		display: inline-block;
+		padding-right: .25em;
+
+	}
+
+	@media only screen and ( min-width: $pwccMq_LargeUp ) {
+		.SocialShare_List > li {
+			display: list-item;
+		}
+
+
+
+		.SocialShare {
+			position: absolute;
+			width: 70px;
+			background: white;
+			
+			top: 0;
+			left: 100%;
+			padding-left: .5rem;
+			padding-top: 2em;
+			left: calc( 100% + 6rem );
+		}
+	}
+}
+
+
+.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}
+.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed{position:absolute;top:0;left:0;width:100%;height:100%;}
+
+
+.alignleft {
+	float: left;
+	margin-right: 1em;
+	margin-bottom: 1em;
+	margin-left: -1rem;
+	
+	@media only screen and ( min-width: $pwccMq_LargeUp ) {
+		margin-left: -5rem;
+	}
+}
+
+.alignright {
+	float: right;
+	margin-left: 1em;
+	margin-bottom: 1em;
+	margin-right: -1rem;
+	
+	@media only screen and ( min-width: $pwccMq_LargeUp ) {
+		margin-right: -5rem;
+	}
+}
+
+.wp-post-image,
+figure.alignnone,
+img.alignnone,
+.aligncenter {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.post-password-form {
+	
+	label {
+		color: $pwccCol_useInputLabelColor;
+		@include font-size(13/16);
+		line-height: (16/13);
+		text-transform: uppercase;
+		display: block;
+		margin-bottom: .5rem;
+	}
+	
+	[type=password] {
+		width: 100%;
+		border-radius: 2px;
+
+		color: $pwccCol_useInputInputColor;
+		background-color: $pwccCol_useInputInputBackground;
+		@include font-size(14/16);
+		line-height: (24/14);
+
+		border-width: 1px;
+		outline: none;
+		
+		// with line-height, the top padding appears to be .75rem (less 1px for the border)
+		padding: calc( .5rem - 1px ) .75rem;
+
+		border-style: solid;
+		border-color: $pwccCol_useInputInputBackground;
+	}
+	
+	[type=submit] {
+		@extend %Btn;
+		@extend %Btn-Block;
+	}
+}

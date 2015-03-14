@@ -1,0 +1,98 @@
+@import "generic/css-warning";
+/*------------------------------------*\
+    $TABLE OF CONTENTS 
+    based generally on Harry Roberts excellent CSS Guidelines https://github.com/csswizardry/CSS-Guidelines
+\*------------------------------------*/
+/**
+ * 
+ */
+
+
+
+/*------------------------------------*\
+    $Generic Elements
+\*------------------------------------*/
+
+@import "generic/variables";
+@import "generic/mixins";
+@import "generic/normalize";
+@import "generic/rebeccapurple";
+@import "generic/reset";
+@import "generic/box-sizing";
+@import "generic/shared";
+
+
+/*------------------------------------*\
+    $Base
+\*------------------------------------*/
+
+@import "base/forms";
+@import "base/images";
+@import "base/links";
+@import "base/lists";
+@import "base/page";
+@import "base/fonts";
+@import "base/blockquotes";
+@import "base/tables";
+
+
+/*------------------------------------*\
+    $Utilities
+\*------------------------------------*/
+
+@import "utilities/accessibility";
+@import "utilities/clear";
+@import "utilities/clearfix";
+@import "utilities/Display";
+@import "utilities/font-size";
+@import "utilities/fonts";
+@import "utilities/nav";
+@import "utilities/sectionTitle";
+@import "utilities/silentAbbr";
+
+
+/*------------------------------------*\
+    $PAGE STRUCTURE
+\*------------------------------------*/
+
+
+/*------------------------------------*\
+    $TEXT Styles
+\*------------------------------------*/
+
+
+/*------------------------------------*\
+    $COMPONENTS
+\*------------------------------------*/
+@import "components/Article";
+@import "components/Btn";
+@import "components/Logo";
+//@import "components/Icons";
+@import "components/InputSet";
+@import "components/EntryMeta";
+//@import "components/Footer";
+.Footer {display:none;}
+@import "components/Header";
+@import "components/Headline";
+//@import "components/hljs";
+@import "components/wp-caption";
+@import "components/SiteNav";
+@import "components/Pagination";
+//@import "components/comment-form"; 
+#comments {display: none;}
+//@import "components/SocialLink";
+
+//@import "components/Comment";
+//@import "components/CommentList";
+.CommentList {display: none;}
+@import "components/Section";
+@import "components/PostList";
+@import "components/more-link";
+@import "components/Page";
+
+
+/*------------------------------------*\
+    $Shame Styles
+\*------------------------------------*/
+
+@import "shame";

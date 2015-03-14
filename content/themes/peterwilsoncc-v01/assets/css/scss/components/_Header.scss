@@ -1,0 +1,80 @@
+.Header {
+	padding-top: 1rem;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	background-color: $pwccCol_useHeaderBackgroundColor;
+}
+
+	.Header_Logo {
+		margin-right: auto;
+		margin-left: auto;
+		margin-bottom: 3rem;
+		width: 6rem;
+	}
+
+	.Header_Bio {
+		color: $pwccCol_useHeaderBioColor;
+		@include font-size(13/16);
+		line-height: (16/13);
+		padding-bottom: 1rem;
+
+		> :last-child {
+			margin-bottom: 0;
+		}
+		
+	}
+	
+@media ( min-width : 30em ) {
+	.Header {
+		background-image: linear-gradient( to bottom, transparent 3.5rem, white 3.5rem );
+	}
+	
+	
+	.Header_Logo {
+		margin-right: 0;
+		margin-left: 0;
+		margin-bottom: 0;
+		
+		float: left;
+	}
+	
+	.Header_NonLogo {
+		margin-top: 1rem;
+		margin-left: 7rem;
+	}
+
+	.Header_Bio {
+	}
+	
+}
+
+@media ( min-width : 60em ) {
+	.Header {
+		background-image: none;
+		
+		margin-left: 5em;
+	}
+	
+	.Header_Logo {
+		float: none;
+		position: relative; 
+		left: -3rem;
+	}
+	
+	.Header_NonLogo {
+		margin-left: 0;
+	}
+
+	.Header_Bio {
+		&::before {
+			color: inherit;
+
+			content: '';
+			display: block;
+			width: 2rem;
+			height: 1rem;
+
+			border-top: 1px solid ;
+		}
+	}
+}

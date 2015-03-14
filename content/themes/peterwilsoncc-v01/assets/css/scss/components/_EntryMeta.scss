@@ -1,0 +1,30 @@
+.EntryMeta {
+	color: $pwccCol_useEntryMetaColor;
+	margin-bottom: 3rem;
+	
+//	font-family: $pwccType_useEntryMetaFontFamily;
+	@include secondaryFont( 'n4' );
+	@include font-size(13/16);
+	line-height: (16/13);
+	text-transform: uppercase;
+
+}
+
+	.EntryMeta-Footer {
+		text-align: right;
+	}
+
+	.EntryMeta_Item {
+		margin-right: .5rem;
+	}
+
+	.EntryMeta_Item:last-child {
+		margin-right: 0;
+	}
+
+	.EntryMeta_Detail, .EntryMeta_Detail>a {
+		&,&:visited,
+		&:hover,&:focus,&:active {
+			color: $pwccCol_useEntryMetaDetailColor;
+		}
+	}

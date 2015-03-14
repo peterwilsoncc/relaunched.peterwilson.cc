@@ -1,0 +1,9 @@
+html {
+	color: $pwccCol_useHtmlColor;
+	background-color: $pwccCol_useHtmlBackgroundColor;
+	font-size: ( $pwccType_useHtmlFontSize / 1rem ) * 1em;
+	line-height: ( $pwccSpace_baseSpacingUnit / $pwccType_useHtmlFontSize );
+    min-height: 100%; /* [3] */
+    overflow-y: scroll; /* [2] */
+	
+}

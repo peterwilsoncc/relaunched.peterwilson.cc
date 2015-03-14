@@ -1,0 +1,11 @@
+.util-SectionTitle,
+%util-SectionTitle {
+	@extend %secondaryFont;
+	color: $lightgrey;
+	@include font-size( 14/16 );
+	line-height: (16/14);
+	border-bottom: 1px solid;
+	$paddingBottom: (16/14)*1em;
+	padding-bottom: calc( #{$paddingBottom} - 1px );
+	margin-bottom: 2rem;
+}

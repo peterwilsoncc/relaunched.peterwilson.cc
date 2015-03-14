@@ -1,0 +1,10 @@
+fieldset {
+	margin-left: 0;
+	margin-right: 0;
+	border: 0;
+}
+
+input[type="search"] {
+	/* reverse setting from normalize.css */
+	        box-sizing: border-box;
+}

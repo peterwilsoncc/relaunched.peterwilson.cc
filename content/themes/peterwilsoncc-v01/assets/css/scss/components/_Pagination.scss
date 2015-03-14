@@ -1,0 +1,63 @@
+.Pagination {
+	@extend %clearfix;
+	
+	@include font-size(14/16);
+	line-height: (16/14);
+}
+
+	.Pagination > div {
+		float: left;
+		width: 33%;
+		min-height: 1px;
+	}
+	
+	.Pagination--Post {
+//		font-family: $pwccType_usePaginationDirectionFontFamily;
+		@include secondaryFont( 'n7' );
+		font-weight: bold;
+		font-style: normal;
+		text-transform: uppercase;
+	}
+	
+	.Pagination--Post b {
+		display: inline-block;
+		padding: .25em 1em;
+		border-left: 1px solid $lightgrey;
+	}
+	
+	.Pagination--Post span > b:first-child,
+	.Pagination--Post span > a:first-child b {
+		border-left: 0;
+	}
+
+	.Pagination_Direction {
+		color: $pwccCol_usePaginationDirectionColor;
+	
+//		font-family: $pwccType_usePaginationDirectionFontFamily;
+		@include secondaryFont( 'n7' );
+		font-weight: bold;
+		font-style: normal;
+		text-transform: uppercase;
+	}
+	
+	.Pagination_Direction-Next {
+		text-align: right;
+	}
+	
+	.Pagination_Direction-Previous + .Pagination_Direction-Next {
+		// Current page/page number is optional
+		width: 67%;
+	}
+	
+	.Pagination_Current {
+		width: 34%;
+		text-align: center;
+	}
+	
+	.Pagination_Total {
+		color: $pwccCol_usePaginationTotalColor;
+//		font-family: $pwccType_usePaginationCurrentFontFamily;
+		@include secondaryFont( 'n4' );
+		font-weight: normal;
+		font-style: normal;
+	}

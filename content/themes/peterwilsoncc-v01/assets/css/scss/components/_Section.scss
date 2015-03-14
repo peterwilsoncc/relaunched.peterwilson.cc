@@ -1,0 +1,12 @@
+.Section {
+	margin-bottom: 6rem;
+	margin-left: 1em;
+	margin-right: 1em;
+}
+
+	@media only screen and ( min-width: $pwccMq_mediumUp ) {
+		.Section {
+			margin-left: 6em;
+			margin-right: 6em;
+		}
+	}

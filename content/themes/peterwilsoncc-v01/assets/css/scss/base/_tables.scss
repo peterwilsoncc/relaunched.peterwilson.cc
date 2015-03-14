@@ -1,0 +1,13 @@
+table {
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px solid;
+}
+
+	th,td {
+		text-align: left;
+		vertical-align: top;
+		border: 1px solid;
+		/* different paddingto allow for line hiehht */
+		padding: .5rem 1rem;
+	}

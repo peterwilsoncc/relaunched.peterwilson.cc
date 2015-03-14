@@ -1,0 +1,64 @@
+.InputSet {
+	@extend %margin-bottom;
+}
+
+	.InputSet > label,
+	.InputSet-Boolean > legend {
+		color: $pwccCol_useInputLabelColor;
+		@include font-size(13/16);
+		line-height: (16/13);
+		text-transform: uppercase;
+		display: block;
+		margin-bottom: .5rem;
+	}
+	
+	.InputSet > input,
+	.InputSet > textarea,
+	.InputSet-Select > select {
+		width: 100%;
+		border-radius: 2px;
+	}
+	
+	.InputSet-Color > input {
+		border-radius: inherit;
+	}
+	
+	.InputSet-Text > input,
+	.InputSet-Text > textarea,
+	.InputSet-Select > select {
+		color: $pwccCol_useInputInputColor;
+		background-color: $pwccCol_useInputInputBackground;
+		@include font-size(14/16);
+		line-height: (24/14);
+
+		border-width: 1px;
+		outline: none;
+		
+		// with line-height, the top padding appears to be .75rem (less 1px for the border)
+		padding: calc( .5rem - 1px ) .75rem;
+	}
+	
+	.InputSet-Text > input,
+	.InputSet-Text > textarea {
+		border-style: solid;
+		border-color: $pwccCol_useInputInputBackground;
+	}
+
+	/* Error state */
+	.InputSet.is-error > label {
+		color: $pwccCol_useInputErrorColor;
+	}
+
+	.InputSet-Text.is-error > input,
+	.InputSet-Text.is-error > textarea {
+		border-color: $pwccCol_useInputErrorColor;
+	}
+	
+	/* Boolean */
+	
+	.InputSet_Options {
+		color: $pwccCol_useInputInputColor;
+		list-style: none;
+		margin-left: 0.5em;
+		margin-bottom: 0;
+	}

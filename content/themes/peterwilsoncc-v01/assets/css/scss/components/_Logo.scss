@@ -1,0 +1,12 @@
+.Logo {
+	max-width: 6rem; // includes the border 
+	max-height: 6rem; // includes the border 
+	border-radius: 100%;
+	border: .5rem solid white;
+	background-color: white;
+	display: block;
+}
+
+	.Logo_fill{
+		fill: $pwccCol_useLogo;
+	}

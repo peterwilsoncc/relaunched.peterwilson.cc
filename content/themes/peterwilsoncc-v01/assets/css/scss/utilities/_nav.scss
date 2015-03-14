@@ -1,0 +1,21 @@
+.util-nav {
+	list-style: none;
+	margin-left: 0;
+}
+
+	.util-nav > li,
+	.util-nav > li > a {
+		display: inline-block;
+	}
+	
+.util-nav-stacked {
+	
+}
+
+	.util-nav-stacked > li {
+		display: list-item;
+	}
+	
+	.util-nav-stacked > li > a {
+		display: block;
+	}

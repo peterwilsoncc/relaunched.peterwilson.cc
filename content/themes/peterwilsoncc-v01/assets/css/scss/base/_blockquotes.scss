@@ -1,0 +1,46 @@
+blockquote {
+	color: $pwccCol_useBlockquoteColor;
+	background-color: $pwccCol_useBlockquoteBackgroundColor;
+
+
+	padding-top: 1.5rem; /* these are 1.5rem to account for line height of 2 */
+	padding-bottom: 1.5rem; /* these are 1.5rem to account for line height of 2 */
+	.Article_Body > & {
+		margin-left: -1em;
+		margin-right: -1em;
+
+		padding-left: 1em;
+		padding-right: 1em;
+	}
+	> :last-child {
+		margin-bottom: 0;
+	}
+	
+	@media only screen and ( min-width: $pwccMq_mediumUp ) {
+		border-left: 1px solid;
+
+		.Article_Body > & {
+			margin-left: -2em;
+			margin-right: -6em;
+			padding-left: calc( 2em - 1px );
+			padding-right: 6em;
+		}
+	}
+}
+
+	blockquote a,
+	blockquote a:visited {
+		color: $pwccCol_useBlockquoteLinkColor;
+		text-decoration: underline;
+	}
+	
+	blockquote a:focus,
+	blockquote a:hover,
+	blockquote a:active {
+		color: $pwccCol_useBlockquoteLinkColor;
+		text-decoration: none;
+	}
+	
+	blockquote cite {
+		color: $pwccCol_useCiteColor;
+	}

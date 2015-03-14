@@ -1,0 +1,82 @@
+/*
+Breaks the naming convention to fit with WordPress's default classes
+*/
+
+.gallery {
+	@extend %clearfix;
+	@extend .Article_FullWidthBlock;
+}
+
+.gallery-item,
+.wp-caption {
+	position: relative;
+	display:  block;
+	margin-left: 0;
+	margin-right: 0;
+	max-width: 100%;
+	
+}
+
+	.gallery-item {
+		float: left;
+		text-align: center;
+		width: 33%;
+	}
+	
+	.gallery-columns-1 .gallery-item { width: (100/1)*1%;}
+	.gallery-columns-2 .gallery-item { width: (100/2)*1%;}
+	.gallery-columns-3 .gallery-item { width: (100/3)*1%;}
+	.gallery-columns-4 .gallery-item { width: (100/4)*1%;}
+	.gallery-columns-5 .gallery-item { width: (100/5)*1%;}
+	.gallery-columns-6 .gallery-item { width: (100/6)*1%;}
+	.gallery-columns-7 .gallery-item { width: (100/7)*1%;}
+	.gallery-columns-8 .gallery-item { width: (100/8)*1%;}
+	.gallery-columns-9 .gallery-item { width: (100/9)*1%;}
+	.gallery-columns-10 .gallery-item { width: (100/10)*1%;}
+	
+	.gallery-caption.gallery-caption {
+		display: none;
+	}
+
+
+	.wp-caption > img {
+		display: block;
+	}
+
+	.wp-caption-text {
+		color: $pwccCol_useCaptionColor;
+		background-color: $pwccCol_useCaptionBackgroundColor;
+		
+//		font-family: $pwccType_useCaptionTextFontFamily;
+		@include secondaryFont( 'n4' );
+		font-size-adjust: 0.52;
+		font-weight: normal;
+		font-style: normal;
+		text-transform: uppercase;
+		
+		@include font-size(13/16);
+		line-height: (16/13);
+		padding: .75rem .5rem;
+		
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		display: block;
+		
+		@media only screen and ( min-width : $pwccMq_useCaptionMediumUp ) {
+			padding-left: 6rem;
+			padding-right: 6rem;
+		}
+
+	}
+	
+	.wp-caption-text > a,
+	.wp-caption-text > a:visited {
+		color: $pwccCol_useCaptionLinkColor;
+	}
+	
+	.wp-caption-text p:last-child{
+		margin-bottom: 0;
+	}
+	

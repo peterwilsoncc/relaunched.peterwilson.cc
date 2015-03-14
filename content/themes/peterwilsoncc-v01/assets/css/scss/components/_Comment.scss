@@ -1,0 +1,88 @@
+.Comment {
+	@include font-size(14/16);
+	line-height: (24/14);
+	display: block;
+
+	&,
+	p, blockquote, pre {
+		margin-bottom: (24/14)*1em;
+	}
+}
+
+	.Comment-withAvatar {
+		margin-left: 48px + 16px;
+		min-height: 4+48+4px;
+	}
+
+	.Comment_Meta {
+		color: $pwccCol_useCommentMetaColor;
+		@extend %clearfix;
+	}
+	
+	.Comment_Avatar {
+		width: 48px;
+		height: 48px;
+//		float: left;
+		position: absolute;
+		margin-top: 4px;
+		margin-left: -48px - 16px;
+	}
+	
+		.Comment_Avatar > img {
+			width: 48px;
+			height: 48px;
+		}
+
+	.Comment_Name,
+	.Comment_Time,
+	.Comment_Time > a {
+		font-family: inherit;
+		font-size: inherit;
+		text-transform: inherit;
+		font-weight: inherit;
+		font-style: inherit;
+		margin-bottom: 0;
+	}
+
+	.Comment_Name {
+		float: left;
+	}
+	
+	.Comment_Time {
+		float: right;
+	}
+	
+	.Comment_Time > a {
+		color: inherit;
+	}
+	
+	.Comment_Moderation.Comment_Moderation {
+		margin-bottom: 0;
+		font-style: italic;
+	}
+	
+	.Comment_Body {
+		clear: right;
+
+		.Comment-withAvatar & {
+			float: left;
+		}
+		
+		:last-child {
+			margin-bottom: 0;
+		}
+	}
+	
+	.comment-reply-link,
+	.comment-reply-link:visited {
+		color: $pwccCol_useCommentReplyColor;
+		text-transform: uppercase;
+		@extend %secondaryFont;
+	}
+	
+	.comment-reply-link:hover,
+	.comment-reply-link:focus,
+	.comment-reply-link:visited {
+		color: $pwccCol_useCommentReplyColor;
+	}
+	

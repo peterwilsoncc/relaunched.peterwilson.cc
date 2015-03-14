@@ -1,0 +1,39 @@
+.Footer {
+	@include font-size(13/16);
+	line-height: (16/13);
+	
+	color: $pwccCol_useFooterColor;
+	text-transform: uppercase;
+	
+	text-align: center;
+	display: block;
+}
+
+
+	.Footer::before {
+		display: block;
+		content: '';
+		width: 10rem;
+		height: 2rem;
+	
+		color: inherit;
+		border-top: 1px solid;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+
+	.Footer_Copyright {
+		margin-bottom: 0;
+	}
+	
+	
+	.Footer_Nav li:before {
+		display: inline-block;
+		content: ' \2022 ';
+	}
+	
+	.Footer_Nav li:first-child:before {
+		display: none;
+		content: none;
+	}

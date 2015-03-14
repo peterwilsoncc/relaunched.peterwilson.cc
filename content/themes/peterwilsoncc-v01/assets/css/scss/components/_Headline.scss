@@ -1,0 +1,14 @@
+.Headline {
+	color: $pwccCol_useHeadlineColor;
+	
+// 	font-family: $pwccCol_useHeadlineFontFamily;
+	@include secondaryFont( 'n7' );
+	@include font-size(1.5);
+	line-height: (32/24);
+	font-size-adjust: .52;
+	font-weight: bold;
+	font-style:normal;
+	text-transform: uppercase;
+	
+	margin-bottom: 1rem;
+}

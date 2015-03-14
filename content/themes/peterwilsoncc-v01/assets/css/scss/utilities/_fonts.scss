@@ -1,0 +1,56 @@
+%secondaryFont {
+//	font-family: $pwccType_secondaryFont;
+	@include secondaryFont( 'n4' );
+	font-size-adjust:0.52;
+	font-weight: normal;
+	font-style: normal;
+}
+
+%secondaryFont-bold {
+//	font-family: $pwccType_secondaryFont_Bold;
+	@include secondaryFont( 'n7' );
+	font-size-adjust:0.52;
+	font-weight: bold;
+	font-style: normal;
+}
+
+
+.util-secondaryFont {
+//	font-family: $pwccType_secondaryFont !important;
+	@include secondaryFont( 'n4', !important );
+	font-size-adjust:0.52 !important;
+	font-weight: normal !important;
+	font-style: normal !important;
+}
+
+.util-secondaryFont-bold {
+//	font-family: $pwccType_secondaryFont_Bold !important;
+	@include secondaryFont( 'n7', !important );
+	font-size-adjust:0.52 !important;
+	font-weight: bold !important;
+	font-style: normal !important;
+}
+
+
+/*
+.util-hX helper classes iin base/fonts
+*/
+
+
+
+/*
+@font-face {
+	font-family: 'Uni Sans Regular';
+	src: url('http://f.fontdeck.com/f/1/amlLVzN5WHIAANNMo6hnT29tpDAoCGyTDf9MFqlXUeo+V7Fv0qiPVnOcuzQA9imemyQLcDQllKduD10rzpfevFCm.eot');
+	src: url('http://f.fontdeck.com/f/1/amlLVzN5WHIAANNMo6hnT29tpDAoCGyTDf9MFqlXUeo+V7Fv0qiPVnOcuzQA9imemyQLcDQllKduD10rzpfevFCm.eot?')format('embedded-opentype'),url('http://f.fontdeck.com/f/1/amlLVzN5WHIAANNMo6hnT29tpDAoCGyTDf9MFqlXUeo+V7Fv0qiPVnOcuzQA9imemyQLcDQllKduD10rzpfevFCm.woff')format('woff'),url('http://f.fontdeck.com/f/1/amlLVzN5WHIAANNMo6hnT29tpDAoCGyTDf9MFqlXUeo+V7Fv0qiPVnOcuzQA9imemyQLcDQllKduD10rzpfevFCm.ttf')format('opentype'),url('undefined')format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'Uni Sans Bold';
+	src: url('http://f.fontdeck.com/f/1/SC1YalVMd1UAAGeSlwRCfOexKrawBhGTF3NvcN2pJLTP2YfvbLp5qZqiykrzyglRgrW3LeZnyo0dU/5OhOw4QUjG.eot');
+	src: url('http://f.fontdeck.com/f/1/SC1YalVMd1UAAGeSlwRCfOexKrawBhGTF3NvcN2pJLTP2YfvbLp5qZqiykrzyglRgrW3LeZnyo0dU/5OhOw4QUjG.eot?')format('embedded-opentype'),url('http://f.fontdeck.com/f/1/SC1YalVMd1UAAGeSlwRCfOexKrawBhGTF3NvcN2pJLTP2YfvbLp5qZqiykrzyglRgrW3LeZnyo0dU/5OhOw4QUjG.woff')format('woff'),url('http://f.fontdeck.com/f/1/SC1YalVMd1UAAGeSlwRCfOexKrawBhGTF3NvcN2pJLTP2YfvbLp5qZqiykrzyglRgrW3LeZnyo0dU/5OhOw4QUjG.ttf')format('opentype'),url('undefined')format('svg');
+	font-weight: bold;
+	font-style: normal;
+}
+*/

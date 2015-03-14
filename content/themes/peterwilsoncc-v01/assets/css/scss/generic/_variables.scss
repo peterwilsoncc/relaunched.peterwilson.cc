@@ -1,0 +1,111 @@
+/*------------------------------------*\
+    $VARIABLES
+\*------------------------------------*/
+
+//Media Queries
+
+$pwccMq_mediumUp: 48em;
+$pwccMq_LargeUp: 60em;
+
+
+$pwccMq_useCaptionMediumUp: $pwccMq_mediumUp;
+$pwccMq_useSiteNavLargeUp: $pwccMq_LargeUp;
+
+//Base colors
+$blue: #006ef6;
+$white: #ffffff;
+$black: #2a2b2b;
+$lightgrey: #bdc2c7;
+$darkgrey: #5f5f5f;
+
+//Use colors
+$pwccCol_useLogo: $blue;
+$pwccCol_useHtmlColor: $black;
+$pwccCol_useHtmlBackgroundColor: #f1f1f1;
+$pwccCol_useLinkColor: $blue;
+$pwccCol_useBlockquoteColor: $blue;
+$pwccCol_useBlockquoteBackgroundColor: rgba( $blue, .1 );
+$pwccCol_useBlockquoteLinkColor: #000;
+$pwccCol_useCiteColor: $lightgrey;
+
+$pwccCol_useInputLabelColor: $lightgrey;
+$pwccCol_useInputInputColor: $black;
+$pwccCol_useInputInputBackground: #f3f3f3;
+$pwccCol_useInputErrorColor: red;
+
+$pwccCol_useButtonColor: $white;
+$pwccCol_useButtonBackgroundColor: $blue;
+$pwccCol_useButtonBackgroundHoverColor: #005ED2;
+$pwccCol_useButtonDisabledBackgroundColor: $lightgrey;
+
+$pwccCol_useEntryMetaColor: $lightgrey;
+$pwccCol_useEntryMetaDetailColor: $black;
+
+$pwccCol_useHeadlineColor: $blue;
+
+$pwccCol_useCaptionColor: $lightgrey;
+$pwccCol_useCaptionLinkColor: $white;
+$pwccCol_useCaptionBackgroundColor: rgba(0,0,0,.8);
+
+$pwccCol_useSiteNav: $blue;
+
+$pwccCol_usePaginationDirectionColor: $blue;
+$pwccCol_usePaginationCurrentColor: $black;
+$pwccCol_usePaginationTotalColor: $lightgrey;
+
+$pwccCol_useCommentMetaColor: $lightgrey;
+$pwccCol_useCommentReplyColor: $lightgrey;
+
+$pwccCol_useHeaderBackgroundColor: #f3f3f3;
+$pwccCol_useHeaderBioColor: $darkgrey;
+
+
+$pwccCol_useFooterColor: $darkgrey;
+
+
+//Typography
+$pwccType_baseFontSize: 1rem;
+$pwccType_baseLineHeight: 2;
+$pwccType_primaryFont: Lato, sans-serif;
+$pwccType_secondaryFont: "Uni Sans Regular", 'Helvetica Neue', sans-serif; // font-size-adjust:0.52;
+$pwccType_secondaryFont_Bold: "Uni Sans Bold", 'Helvetica Neue', sans-serif; // font-size-adjust:0.52;
+$pwccType_preformattedFont: 'Source Code Pro', monospace;
+
+$pwccType_useHtmlFontSize: $pwccType_baseFontSize;
+$pwccType_useHtmlFontFamily: $pwccType_primaryFont;
+
+$pwccType_useHeadingFontFamily: $pwccType_secondaryFont_Bold;
+$pwccType_useHeadingFontFamilySmall: $pwccType_secondaryFont;
+
+$pwccType_useEntryMetaFontFamily: $pwccType_secondaryFont;
+
+$pwccCol_useHeadlineFontFamily: $pwccType_secondaryFont_Bold;
+
+$pwccType_useCaptionTextFontFamily: $pwccType_secondaryFont;
+
+$pwccType_useSiteNavFontFamily: $pwccType_secondaryFont_Bold;
+
+$pwccType_usePaginationDirectionFontFamily: $pwccType_secondaryFont_Bold;
+$pwccType_usePaginationCurrentFontFamily: $pwccType_secondaryFont;
+
+
+//Spacing units
+$pwccSpace_baseSpacingUnit: 2rem;
+$pwccSpace_leftSpacingUnit: 1 * $pwccSpace_baseSpacingUnit;
+
+
+//Defaults
+
+
+//Borders
+$pwccBorder_radiusDefault: 2px;
+
+$pwccBorder_useButtonRadius: $pwccBorder_radiusDefault;
+
+
+//Breakpoints
+
+
+//Inuit CSS unit translations
+
+$base-font-multiplier: 1;

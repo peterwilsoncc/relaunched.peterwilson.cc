@@ -1,0 +1,44 @@
+.Btn,
+%Btn {
+	&,&:visited {
+		color: $pwccCol_useButtonColor;
+		background-color: $pwccCol_useButtonBackgroundColor;
+	
+		@include font-size(14/16);
+		line-height: (24/14);
+		text-transform: uppercase;
+		text-decoration: none;
+		text-align: center;
+	
+		display: inline-block;
+	
+		border: 0;
+		border-radius: $pwccBorder_useButtonRadius;
+		padding: .5rem .8125rem;
+	}
+	
+	&:hover,&:focus,&:active {
+		color: $pwccCol_useButtonColor;
+		background-color: $pwccCol_useButtonBackgroundHoverColor;
+		text-decoration: none;
+	}
+}
+
+
+	.Btn-Block,
+	%Btn-Block {
+		@extend %margin-bottom;
+		display: block;
+		width: 100%;
+	}
+
+
+	.Btn.is-disabled,
+	%Btn--is-disabled {
+		&,&:visited,
+		&:hover,&:focus,&:active {
+			background-color: $pwccCol_useButtonDisabledBackgroundColor;
+			cursor: default;
+			pointer-events: none;
+		}
+	}

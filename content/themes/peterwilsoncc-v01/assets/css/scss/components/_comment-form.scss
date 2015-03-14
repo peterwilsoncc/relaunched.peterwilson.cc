@@ -1,0 +1,94 @@
+/*
+ * Comment form
+ */
+
+/*
+WordPress's comment form HTML is not nearly as flexible/filterable as I'd like so
+so I am breaking the naming convention here to match its HTML. 
+*/
+
+.comment-form {
+	@extend %clearfix;
+	display: block;
+}
+
+	.comment-respond {
+		clear: both;
+	}
+
+	.comment-reply-title {
+		@extend %util-SectionTitle;
+	}
+
+	.form-submit > [type="submit"] {
+		@extend %Btn;
+		@extend %Btn-Block;
+	}
+
+
+	@media only screen and ( min-width : 35em ) {
+		.comment-form > div {
+			width: 50%;
+			float: left;
+			
+			.Comment & {
+				width: auto;
+				float: none;
+			}
+		}
+		
+		.comment-form > div:nth-child(2n) {
+			padding-right: 1rem;
+
+			.Comment & {
+				padding-right: 0;
+			}
+		}
+	
+		.comment-form > div:nth-child(2n-1) {
+			padding-left: 1rem;
+			.Comment & {
+				padding-left: 0;
+			}
+		}
+	
+		.comment-form > .comment-form_comment.comment-form_comment {
+			/* double selector is specificity hack to override nth-child above */
+			width: auto;
+			clear: left;
+			float: none;
+			// cancel both padding-left & right to allow for extra fields
+			// in the future. Twitter user name or some such
+			padding-left: 0;
+			padding-right: 0;
+		}
+		
+		
+		
+		
+		
+	}
+
+	/*
+	@media only screen and ( min-width : 35em ) {
+		// This name, email, website on one row for super-massive screen
+		.comment-form > div {
+			width: 33.333333333%;
+		}
+		
+		.comment-form > div:nth-child(3n-1) {
+			padding-right: 1rem;
+			padding-left: 0;
+		}
+	
+		.comment-form > div:nth-child(3n) {
+			padding-left: 1rem;
+			padding-right: 1rem;
+		}
+
+		.comment-form > div:nth-child(3n+1) {
+			padding-left: 1rem;
+			padding-right: 0;
+		}
+	}
+	*/

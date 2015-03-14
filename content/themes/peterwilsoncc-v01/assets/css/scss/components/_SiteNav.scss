@@ -1,0 +1,48 @@
+.SiteNav {
+	color: $pwccCol_useSiteNav;
+	
+//	font-family: $pwccType_useSiteNavFontFamily;
+	@include secondaryFont( 'n7' );
+	font-weight: bold;
+	font-style: normal;
+	text-transform: uppercase;
+	
+	font-size: 1rem;
+	line-height: 1;
+}
+
+	.SiteNav_List {
+		list-style: none;
+		margin-left: 0;
+		margin-bottom: 0;
+	}
+	
+	.SiteNav_List > li {
+		display: inline-block;
+		margin-bottom: 1rem;
+		margin-right: 1rem;
+		
+	}
+	
+	.SiteNav_List > li:last-child {
+		margin-right: 0;
+	}
+	
+	
+	.SiteNav_List > li > a {
+		color: inherit;
+		display: inline-block;
+	}
+	
+	@media screen and ( min-width: $pwccMq_useSiteNavLargeUp ) {
+		
+		.SiteNav_List > li {
+			display: block;
+			margin-right: 0;
+		}
+
+		.SiteNav_List > li > a {
+			display: block;
+		}
+
+	}
