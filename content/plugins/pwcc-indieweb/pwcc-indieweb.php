@@ -574,7 +574,7 @@ function pwccindieweb_notes_save_post( $post_id, $post, $update ) {
 	$attachments = isset( $note[ 'images' ] ) && is_array( $note[ 'images' ] ) ? $note[ 'images' ] : array();
 	
 	
-	if ( ( $post_type != $post->post_type ) && ( '' == trim( get_post_field( 'post_content', $post_id ) ) ) ){
+	if ( ( $post_type == $post->post_type ) && ( '' == trim( get_post_field( 'post_content', $post_id ) ) ) ){
 		// the content needs to change
 		
 		$new_content = '';
