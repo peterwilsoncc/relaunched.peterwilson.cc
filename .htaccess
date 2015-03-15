@@ -1,3 +1,9 @@
+
+# serve custom 503 response
+ErrorDocument 503 /maintenance.html
+
+
+
 # TEMP MAINTENANCE PAGE
 <IfModule mod_rewrite.c>
 	RewriteEngine On
@@ -16,7 +22,8 @@
 	RewriteCond %{REQUEST_URI} !/maintenance [NC]
 	RewriteCond %{REQUEST_URI} !\.(jpe?g?|png|gif) [NC]
 
-	 RewriteRule .* /maintenance.html [R=503,L]
+	RewriteRule .* - [R=503,L]
+	
 </IfModule>
 
 <IfModule mod_headers.c>
