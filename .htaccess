@@ -16,12 +16,8 @@
 	RewriteCond %{REQUEST_URI} !/maintenance [NC]
 	RewriteCond %{REQUEST_URI} !\.(jpe?g?|png|gif) [NC]
 
-	# serve default 503 response
-	RewriteRule .* http://example.com/maintenance.html [R=503,L]
+	 RewriteRule .* /maintenance.html [R=503,L]
 </IfModule>
-
-# serve custom 503 response
-ErrorDocument 503 /maintenance.html
 
 <IfModule mod_headers.c>
 	# 3600 = 60 minutes
