@@ -338,7 +338,7 @@ function pwccindieweb_notes_register_content_type() {
 		'capability_type'   => 'post',
 		'has_archive'       => true,
 		'hierarchical'      => false,
-		'supports'          => array( 'comments', 'author', 'editor', 'title' ),
+		'supports'          => array( 'comments', 'author', 'editor', 'title', 'post-formats' ),
 		'rewrite'           => array( 'slug' => '~' )
 	);
 	
@@ -555,10 +555,6 @@ function pwccindieweb_notes_save_post( $post_id, $post, $update ) {
 	$post_type = 'pwcc_notes';
 	$new_data = array();
 	
-	if ( $post_type != $post->post_type ) {
-		return;
-	}
-	
 	// verify if this is an auto save routine. 
 	// If it is our form has not been submitted, so we dont want to do anything
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -575,10 +571,10 @@ function pwccindieweb_notes_save_post( $post_id, $post, $update ) {
 
 	$note = get_post_meta( $post_id, '_pwccindieweb-note', true );
 	$note[ 'text' ] = isset( $note['text'] ) ? trim( $note['text'] ) : '';
-	$attachments = is_array( $note[ 'images' ] ) ? $note[ 'images' ] : array();
+	$attachments = isset( $note[ 'images' ] ) && is_array( $note[ 'images' ] ) ? $note[ 'images' ] : array();
 	
 	
-	if ( '' == trim( get_post_field( 'post_content', $post_id ) ) ) {
+	if ( ( $post_type != $post->post_type ) && ( '' == trim( get_post_field( 'post_content', $post_id ) ) ) ){
 		// the content needs to change
 		
 		$new_content = '';

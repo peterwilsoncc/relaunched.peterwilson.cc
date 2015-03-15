@@ -1,4 +1,10 @@
 <?php
+// global $wp_query;
+// echo '<pre>';
+// print_r( $wp_query );
+// echo '</pre>';
+
+
 	get_header();
 	$section_hN = is_front_page() ? 'h2' : 'h1';
 ?>

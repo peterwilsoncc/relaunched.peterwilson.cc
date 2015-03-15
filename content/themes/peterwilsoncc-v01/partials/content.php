@@ -29,7 +29,12 @@
 			the_post_thumbnail();
 			echo '</div>';
 		}
-		the_content( "Continue reading " . get_the_title() );
+		if ( is_search() ) {
+			the_excerpt();
+		}
+		else {
+			the_content( "Continue reading " . get_the_title() );
+		}
 		
 	 	$pages = array(
 			'before'           => '<p class="Pagination Pagination--Post"><span>Pages: </span><span> ',

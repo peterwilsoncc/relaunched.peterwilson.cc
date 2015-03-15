@@ -18,6 +18,8 @@ class PWCC_theme {
 		//add_filter( 'single_post_title', array( $this, 'filter_single_post_title' ), 10, 2 );
 		add_filter( 'the_title', array( $this, 'filter_the_title' ), 10, 2  );
 		add_filter( 'wpseo_title', array( $this, 'filter_wpseo_title' ), 10 );
+		add_filter( 'wpseo_twitter_domain', array( &$this, 'filter_wpseo_twitter_domain' ) );
+		
 		
 		
 		
@@ -374,7 +376,12 @@ class PWCC_theme {
 			case is_home() && !is_paged():
 				$title = "Latest Posts";
 				break;
-				
+			case is_archive():
+			case is_tax():
+			case is_category():
+			case is_tag():
+				$title = get_the_archive_title();
+				break;
 		}
 		
 		if ( $title ) {
@@ -468,6 +475,8 @@ class PWCC_theme {
 			
 			echo trim( $out, $seperator );
 			echo '</span>';
+
+
 		}
 		
 		
@@ -492,21 +501,24 @@ class PWCC_theme {
 			echo '</span>';
 		}
 		
-		
-		
-		echo '</div><!-- //.EntryMeta -->';
-	}
 
-	function entry_meta_footer( $post ) {
+		// hidden syndication links
+		
 		$twitter_permalink = get_post_meta( $post->ID, 'twitter_permalink', true );
+		$twitter_id = get_post_meta( $post->ID, 'twitter_id', true );
 		$instagram_url = get_post_meta( $post->ID, 'instagram_url', true );
 		
-		if ( $twitter_permalink || $instagram_url ) {
-			echo '<div class="EntryMeta EntryMeta-Footer">';
-			echo ' <span class="EntryMeta_Item">Also on ';
+		if ( $twitter_id || $twitter_permalink || $instagram_url ) {
+			echo ' <span class="EntryMeta_Item util-Display-None">Also on ';
 			$seperator = ', ';
 			$links = '';
 			if ( $twitter_permalink ) {
+				$links .= $this->syn_link( $twitter_permalink, 'Twitter', 'EntryMeta_Detail');
+				$links .= $seperator;
+			}
+			else if ( ( '' != $twitter_id ) && ( 0 != $twitter_id ) ) {
+				// assume user is pwcc
+				$twitter_permalink = "https://twitter.com/pwcc/status/" . $twitter_id;
 				$links .= $this->syn_link( $twitter_permalink, 'Twitter', 'EntryMeta_Detail');
 				$links .= $seperator;
 			}
@@ -516,6 +528,42 @@ class PWCC_theme {
 			}
 			
 			echo trim( $links, $seperator );
+			echo '</span>';
+		}
+
+
+		
+		
+		echo '</div><!-- //.EntryMeta -->';
+	}
+
+	function entry_meta_footer( $post ) {
+		$twitter_permalink = get_post_meta( $post->ID, 'twitter_permalink', true );
+		$twitter_id = get_post_meta( $post->ID, 'twitter_id', true );
+		$instagram_url = get_post_meta( $post->ID, 'instagram_url', true );
+		
+		if ( $twitter_id || $twitter_permalink || $instagram_url ) {
+			echo '<div class="EntryMeta EntryMeta-Footer">';
+			echo ' <span class="EntryMeta_Item">Also on ';
+			$seperator = ', ';
+			$links = '';
+			if ( $twitter_permalink ) {
+				$links .= $this->syn_link( $twitter_permalink, 'Twitter', 'EntryMeta_Detail');
+				$links .= $seperator;
+			}
+			else if ( ( '' != $twitter_id ) && ( 0 != $twitter_id ) ) {
+				// assume user is pwcc
+				$twitter_permalink = "https://twitter.com/pwcc/status/" . $twitter_id;
+				$links .= $this->syn_link( $twitter_permalink, 'Twitter', 'EntryMeta_Detail');
+				$links .= $seperator;
+			}
+			if ( $instagram_url ) {
+				$links .= $this->syn_link( $instagram_url, 'Instagram', 'EntryMeta_Detail');
+				$links .= $seperator;
+			}
+			
+			echo trim( $links, $seperator );
+			echo '</span>';
 			echo '</div>';
 		}
 	}
@@ -666,6 +714,14 @@ class PWCC_theme {
 			
 		<?php
 	}
+
+	function filter_wpseo_twitter_domain( $value ) {
+		
+		$value = 'peterwilson.cc';
+		
+		return $value;
+	}
+
 }
 
 $pwcc_theme = new PWCC_theme();

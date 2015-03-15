@@ -8,7 +8,12 @@
 	<<?php echo $hN; ?> class="Headline entry-title p-name"><?php 
 	if ( !is_singular() ) {
 		echo '<a href="';
-		echo esc_url( pwcc_theme_get_link_url() );
+		if ( is_search() ) {
+			the_permalink();
+		}
+		else {
+			echo esc_url( pwcc_theme_get_link_url() );
+		}
 		echo '" class="">';
 	}
 	the_title(); 
@@ -29,7 +34,12 @@
 			the_post_thumbnail();
 			echo '</div>';
 		}
-		the_content( "Continue reading " . get_the_title() );
+		if ( is_search() ) {
+			the_excerpt();
+		}
+		else {
+			the_content( "Continue reading " . get_the_title() );
+		}
 		
 	 	$pages = array(
 			'before'           => '<p class="Pagination Pagination--Post"><span>Pages: </span><span> ',
