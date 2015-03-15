@@ -9,8 +9,10 @@
 		}
 		while ( have_posts() ) : the_post();
 			get_template_part( 'partials/content', $pwcc_format );
-			pwcc_theme_post_nav();
-			comments_template();
+			if ( !is_page() ) {
+				pwcc_theme_post_nav();
+				comments_template();
+			}
 		endwhile; 
 		?>
 	</div>
