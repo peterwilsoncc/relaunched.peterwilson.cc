@@ -1,6 +1,6 @@
 <?php
 $content_width=717;
-$pwcc_css_ver = "20150312-01";
+$pwcc_css_ver = "20150315-01";
 
 class PWCC_theme {
 	
@@ -9,6 +9,7 @@ class PWCC_theme {
 		add_action( 'after_setup_theme', array( $this, 'action_theme_setup' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'action_enqueue_assets' ) );
 		add_action( 'wp_head', array( $this, 'action_header_javascript' ) );
+		add_action( 'wp_head', array( $this, 'action_favicons' ) );
 		
 		add_filter( 'body_class', array( $this, 'filter_body_class' ), 10, 2 );
 		add_filter( 'post_class', array( $this, 'filter_post_class' ), 10, 2 );
@@ -138,6 +139,31 @@ class PWCC_theme {
 		</script>
 		<?php
 	}
+
+	function action_favicons() {
+		$icons = get_template_directory_uri() . '/assets/images/favicons';
+		
+		echo "<link rel='shortcut icon' href='$icons/favicon.ico'>\n";
+		echo "<link rel='apple-touch-icon' sizes='57x57' href='$icons/apple-touch-icon-57x57.png'>\n";
+		echo "<link rel='apple-touch-icon' sizes='114x114' href='$icons/apple-touch-icon-114x114.png'>\n";
+		echo "<link rel='apple-touch-icon' sizes='72x72' href='$icons/apple-touch-icon-72x72.png'>\n";
+		echo "<link rel='apple-touch-icon' sizes='144x144' href='$icons/apple-touch-icon-144x144.png'>\n";
+		echo "<link rel='apple-touch-icon' sizes='60x60' href='$icons/apple-touch-icon-60x60.png'>\n";
+		echo "<link rel='apple-touch-icon' sizes='120x120' href='$icons/apple-touch-icon-120x120.png'>\n";
+		echo "<link rel='apple-touch-icon' sizes='76x76' href='$icons/apple-touch-icon-76x76.png'>\n";
+		echo "<link rel='apple-touch-icon' sizes='152x152' href='$icons/apple-touch-icon-152x152.png'>\n";
+		echo "<meta name='apple-mobile-web-app-title' content='pwcc.cc'>\n";
+		echo "<link rel='icon' type='image/png' href='$icons/favicon-196x196.png' sizes='196x196'>\n";
+		echo "<link rel='icon' type='image/png' href='$icons/favicon-160x160.png' sizes='160x160'>\n";
+		echo "<link rel='icon' type='image/png' href='$icons/favicon-96x96.png' sizes='96x96'>\n";
+		echo "<link rel='icon' type='image/png' href='$icons/favicon-16x16.png' sizes='16x16'>\n";
+		echo "<link rel='icon' type='image/png' href='$icons/favicon-32x32.png' sizes='32x32'>\n";
+		echo "<meta name='msapplication-TileColor' content='#006ef6'>\n";
+		echo "<meta name='msapplication-TileImage' content='$icons/mstile-144x144.png'>\n";
+		echo "<meta name='msapplication-config' content='$icons/browserconfig.xml'>\n";
+		echo "<meta name='application-name' content='PWCC'>\n";
+	}
+
 
 	function i_only_use_jetpack_stats() {
 		wp_deregister_style( 'AtD_style' ); // After the Deadline
