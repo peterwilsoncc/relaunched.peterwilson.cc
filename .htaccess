@@ -1,3 +1,38 @@
+# TEMP MAINTENANCE PAGE
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+
+	# local ip
+	RewriteCond %{REMOTE_ADDR} !^118.209.34.108$
+
+	# server ip
+	RewriteCond %{REMOTE_ADDR} !^216.70.106.194$
+	RewriteCond %{REMOTE_ADDR} !^127.0.0.1$
+
+	# w3c validation
+	# RewriteCond %{REMOTE_ADDR} !^128.30.52.
+
+	# maintenance page and assets
+	RewriteCond %{REQUEST_URI} !/maintenance [NC]
+	RewriteCond %{REQUEST_URI} !\.(jpe?g?|png|gif) [NC]
+
+	# serve default 503 response
+	RewriteRule .* http://example.com/maintenance.html [R=503,L]
+</IfModule>
+
+# serve custom 503 response
+ErrorDocument 503 /maintenance.html
+
+<IfModule mod_headers.c>
+	# 3600 = 60 minutes
+	# 86400 = 1 day
+	# 604800 = 1 week
+	Header always set Retry-After "3600"
+</IfModule>
+
+
+
+
 # ------------------------------------------------------------------------------
 # | Block referrer spam                                                        |
 # ------------------------------------------------------------------------------
