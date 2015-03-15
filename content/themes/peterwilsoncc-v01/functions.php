@@ -659,9 +659,12 @@ class PWCC_theme {
 		?>
 		<nav class="Pagination Pagination-PrevNextPost" role="navigation">
 			<h2 class="util-accessibility">Post navigation</h2>
-
-				<?php previous_post_link( '<div class="Pagination_Direction Pagination_Direction-Previous">%link</div>', 'Previous post' ); ?>
-				<?php next_post_link( '<div class="Pagination_Direction Pagination_Direction-Next">%link</div>', 'Next post' ); ?>
+				<div class="Pagination_Direction Pagination_Direction-Previous">
+				<?php previous_post_link( '%link', 'Previous post' ); ?>
+				</div>
+				<div class="Pagination_Direction Pagination_Direction-Next">
+				<?php next_post_link( '%link', 'Next post' ); ?>
+				</div>
 
 		</nav><!-- .navigation -->
 		<?php
