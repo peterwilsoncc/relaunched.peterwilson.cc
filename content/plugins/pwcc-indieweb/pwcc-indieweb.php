@@ -611,7 +611,7 @@ function pwccindieweb_notes_save_post( $post_id, $post, $update ) {
 	}
 	
 	$tweet_this = isset( $note[ 'post_on_twitter' ] ) ? true : false;
-	$attachments = array();
+	// $attachments = array();
 	if ( 'publish' != $post->post_status ) {
 		$tweet_this = false;
 	}
