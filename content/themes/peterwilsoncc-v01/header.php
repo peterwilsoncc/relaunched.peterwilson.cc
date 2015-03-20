@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
+	<link re="me" href="https://twitter.com/pwcc" />
 	<?php wp_head(); ?>
 </head>
 <!--[if lte IE 8 ]><body class="lte8"><![endif]-->
