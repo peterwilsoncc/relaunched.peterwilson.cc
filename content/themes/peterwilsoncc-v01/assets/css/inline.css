@@ -1282,7 +1282,7 @@ Breaks the naming convention to fit with WordPress's default classes
     .alignright {
       margin-right: -5rem; } }
 
-.instagram-link > .keyring-img,
+.instagram-image .keyring-img,
 .wp-post-image,
 figure.alignnone,
 img.alignnone,
