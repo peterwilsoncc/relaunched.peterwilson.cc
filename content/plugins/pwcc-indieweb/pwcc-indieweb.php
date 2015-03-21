@@ -742,3 +742,13 @@ function pwccindieweb_send_tweet( $text, $media = array(), $in_reply_to_status_i
 	}
 	return false;
 }
+
+
+function pwccindieweb_keyring_import_set_type( $post_type, $keyring_slug ) {
+	
+	$post_type = 'pwcc_notes';
+	
+	return $post_type;
+}
+
+add_action( 'keyring_post_type', 'pwccindieweb_keyring_import_set_type', 10, 2 );
