@@ -1765,7 +1765,7 @@ so I am breaking the naming convention here to match its HTML.
     .alignright {
       margin-right: -5rem; } }
 
-.instagram-link,
+.instagram-link > .keyring-img,
 .wp-post-image,
 figure.alignnone,
 img.alignnone,
