@@ -113,7 +113,7 @@ class Keyring_Instagram_Importer extends Keyring_Importer_Base {
 			$post_title = 'Snapped ' . date( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ), $post->created_time + $offset );
 			// if ( !empty( $post->caption ) )
 				// $post_title = strip_tags( $post->caption->text );
-
+				$post_title = '';
 
 
 			// Apply selected category
