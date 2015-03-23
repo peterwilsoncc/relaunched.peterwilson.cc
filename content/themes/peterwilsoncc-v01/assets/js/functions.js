@@ -288,16 +288,8 @@ var console = this.console || {  // jshint ignore:line
 			$allImages,
 			i, j;
 		
-		// eventually set this to PWCC_data.Article_FullWidthBlock_Selectors 
-		var selectors = [
-			'img.keyring-img',
-			'img.aligncenter',
-			'img.alignnone',
-			'pre > code',
-			'figure.aligncenter>img',
-			'figure.alignnone>img',
-			'.fluid-width-video-wrapper'
-		];
+		// eventually set this to  
+		var selectors = PWCC_data.Article_FullWidthBlock_Selectors;
 		
 		
 		for( i=$articleBody.length-1 ; 0<=i ; i-- ) {

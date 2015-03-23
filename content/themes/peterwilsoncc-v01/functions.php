@@ -92,7 +92,7 @@ class PWCC_theme {
 			'pwcc-scripts',
 			$assets . '/js/min/functions-min.js',
 			null,
-			'20150323-01',
+			'20150323-02',
 			true
 		);
 		
