@@ -92,13 +92,22 @@ class PWCC_theme {
 			'pwcc-scripts',
 			$assets . '/js/min/functions-min.js',
 			null,
-			'1.0',
+			'20150323-01',
 			true
 		);
 		
 		$js_config = array(
 			'siteHome' => home_url( '/' ),
-			'assetsHome' => untrailingslashit( $assets ) . '/'
+			'assetsHome' => untrailingslashit( $assets ) . '/',
+			'Article_FullWidthBlock_Selectors' => array(
+				'img.keyring-img',
+				'img.aligncenter',
+				'img.alignnone',
+				'pre > code',
+				'figure.aligncenter>img',
+				'figure.alignnone>img',
+				'.fluid-width-video-wrapper'
+			)
 		);
 		
 		wp_localize_script(

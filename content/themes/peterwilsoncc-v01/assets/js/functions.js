@@ -172,6 +172,7 @@ var console = this.console || {  // jshint ignore:line
 	// var hljs = window.hljs;
 	var S4_words = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
 	var document = window.document;
+	var PWCC_data = window.PWCC_data;
 	
 	if ( !document.querySelectorAll || !window.addEventListener ) {
 		// you're not a very good browser
@@ -287,7 +288,9 @@ var console = this.console || {  // jshint ignore:line
 			$allImages,
 			i, j;
 		
+		// eventually set this to PWCC_data.Article_FullWidthBlock_Selectors 
 		var selectors = [
+			'img.keyring-img',
 			'img.aligncenter',
 			'img.alignnone',
 			'pre > code',
