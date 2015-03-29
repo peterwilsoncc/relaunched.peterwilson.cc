@@ -1,25 +1,132 @@
 RICG-responsive-images
 ---
 
+![Build Status](https://travis-ci.org/ResponsiveImagesCG/wp-tevko-responsive-images.svg)
+
 Bringing automatic default responsive images to WordPress.
 
 This plugin works by including all available image sizes for each image upload. Whenever WordPress outputs the image through the media uploader, or whenever a featured image is generated, those sizes will be included in the image tag via the [srcset](http://css-tricks.com/responsive-images-youre-just-changing-resolutions-use-srcset/) attribute.
 
-##Hardcoding in template files
+##Documentation
 
- You can output a responsive image anywhere you'd like by using the following syntax:
+###For General Users
 
-``<img src="pathToImage" <?php echo tevkori_get_srcset_string( TheIdOfYourImage, theLargestImageSizeNeeded ); ?> />``
+No configuration is needed! Just install the plugin and enjoy automatic responsive images!
 
-ex.)
+###For Theme Developers
 
-```<img src="myimg.png" <?php echo tevkori_get_srcset_string( 11, 'medium' ); ?> />```
+This plugin includes several functions that can be used by theme and plugin developers in templates.
+
+####tevkori_get_sizes( $id, $size, $args )
+
+Returns a valid source size value for use in a 'sizes' attribute. The parameters include the ID of the image, the default size of the image, and an array or string containing of size information. The ID parameter is required. [Link](https://github.com/ResponsiveImagesCG/wp-tevko-responsive-images/blob/master/wp-tevko-responsive-images.php#L28)
+
+***Usage Example***
+
+```
+<img src="myimg.png" sizes="<?php echo tevkori_get_sizes( 11, 'medium' ); ?>" >
+```
+
+By default, the sizes attribute will be declared as 100% of the viewport width when the viewport width is smaller than the width of the image, or to the width of the image itself when the viewport is larger than the image. In other words, this:
+
+`(max-width: {{image-width}}) 100vw, {{image-width}}`
+
+You can override those defaults by passing your own size values as set of arrays to the `$args` parameter.
+
+*Example:*
+
+```
+$args = array(
+  'sizes' => array(
+    array(
+      'size_value' 	=> '10em',
+      'mq_value'		=> '60em',
+      'mq_name'			=> 'min-width'
+    ),
+    array(
+      'size_value' 	=> '20em',
+      'mq_value'		=> '30em',
+      'mq_name'			=> 'min-width'
+    ),
+    array(
+      'size_value'	=> 'calc(100vm - 30px)'
+    ),
+  )
+);
+
+$sizes = tevkori_get_sizes( $id, 'medium', $args );
+```
+
+Which would output a sizes value of:
+`(min-width: 60em) 10em, (min-width: 30em) 20em, calc(100vm - 30px)`
+
+---
+
+####tevkori_get_sizes_string( $id, $size, $args)
+
+Returns A full 'sizes' attribute. The parameters include the ID of the image, the default size of the image, and an array or string containing of size information. The ID parameter is required.
+
+***Usage Example***
+
+```
+<img src="myimg.png" <?php echo tevkori_get_sizes_string( 11, 'medium' ); ?> >
+```
+
+---
+####tevkori_get_srcset_array( $id, $size )
+
+Returns an array of image source candidates for use in a 'srcset' attribute. The parameters include the ID of the image, the default size of the image, and An array of of srcset values. The ID parameter is required. [Link](https://github.com/ResponsiveImagesCG/wp-tevko-responsive-images/blob/master/wp-tevko-responsive-images.php#L132)
+
+***Usage Example***
+
+```
+
+$sources = tevkori_get_srcset_array( 11, 'medium' );
+
+$srcset = array();
+foreach( $srcset as $source ) {
+ if ( false === strpos(' 900w', $source) {
+  $srcset[] = $source;
+ }
+}
+
+<img src="myimg.png" srcset="<?php implode( ', ', $srcset ); ?>" >
+```
+
+---
+
+####tevkori_get_srcset_string( $id, $size )
+
+Returns A full 'srcset' attribute. The parameters include the ID of the image and its default size. The ID parameter is required. [Link](https://github.com/ResponsiveImagesCG/wp-tevko-responsive-images/blob/master/wp-tevko-responsive-images.php#L196)
+
+***Usage Example***
+
+```
+<img src="myimg.png" <?php echo tevkori_get_srcset_string( 11, 'medium' ); ?> >
+```
+
+**Dependencies**
+
+The only external dependency included in this plugin is Picturefill - v2.3.0. If you would like to remove Picturefill, add the following line to your functions.php file: ```wp_dequeue_script('picturefill')```
 
 ##Version
 
-2.1.1
+2.2.1
 
 ##Changelog
+
+- JS patch for wordpress
+
+**2.2.0**
+
+- The mandatory sizes attribute is now included on all images
+- Updated to Picturefill v2.3.0
+- Extensive documentation included in readme
+- Integrated testing with Travis CLI
+- Check if wp.media exists before running JS
+- Account for rounding variance when matching ascpect ratios
+
+**2.1.1**
 
 - Adding in wp-tevko-responsive-images.js after file not found to be in wordpress repository
 - Adjusts the aspect ratio check in tevkori_get_srcset_array() to account for rounding variance

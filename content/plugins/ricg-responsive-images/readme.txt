@@ -4,7 +4,7 @@ Donate link: https://app.etapestry.com/hosted/BoweryResidentsCommittee/OnlineDon
 Tags: Responsive, Images, Responsive Images, SRCSET, Picturefill
 Requires at least: 4.1
 Tested up to: 4.1
-Stable tag: 2.1.1
+Stable tag: 2.2.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -12,19 +12,11 @@ Bringing automatic default responsive images to WordPress.
 
 == Description ==
 
-**If you'd like to contribute to this plugin, please do so on [Github](https://github.com/ResponsiveImagesCG/wp-tevko-responsive-images)**
+Bringing automatic default responsive images to WordPress.
 
-Basically, responsive images allow the browser to choose the best image from a list. This plugin works by including all available image sizes for each image upload. Whenever WordPress outputs the image through the media uploader, or whenever a featured image is generated, those sizes will be included in the image tag via the [srcset](http://css-tricks.com/responsive-images-youre-just-changing-resolutions-use-srcset/) attribute.
+This plugin works by including all available image sizes for each image upload. Whenever WordPress outputs the image through the media uploader, or whenever a featured image is generated, those sizes will be included in the image tag via the srcset attribute.
 
-**Hardcoding in template files**
-
- You can output a responsive image anywhere you'd like by using the following syntax:
-
-`<img src="pathToImage" <?php echo tevkori_get_srcset_string( TheIdOfYourImage, theLargestImageSizeNeeded ); ?> />`
-
-ex.)
-
-`<img src="myimg.png" <?php echo tevkori_get_srcset_string( 11, 'medium' ); ?> />`
+**Full documentation and contributor guidelines can be found on [Github](https://github.com/ResponsiveImagesCG/wp-tevko-responsive-images)**
 
 == Installation ==
 
@@ -32,8 +24,20 @@ ex.)
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+= 2.2.1 =
+* Patch fixing missing javascript error
+
+= 2.2.0 =
+* The mandatory sizes attribute is now included on all images
+* Updated to Picturefill v2.3.0
+* Extensive documentation included in readme
+* Integrated testing with Travis CLI
+* Check if wp.media exists before running JS
+* Account for rounding variance when matching ascpect ratios
+
+
 = 2.1.1 =
-* Adding in wp-tevko-responsive-images.js after file not found to be in wordpress repository
+* Adding in wp-tevko-responsive-images.js after file not found to be in WordPress repository
 * Adjusts the aspect ratio check in tevkori_get_srcset_array() to account for rounding variance
 
 = 2.1.0 =
