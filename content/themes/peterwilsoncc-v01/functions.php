@@ -1,6 +1,6 @@
 <?php
 $content_width=1200;
-$pwcc_css_ver = "20150321-03";
+$pwcc_css_ver = "20150329-01";
 
 class PWCC_theme {
 	
@@ -92,7 +92,7 @@ class PWCC_theme {
 			'pwcc-scripts',
 			$assets . '/js/min/functions-min.js',
 			null,
-			'20150323-02',
+			'20150329-01',
 			true
 		);
 		

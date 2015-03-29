@@ -172,7 +172,9 @@ var console = this.console || {  // jshint ignore:line
 	// var hljs = window.hljs;
 	var S4_words = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
 	var document = window.document;
+	var pluginName = "pwcc_theme_fns_";
 	var PWCC_data = window.PWCC_data;
+	var haveFitVidRules = false;
 	
 	if ( !document.querySelectorAll || !window.addEventListener ) {
 		// you're not a very good browser
@@ -196,6 +198,12 @@ var console = this.console || {  // jshint ignore:line
 		if ( 0 === $form.length ) {
 			return;
 		}
+		
+		if ( true === $form[nameSpaceIt('commentForm', 'hasInitialised')] ) {
+			return;
+		}
+		$form[nameSpaceIt('commentForm', 'hasInitialised')] = true;
+		
 		
 		$inputs = $form[0].querySelectorAll( 'input,textarea' );
 
@@ -296,12 +304,17 @@ var console = this.console || {  // jshint ignore:line
 			$allImages = $articleBody[i].querySelectorAll( selectors.join( ',' ) ); // all images & code blocks
 			
 			for ( j=$allImages.length-1; 0<=j; j-- ) {
+				if ( true === $allImages[nameSpaceIt('fullWidthBlocks', 'hasInitialised')]) {
+					continue;
+				}
 				$allImages[j].parentNode.classList.add( 'Article_FullWidthBlock' );
+				$allImages[nameSpaceIt('fullWidthBlocks', 'hasInitialised')] = true;
 			}
 		}
 	}
 	
 	function fitVids() {
+		fitVidRules();
 		var selectors = [
 			'iframe[src*="player.vimeo.com"]',
 			'iframe[src*="youtube.com"]',
@@ -311,7 +324,6 @@ var console = this.console || {  // jshint ignore:line
 			'embed'];
 		
 		var $fit = $( '.Page_Main' )[0].querySelectorAll( selectors.join(',') );
-		var hasInitialised = 'pwcc_theme_fitVids_has_initialised';
 		var $vid;
 		var i,l;
 		var width, height, ratio;
@@ -319,7 +331,7 @@ var console = this.console || {  // jshint ignore:line
 		
 		for ( i=0,l=$fit.length; i<l; i++ ) {
 			$vid = $fit[i];
-			if ( true === $vid[hasInitialised] ) {
+			if ( true === $vid[nameSpaceIt('fitVids', 'hasInitialised')] ) {
 				continue;
 			}
 			width = $vid.width;
@@ -327,17 +339,52 @@ var console = this.console || {  // jshint ignore:line
 			ratio = height / width;
 			
 			wrap = document.createElement("div");
-			wrap.id = 'pwcc-fitvid-' + guid();
-			wrap.className = "fluid-width-video-wrapper";
-			wrap.style.paddingTop = (ratio * 100) + "%";
+			wrap.id = nameSpaceIt('fitVids', 'video', guid() );
+			wrap.className = "fluid-width-video-wrapper fluid-width-video-wrapper--" + Math.floor( ratio * 100 );
+			// wrap.style.paddingTop = (ratio * 100) + "%";
 			
 			$vid.removeAttribute("width");
 			$vid.removeAttribute("height");
 			wrap.appendChild($vid.cloneNode(true));
 			$vid.parentNode.replaceChild(wrap, $vid);
-			$vid[hasInitialised] = true;
+			$vid[nameSpaceIt('fitVids', 'hasInitialised')] = true;
 		}
 	}
+
+	function fitVidRules() {
+		if ( true === haveFitVidRules ) {
+			return;
+		}
+		haveFitVidRules = true;
+		
+		var styleEl = document.createElement('style');
+		var i, selector, rule, maths, cssText = '';
+
+		styleEl.type="text/css";
+		document.head.appendChild(styleEl);
+
+
+		for ( i=200; i>0; i-- ) {
+			selector='.fluid-width-video-wrapper--' + i ;
+			maths = 100/(i/100);
+			rule = 'max-width:' + maths*0.95 + 'vh;';
+			cssText += selector + "       {" + rule + "}\n";
+			
+			selector='.fluid-width-video-wrapper--' + i + ":before";
+			rule = 'padding-top:' + i + '%;';
+			cssText += selector + "{" + rule + "}\n";
+		}
+
+
+		if ( styleEl.styleSheet ) {
+			styleEl.styleSheet.cssText = cssText;
+		}
+		else {
+			styleEl.innerHTML = cssText;
+		}
+
+	}
+	
 	
 	/* helper functions */
 	function $( selector ) {  // jshint ignore:line
@@ -355,6 +402,21 @@ var console = this.console || {  // jshint ignore:line
   
 	  var re = /^(?:(?:https?|ftp):\/\/){0,1}(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i;
 	    return '' === web || re.test(web);
+	}
+	
+	function nameSpaceIt() {
+		var namespaced = pluginName,
+			i,l;
+
+
+		for ( i=0, l=arguments.length; i<l; i++ ) {
+			namespaced += '__' + arguments[i];
+		}
+		if ( 2 > l ) {
+			namespaced += '__' + 'hasInitialised';
+		}
+
+		return namespaced;
 	}
 	
 	function S4(val) {
