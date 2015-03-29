@@ -293,7 +293,7 @@ var console = this.console || {  // jshint ignore:line
 	
 	function fullWidthBlocks() {
 		var $articleBody = $( '.js-Article_Body' ),
-			$allImages,
+			$allImages, $img,
 			i, j;
 		
 		// eventually set this to  
@@ -304,11 +304,12 @@ var console = this.console || {  // jshint ignore:line
 			$allImages = $articleBody[i].querySelectorAll( selectors.join( ',' ) ); // all images & code blocks
 			
 			for ( j=$allImages.length-1; 0<=j; j-- ) {
-				if ( true === $allImages[nameSpaceIt('fullWidthBlocks', 'hasInitialised')]) {
+				$img = $allImages[j];
+				if ( true === $img[nameSpaceIt('fullWidthBlocks', 'hasInitialised')]) {
 					continue;
 				}
-				$allImages[j].parentNode.classList.add( 'Article_FullWidthBlock' );
-				$allImages[nameSpaceIt('fullWidthBlocks', 'hasInitialised')] = true;
+				$img.parentNode.classList.add( 'Article_FullWidthBlock' );
+				$img[nameSpaceIt('fullWidthBlocks', 'hasInitialised')] = true;
 			}
 		}
 	}
