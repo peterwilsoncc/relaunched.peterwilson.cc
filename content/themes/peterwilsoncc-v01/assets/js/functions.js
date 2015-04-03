@@ -7,12 +7,14 @@
 			families: ['Lato:400,700,400italic,700italic:latin']
 		},
 		fontdeck: { id: '47046' },
+		/*
 		custom: {
 			families: ['fontello'],
 			testStrings: {
 				'fontello': '\uE801\uE802\uE808'
 			}
 		},
+		*/
 		timeout: 3000
 	},
 		e = P.documentElement,

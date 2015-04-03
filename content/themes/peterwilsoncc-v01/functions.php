@@ -1,7 +1,7 @@
 <?php
 $content_width=1200;
 $pwcc_css_ver = "20150403-01";
-$pwcc_js_ver =  "20150403-01";
+$pwcc_js_ver =  "20150403-02";
 
 class PWCC_theme {
 	
