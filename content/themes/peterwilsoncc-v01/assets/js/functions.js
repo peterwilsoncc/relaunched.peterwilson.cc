@@ -308,11 +308,7 @@ var console = window.console || {  // jshint ignore:line
 			
 			for ( j=$allImages.length-1; 0<=j; j-- ) {
 				$img = $allImages[j];
-				if ( true === $img[nameSpaceIt('fullWidthBlocks', 'hasInitialised')]) {
-					continue;
-				}
 				$img.parentNode.classList.add( 'Article_FullWidthBlock' );
-				$img[nameSpaceIt('fullWidthBlocks', 'hasInitialised')] = true;
 			}
 		}
 	}
