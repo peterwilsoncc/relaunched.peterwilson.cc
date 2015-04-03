@@ -1,6 +1,7 @@
 <?php
 $content_width=1200;
-$pwcc_css_ver = "20150329-01";
+$pwcc_css_ver = "20150403-01";
+$pwcc_js_ver =  "20150403-01";
 
 class PWCC_theme {
 	
@@ -68,7 +69,7 @@ class PWCC_theme {
 	}
 	
 	function action_enqueue_assets() {
-		global $content_width, $pwcc_css_ver;
+		global $content_width, $pwcc_css_ver, $pwcc_js_ver;
 		if ( is_attachment() )
 			$content_width = 1200;
 		elseif ( has_post_format( 'audio' ) )
@@ -92,7 +93,7 @@ class PWCC_theme {
 			'pwcc-scripts',
 			$assets . '/js/min/functions-min.js',
 			null,
-			'20150329-02',
+			$pwcc_js_ver,
 			true
 		);
 		
