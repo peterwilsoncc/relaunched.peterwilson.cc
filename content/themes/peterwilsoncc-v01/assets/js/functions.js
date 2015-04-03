@@ -36,6 +36,7 @@
 	o.parentNode.insertBefore(b, o);
 })(document, 'script', 'className', ' wf-');
 
+/*
 (function(document) {
 	var assetsDir = PWCC_data.assetsHome;
 	var b = {
@@ -78,6 +79,7 @@
 		}
 	};
 })(document).a();
+*/
 
 (function( window ) {
 
