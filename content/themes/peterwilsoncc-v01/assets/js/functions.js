@@ -172,7 +172,8 @@ var console = window.console || {  // jshint ignore:line
 	'use strict';
 	
 	// var hljs = window.hljs;
-	var S4_words = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+	var faux_guid_characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+	var faux_guid_characters_length = faux_guid_characters.length;
 	var document = window.document;
 	var pluginName = "pwcc_theme_fns_";
 	var PWCC_data = window.PWCC_data;
@@ -426,7 +427,7 @@ var console = window.console || {  // jshint ignore:line
 		if (val === undefined) {
 			val = "";
 		}
-		val += S4_words[Math.floor(Math.random() * 36)];
+		val += faux_guid_characters[Math.floor(Math.random() * faux_guid_characters_length)];
 		val = (val.length === 4) ? val : S4(val);
 		return val;
 	}
