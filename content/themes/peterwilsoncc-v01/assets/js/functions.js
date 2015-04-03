@@ -177,7 +177,6 @@ var console = window.console || {  // jshint ignore:line
 	var document = window.document;
 	var pluginName = "pwcc_theme_fns_";
 	var PWCC_data = window.PWCC_data;
-	var haveFitVidRules = false;
 	
 	if ( !document.querySelectorAll || !window.addEventListener ) {
 		// you're not a very good browser
@@ -318,7 +317,6 @@ var console = window.console || {  // jshint ignore:line
 	}
 	
 	function fitVids() {
-		fitVidRules();
 		var selectors = [
 			'iframe[src*="player.vimeo.com"]',
 			'iframe[src*="youtube.com"]',
@@ -326,69 +324,73 @@ var console = window.console || {  // jshint ignore:line
 			'iframe[src*="kickstarter.com"][src*="video.html"]',
 			'object',
 			'embed'];
+
+		var styles = [];
+
+		measureAndWrap( selectors );
+		createStyleElement();
 		
-		var $fit = $( '.Page_Main' )[0].querySelectorAll( selectors.join(',') );
-		var $vid;
-		var i,l;
-		var width, height, ratio;
-		var wrap;
 		
-		for ( i=0,l=$fit.length; i<l; i++ ) {
-			$vid = $fit[i];
-			if ( true === $vid[nameSpaceIt('fitVids', 'hasInitialised')] ) {
-				continue;
+		function measureAndWrap( selectors ) {
+			var $allVids, $vid,
+				$wrap, id,
+				i,l,
+				width,height,ratio;
+
+			$allVids = document.querySelectorAll( selectors.join(',') );
+
+
+			for (i = 0, l = $allVids.length; i < l; i++) {
+				$vid = $allVids[i];
+
+				// calculate ratio
+				width = $vid.width;
+				height = $vid.height;
+				ratio = height / width;
+			
+				// generate ID
+				id = nameSpaceIt( 'fluid-video-wrapper', guid() );
+
+				// create wrapper element
+				$wrap = document.createElement("div");
+				$wrap.id = id;
+				$wrap.className = "fluid-width-video-wrapper";
+				// $wrap.style.paddingTop = (ratio * 100) + "%";
+				pushRules(id, ratio);
+
+				// add wrapped video to document
+				$vid.removeAttribute("width");
+				$vid.removeAttribute("height");
+				$wrap.appendChild($vid.cloneNode(true));
+				$vid.parentNode.replaceChild($wrap, $vid);
 			}
-			width = $vid.width;
-			height = $vid.height;
-			ratio = height / width;
-			
-			wrap = document.createElement("div");
-			wrap.id = nameSpaceIt('fitVids', 'video', guid() );
-			wrap.className = "fluid-width-video-wrapper fluid-width-video-wrapper--" + Math.floor( ratio * 100 );
-			// wrap.style.paddingTop = (ratio * 100) + "%";
-			
-			$vid.removeAttribute("width");
-			$vid.removeAttribute("height");
-			wrap.appendChild($vid.cloneNode(true));
-			$vid.parentNode.replaceChild(wrap, $vid);
-			$vid[nameSpaceIt('fitVids', 'hasInitialised')] = true;
 		}
-	}
 
-	function fitVidRules() {
-		if ( true === haveFitVidRules ) {
-			return;
+		function pushRules(wrapId, ratio) {
+			var selector = '#' + wrapId, // use wrapper's ID
+				paddingTop = (ratio * 100) + "%", // video ratio
+				maxWidth = (95 / ratio) + 'vh'; // 95% to give breathing space
+
+			styles.push(selector + '{max-width:' + maxWidth + '}');
+			styles.push(selector + ':before{padding-top:' + paddingTop + '}');
 		}
-		haveFitVidRules = true;
 		
-		var styleEl = document.createElement('style');
-		var i, selector, rule, maths, cssText = '';
+		function createStyleElement() {
+			var $style = document.createElement('style'),
+				$firstScript = document.querySelector( 'script' );
 
-		styleEl.type="text/css";
-		document.head.appendChild(styleEl);
+			$firstScript.parentNode.insertBefore( $style, $firstScript );
 
-
-		for ( i=200; i>0; i-- ) {
-			selector='.fluid-width-video-wrapper--' + i ;
-			maths = 100/(i/100);
-			rule = 'max-width:' + maths*0.95 + 'vh;';
-			cssText += selector + "       {" + rule + "}\n";
+			if ($style.styleSheet) {
+				$style.styleSheet.cssText = styles.join("\n");
+			} 
+			else {
+				$style.innerHTML = styles.join("\n");
+			}
 			
-			selector='.fluid-width-video-wrapper--' + i + ":before";
-			rule = 'padding-top:' + i + '%;';
-			cssText += selector + "{" + rule + "}\n";
 		}
-
-
-		if ( styleEl.styleSheet ) {
-			styleEl.styleSheet.cssText = cssText;
-		}
-		else {
-			styleEl.innerHTML = cssText;
-		}
-
+		
 	}
-	
 	
 	/* helper functions */
 	function $( selector ) {  // jshint ignore:line
