@@ -158,10 +158,10 @@
 		return new DOMTokenList(this);
 	});
 
-})( this );
+})( window );
 
-var PWCC = this.PWCC || {};
-var console = this.console || {  // jshint ignore:line
+var PWCC = window.PWCC || {};
+var console = window.console || {  // jshint ignore:line
 	error: function(){},
 	info: function(){},
 	log: function(){},
@@ -435,7 +435,7 @@ var console = this.console || {  // jshint ignore:line
 	function guid(){
 		return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 	}
-}( this ));
+}( window ));
 
 /* jshint ignore: start */
 (PWCC.hljs = function( window, undefined ) {
@@ -451,7 +451,7 @@ var console = this.console || {  // jshint ignore:line
 	
 	window.hljs = hljs;
 
-}( this ));
+}( window ));
 /* jshint ignore: end */
 
 
