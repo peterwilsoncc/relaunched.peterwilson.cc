@@ -378,6 +378,12 @@ var console = window.console || {  // jshint ignore:line
 		}
 		
 		function createStyleElement() {
+			if ( 0 === styles.length ) {
+				// no work to do, break out
+				return;
+			}
+			
+			
 			var $style = document.createElement('style'),
 				$firstScript = document.querySelector( 'script' );
 
