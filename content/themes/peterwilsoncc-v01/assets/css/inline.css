@@ -1254,6 +1254,7 @@ Breaks the naming convention to fit with WordPress's default classes
 
 .fluid-width-video-wrapper {
   width: 100%;
+  max-width: 126.6666666667vh;
   position: relative;
   padding: 0;
   margin-left: auto;
@@ -1261,27 +1262,13 @@ Breaks the naming convention to fit with WordPress's default classes
 
 .fluid-width-video-wrapper:before {
   display: block;
-  display: block;
   width: 100%;
   padding-top: 75%;
   content: ' '; }
 
-.fluid-width-video-wrapper--75 {
-  max-width: 133.3333333333vh; }
-  .fluid-width-video-wrapper--75:before {
-    padding-top: 75%; }
-
-.fluid-width-video-wrapper--55 {
-  max-width: 181.8181818182vh; }
-  .fluid-width-video-wrapper--55:before {
-    padding-top: 55%; }
-
-.fluid-width-video-wrapper--56 {
-  max-width: 178.5714285714vh; }
-  .fluid-width-video-wrapper--56:before {
-    padding-top: 56%; }
-
-.fluid-width-video-wrapper iframe, .fluid-width-video-wrapper object, .fluid-width-video-wrapper embed {
+.fluid-width-video-wrapper > iframe,
+.fluid-width-video-wrapper > object,
+.fluid-width-video-wrapper > embed {
   position: absolute;
   top: 0;
   left: 0;
