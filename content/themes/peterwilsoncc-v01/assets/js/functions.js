@@ -332,11 +332,12 @@ var console = window.console || {  // jshint ignore:line
 			var $allVids, $vid,
 				$wrap, id,
 				i,l,
-				width,height,ratio;
+				width,height,ratio,
+				ratios = [];
 
 			$allVids = document.querySelectorAll( selectors.join(',') );
 
-
+			// read loop
 			for (i = 0, l = $allVids.length; i < l; i++) {
 				$vid = $allVids[i];
 
@@ -344,7 +345,15 @@ var console = window.console || {  // jshint ignore:line
 				width = $vid.width;
 				height = $vid.height;
 				ratio = height / width;
+				
+				ratios[i] = ratio;
+			}
 			
+			// write loop
+			// l = $allVids.length // from above
+			for (i = 0; i < l; i++) {
+				$vid = $allVids[i];
+
 				// generate ID
 				id = nameSpaceIt( 'fluid-video-wrapper', guid() );
 
@@ -353,13 +362,13 @@ var console = window.console || {  // jshint ignore:line
 				$wrap.id = id;
 				$wrap.className = "fluid-width-video-wrapper";
 				// $wrap.style.paddingTop = (ratio * 100) + "%";
-				pushRules(id, ratio);
+				pushRules(id, ratios[i]);
 
 				// add wrapped video to document
+				$vid.parentNode.replaceChild($wrap, $vid);
 				$vid.removeAttribute("width");
 				$vid.removeAttribute("height");
-				$wrap.appendChild($vid.cloneNode(true));
-				$vid.parentNode.replaceChild($wrap, $vid);
+				$wrap.appendChild($vid);
 			}
 		}
 
