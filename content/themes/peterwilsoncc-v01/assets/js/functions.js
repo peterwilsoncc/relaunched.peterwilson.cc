@@ -170,7 +170,7 @@ var console = window.console || {  // jshint ignore:line
 	warn: function(){}
 };
 
-(PWCC.fns = function( window, undefined ){
+(PWCC.fns = function( window, PWCC_data, undefined ){
 	'use strict';
 	
 	// var hljs = window.hljs;
@@ -178,7 +178,6 @@ var console = window.console || {  // jshint ignore:line
 	var faux_guid_characters_length = faux_guid_characters.length;
 	var document = window.document;
 	var pluginName = "pwcc_theme_fns_";
-	var PWCC_data = window.PWCC_data;
 	
 	if ( !document.querySelectorAll || !window.addEventListener ) {
 		// you're not a very good browser
@@ -446,7 +445,7 @@ var console = window.console || {  // jshint ignore:line
 	function guid(){
 		return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 	}
-}( window ));
+}( window, PWCC_data ));
 
 /* jshint ignore: start */
 (PWCC.hljs = function( window, undefined ) {
