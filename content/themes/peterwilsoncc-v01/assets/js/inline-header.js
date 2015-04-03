@@ -5,7 +5,7 @@ window.PWCC = window.PWCC || {};
 	var document = window.document,
 		PWCC = window.PWCC,
 		html = document.documentElement,
-		fonts = ['lato-n4','lato-n7','lato-i4','lato-i7','fontello-n4','unisansregular-n4','unisansbold-n7'],
+		fonts = ['lato-n4','lato-n7','lato-i4','lato-i7','unisansregular-n4','unisansbold-n7'],
 		fontClasses = ' wf-' + fonts.join('-loading wf-') + '-loading ';
 		
 	
