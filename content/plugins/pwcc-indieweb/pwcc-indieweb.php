@@ -670,8 +670,21 @@ function pwccindieweb_note_to_content( $post_id, $post ) {
 		}
 	}
 	
+	$geo = array();
 	if ( true == $tweet_this ) {
-		$twitter_response = pwccindieweb_send_tweet( $tweet_text, $attachments );
+		$lat = get_post_meta( $post_id, 'geo_latitude', true );
+		$long = get_post_meta( $post_id, 'geo_longitude', true );
+		
+		if ( '' != $lat ) {
+			$geo['lat'] = $lat;
+		}
+		if ( '' != $long ) {
+			$geo['long'] = $long;
+		}
+	}
+	
+	if ( true == $tweet_this ) {
+		$twitter_response = pwccindieweb_send_tweet( $tweet_text, $attachments, '', $geo );
 		if ( false !== $twitter_response ) {
 			
 			$twitter_id = $twitter_response->id_str;
@@ -712,7 +725,7 @@ add_action( 'keyring_post_imported', 'pwccindieweb_tweet_instagram', 10, 3 );
 require "twitteroauth/autoload.php";
 use Abraham\TwitterOAuth\TwitterOAuth;
 
-function pwccindieweb_send_tweet( $text, $media = array(), $in_reply_to_status_id = '' ) {
+function pwccindieweb_send_tweet( $text, $media = array(), $in_reply_to_status_id = '', $geo = array() ) {
 
 	if ( 
 		!defined( 'PWCC_TWTTR_CONSUMER_KEY' ) ||
@@ -767,6 +780,12 @@ function pwccindieweb_send_tweet( $text, $media = array(), $in_reply_to_status_i
 	if ( '' != $in_reply_to_status_id ) {
 		$status_update['in_reply_to_status_id'] = $in_reply_to_status_id;
 	}
+
+	if ( !empty($geo['lat']) && !empty($geo['long']) ) {
+		$status_update['lat'] = $geo['lat'];
+		$status_update['long'] = $geo['long'];
+	}
+
 	
 	$status_update['status'] = $text;
 	$reaction = $connection->post( "statuses/update", $status_update );
