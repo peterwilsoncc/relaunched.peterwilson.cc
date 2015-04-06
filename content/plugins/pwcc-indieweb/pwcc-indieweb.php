@@ -752,3 +752,14 @@ function pwccindieweb_keyring_import_set_type( $post_type, $keyring_slug ) {
 }
 
 add_action( 'keyring_post_type', 'pwccindieweb_keyring_import_set_type', 10, 2 );
+
+function pwccindieweb_five_minute_cron( $schedules ) {
+	
+	$schedules['pwcc_fiveminutes'] = array(
+		'interval' => 15 * MINUTE_IN_SECONDS,
+		'display' => 'Every five minutes'
+	);
+	
+	return $schedules;
+}
+add_filter( 'cron_schedules', 'pwccindieweb_five_minute_cron' );
