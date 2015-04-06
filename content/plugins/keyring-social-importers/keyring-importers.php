@@ -829,6 +829,11 @@ abstract class Keyring_Importer_Base {
 
 			$post['ID'] = $post_id;
 			wp_update_post( $post );
+			
+			return $attachments[0]->ID;
+		}
+		else {
+			return 0;
 		}
 	}
 }

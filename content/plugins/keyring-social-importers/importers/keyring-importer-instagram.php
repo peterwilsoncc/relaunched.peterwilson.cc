@@ -233,7 +233,23 @@ class Keyring_Instagram_Importer extends Keyring_Importer_Base {
 
 				add_post_meta( $post_id, 'raw_import_data', json_encode( $instagram_raw ) );
 
-				$this->sideload_media( $instagram_img, $post_id, $post, apply_filters( 'keyring_instagram_importer_image_embed_size', 'full' ) );
+				$img_id = $this->sideload_media( $instagram_img, $post_id, $post, apply_filters( 'keyring_instagram_importer_image_embed_size', 'full' ) );
+				
+				// add twitter data if auto-importing
+				if (( $this->auto_import ) && ( 0 != $img_id )) {
+					
+					$caption = $instagram_raw->caption->text ? $instagram_raw->caption->text : 'Posted a photo';
+					
+					$pwccindiweb_note = array(
+						'text' => $caption,
+						'post_on_twitter' => "1",
+						'images' => array(
+							'cmb-field-0' => $img_id
+						)
+					);
+					add_post_meta( $post_id, '_pwccindieweb-note', $pwccindiweb_note );
+				}
+				
 
 				$imported++;
 

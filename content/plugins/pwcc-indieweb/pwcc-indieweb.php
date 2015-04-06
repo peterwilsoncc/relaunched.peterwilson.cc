@@ -563,9 +563,6 @@ add_action('admin_footer-post-new.php', 'pwccindieweb_notes_javascript');
 
 function pwccindieweb_notes_save_post( $post_id, $post, $update ) {
 	
-	$post_type = 'pwcc_notes';
-	$new_data = array();
-	
 	// verify if this is an auto save routine. 
 	// If it is our form has not been submitted, so we dont want to do anything
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -579,6 +576,20 @@ function pwccindieweb_notes_save_post( $post_id, $post, $update ) {
 	if ( !current_user_can( 'edit_post', $post_id ) ) {
 		 return;
 	}
+
+	pwccindieweb_note_to_content( $post_id, $post );
+	
+}
+
+add_filter ( 'save_post', 'pwccindieweb_notes_save_post', 20, 3 );
+
+
+function pwccindieweb_note_to_content( $post_id, $post ) {
+	$post_type = 'pwcc_notes';
+	$new_data = array();
+
+
+
 
 	$note = get_post_meta( $post_id, '_pwccindieweb-note', true );
 	$note[ 'text' ] = isset( $note['text'] ) ? trim( $note['text'] ) : '';
@@ -680,11 +691,22 @@ function pwccindieweb_notes_save_post( $post_id, $post, $update ) {
 		// add it back
 		add_filter ( 'save_post', 'pwccindieweb_notes_save_post', 20, 3 );
 	}
-	
+
 	
 }
 
-add_filter ( 'save_post', 'pwccindieweb_notes_save_post', 20, 3 );
+
+
+
+
+function pwccindieweb_tweet_instagram( $post_id, $import_slug, $post ){
+
+	if ( 'instagram' == $import_slug ) {
+		pwccindieweb_note_to_content( $post_id, get_post( $post_id ) );
+	}
+	
+}
+add_action( 'keyring_post_imported', 'pwccindieweb_tweet_instagram', 10, 3 );
 
 
 require "twitteroauth/autoload.php";
