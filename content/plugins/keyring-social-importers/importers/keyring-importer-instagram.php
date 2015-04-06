@@ -136,6 +136,10 @@ class Keyring_Instagram_Importer extends Keyring_Importer_Base {
 					'lat'  => $post->location->latitude,
 					'long' => $post->location->longitude,
 				);
+				if ( !empty( $post->location->name ) ) {
+					$geo['name'] = $post->location->name;
+				}
+				
 			}
 
 			// Tags
@@ -221,6 +225,10 @@ class Keyring_Instagram_Importer extends Keyring_Importer_Base {
 					add_post_meta( $post_id, 'geo_latitude', $geo['lat'] );
 					add_post_meta( $post_id, 'geo_longitude', $geo['long'] );
 					add_post_meta( $post_id, 'geo_public', 1 );
+					
+					if ( !empty( $geo['name'] ) ) {
+						add_post_meta( $post_id, 'geo_address', $geo['name'] );
+					}
 				}
 
 				add_post_meta( $post_id, 'raw_import_data', json_encode( $instagram_raw ) );
