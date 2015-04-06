@@ -65,6 +65,12 @@ if ( true !== PWCC_DEBUG_DISPLAY ) {
 	define( 'WP_DEBUG_DISPLAY', false );
 }
 
+// ===================
+// Misc config options
+// ===================
+define( 'WP_POST_REVISIONS', 3 );
+
+
 // =================================================================
 // Debug mode
 // Debugging? Enable these. Can also enable them in local-config.php
