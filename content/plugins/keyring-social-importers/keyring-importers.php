@@ -116,9 +116,14 @@ abstract class Keyring_Importer_Base {
 			$this->taxonomy = get_term( $term['term_id'], 'keyring_services' );
 		}
 
+		// Clear the old hourly scheduled hook if it still exists
+		if ( 'hourly' == wp_get_schedule( 'keyring_' . static::SLUG . '_import_auto' ) ) {
+			wp_clear_scheduled_hook( 'keyring_' . static::SLUG . '_import_auto' );
+		}
+
 		// Make sure we have a scheduled job to handle auto-imports if enabled
 		if ( $this->get_option( 'auto_import' ) && !wp_get_schedule( 'keyring_' . static::SLUG . '_import_auto' ) )
-			wp_schedule_event( time(), 'hourly', 'keyring_' . static::SLUG . '_import_auto' );
+			wp_schedule_event( time(), 'pwcc_fiveminutes', 'keyring_' . static::SLUG . '_import_auto' );
 
 		// Form handling here, pre-output (in case we need to redirect etc)
 		$this->handle_request();
