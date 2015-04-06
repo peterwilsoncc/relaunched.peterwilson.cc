@@ -103,7 +103,8 @@ function pwccindieweb_location_javascript() {
 			navigator = window.navigator,
 			hasInitialisedName = 'pwccIndiewebLocationHasInitialised',
 			$metaBox = $( '#pwccindieweb_location_metabox' ),
-			$form = $metaBox.closest( 'form' );
+			$form = $metaBox.closest( 'form' ),
+			post_status = $( '#original_post_status' ).val();
 		
 		if ( !navigator.geolocation ) {
 			// I got no idea where you are
@@ -173,7 +174,17 @@ function pwccindieweb_location_javascript() {
 			
 			console.log( 'initSection', $section );
 			
-			setLocation();
+			if ( 'publish' == post_status ) {
+				if ( ( '' == $lat.val() ) && ( '' == $long.val() ) ) {
+					// do initial check
+					setLocation();
+				}
+			}
+			else {
+				// do initial check
+				setLocation();
+			}
+			
 			// $lat.closest( '.field' ).hide();
 			// $long.closest( '.field' ).hide();
 			$include.on( 'change.pwccindieweb-location', setLocation );
