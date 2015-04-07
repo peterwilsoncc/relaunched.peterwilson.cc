@@ -242,8 +242,8 @@ class PWCC_theme {
 		$classes = [];
 		
 		// microformats 1 and 2
-		// $classes[] = 'hentry';
-		// $classes[] = 'h-entry';
+		$classes[] = 'hentry';
+		$classes[] = 'h-entry';
 		
 		// it's an article 
 		$classes[] = 'Article';
@@ -468,7 +468,7 @@ class PWCC_theme {
 		echo '<span class="EntryMeta_Item"> Posted ';
 		
 		// the when
-		echo '<time class="EntryMeta_Detail entry-date dt-published" datetime="' . esc_attr( get_the_date( 'c' ) ) . '">';
+		echo '<time class="EntryMeta_Detail entry-date dt-published published dt-updated updated" datetime="' . esc_attr( get_the_date( 'c' ) ) . '">';
 		echo '<a href="' . esc_attr( get_permalink() ) . '" class="u-url" rel="bookmark">';
 		
 		if ( '' == $title ) {
@@ -520,6 +520,31 @@ class PWCC_theme {
 		
 		// finish the when anad where
 		echo '</span> ';
+		
+		// the human
+		if ( ( 'post' == get_post_type() ) || ( 'pwcc_notes' == get_post_type() ) ) {
+			$author_link = ( '' != get_the_author_meta( 'user_url' ) ) ? esc_url( get_the_author_meta('user_url') ) : '';
+			echo '<span class="util-Display-None EntryMeta_Item" aria-hidden="true"> by ';
+			echo '<span class="EntryMeta_Detail vcard h-card">';
+			if ( '' != $author_link ) {
+				echo '<a href="' . $author_link . '" class="fn url u-url p-name">';
+			}
+			else {
+				echo '<span class="fn p-name">';
+			}
+		
+
+			echo esc_html( get_the_author_meta( 'display_name' ) );
+			if ( '' != $author_link ) {
+				echo '</a>';
+			}
+			else {
+				echo '</span>';
+			}
+			
+			echo '</span>';
+			echo '</span> ';
+		}
 		
 		// Categories
 		$cats = get_the_category();
