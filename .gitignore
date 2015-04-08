@@ -6,4 +6,5 @@
 /sql-dump-*.sql
 /db-sync
 /content/upgrade/
+/content/plugins/wp-rocket/
 .DS_Store
