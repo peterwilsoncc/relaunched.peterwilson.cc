@@ -84,6 +84,7 @@ class PWCC_theme {
 
 
 		$assets = get_template_directory_uri() . '/assets';
+		$assets = "//s0.pwcc.cc/content/themes/peterwilsoncc-v01/assets";
 		
 		if ( isset( $_COOKIE["pwccsscache"] ) && ( $pwcc_css_ver == $_COOKIE["pwccsscache"] ) ) {
 			wp_enqueue_style(
@@ -158,6 +159,8 @@ class PWCC_theme {
 
 	function action_favicons() {
 		$icons = get_template_directory_uri() . '/assets/images/favicons';
+		$icons = "//s0.pwcc.cc/content/themes/peterwilsoncc-v01/assets/images/favicons";
+		
 		
 		echo "<link rel='shortcut icon' href='$icons/favicon.ico'>\n";
 		echo "<link rel='apple-touch-icon' sizes='57x57' href='$icons/apple-touch-icon-57x57.png'>\n";
