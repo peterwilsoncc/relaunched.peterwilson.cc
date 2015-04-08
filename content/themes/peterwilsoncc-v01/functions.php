@@ -9,6 +9,24 @@ return 'ok';
 add_filter( 'pre_transient_wppp_cdntest', 'pwcc__return_ok' );
 
 
+function pwcc_filter_asset_src( $src ){
+	$pwcc_non_cdn_string = '://peterwilson.cc/';
+	$pwcc_cdn_string     = '://s0.pwcc.cc/';
+
+	str_replace( $pwcc_non_cdn_string, $pwcc_cdn_string, $src );
+
+	return $src;
+}
+
+add_filter( 'stylesheet_directory_uri',  'pwcc_filter_asset_src' );
+add_filter( 'template_directory_uri',    'pwcc_filter_asset_src' );
+add_filter( 'style_loader_src',  'pwcc_filter_asset_src' );
+add_filter( 'script_loader_src', 'pwcc_filter_asset_src' );
+
+
+
+
+
 class PWCC_theme {
 	
 	
@@ -84,7 +102,6 @@ class PWCC_theme {
 
 
 		$assets = get_template_directory_uri() . '/assets';
-		$assets = "//s0.pwcc.cc/content/themes/peterwilsoncc-v01/assets";
 		
 		if ( isset( $_COOKIE["pwccsscache"] ) && ( $pwcc_css_ver == $_COOKIE["pwccsscache"] ) ) {
 			wp_enqueue_style(
@@ -149,7 +166,6 @@ class PWCC_theme {
 		echo ';';
 		if ( !isset( $_COOKIE["pwccsscache"] ) || ( $pwcc_css_ver != $_COOKIE["pwccsscache"] ) ) {
 			$css = get_template_directory_uri() . '/assets/css/style.min.css?ver=' . $pwcc_css_ver ;
-			$css = "//s0.pwcc.cc/content/themes/peterwilsoncc-v01/assets/css/style.min.css?ver=" . $pwcc_css_ver ;
 			
 			echo 'PWCC.loadCSS( "' . $css . '", document.getElementById("pwcc-inline-js") );';
 			echo 'document.cookie = "pwccsscache=' . $pwcc_css_ver . '; path=/";';
@@ -161,7 +177,6 @@ class PWCC_theme {
 
 	function action_favicons() {
 		$icons = get_template_directory_uri() . '/assets/images/favicons';
-		$icons = "//s0.pwcc.cc/content/themes/peterwilsoncc-v01/assets/images/favicons";
 		
 		
 		echo "<link rel='shortcut icon' href='$icons/favicon.ico'>\n";
