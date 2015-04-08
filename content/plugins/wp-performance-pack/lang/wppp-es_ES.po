@@ -1,0 +1,863 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Performance Pack\n"
+"POT-Creation-Date: 2014-08-22 09:01+0100\n"
+"PO-Revision-Date: 2014-09-18 11:05+0100\n"
+"Last-Translator: jelena kovacevic <jecajeca260@gmail.com>\n"
+"Language-Team:  <bjoern@ahrens.net>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-KeywordsList: __:1,2t;_e:1,2t\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../admin/class.admin-renderer.php:31
+msgid "WP Performance Pack - Settings"
+msgstr "WP Performance Pack - Configuración"
+
+#: ../admin/class.admin-renderer.php:41
+msgid "Support WPPP"
+msgstr "Soporte WPPP"
+
+#: ../admin/class.admin-renderer.php:42
+msgid "Do you like this Plugin? If so, please support its development."
+msgstr "¿Te gusta este Plugin? Si es así, por favor apoya su desarrollo."
+
+#: ../admin/class.admin-renderer.php:43
+msgid "Rate WPPP"
+msgstr "Calificar WPPP"
+
+#: ../admin/class.admin-renderer.php:54
+msgid "Dismiss this message for today."
+msgstr "Descartar este mensaje para hoy."
+
+#: ../admin/class.admin-renderer.php:58
+msgid "Need help?"
+msgstr "¿Necesitas ayuda?"
+
+#: ../admin/class.admin-renderer.php:59
+msgid "Got any questions? Found a bug? Have any Suggestions?"
+msgstr ""
+"¿Tienes alguna pregunta? ¿Encontraste un error? ¿Tienes alguna sugerencia?"
+
+#: ../admin/class.admin-renderer.php:60
+msgid "Visit the support forums"
+msgstr "Visite los foros de soporte"
+
+#: ../admin/class.admin-renderer.php:166
+#, php-format
+msgid "Gettext support requires the %s extension."
+msgstr "Soporte Gettext requiere la extensión %s."
+
+#: ../admin/class.admin-renderer.php:169
+#, php-format
+msgid ""
+"Gettext support requires the language directory %s to be writeable for php."
+msgstr ""
+"Soporte Gettext requiere el directorio de idioma %s para tener permiso de "
+"escritura para php."
+
+#: ../admin/class.admin-renderer.php:171
+msgid "Gettext test failed. Activate WPPP debugging for additional info."
+msgstr ""
+"Prueba Gettext fallada. Activar depuración WPPP para obtener información "
+"adicional."
+
+#: ../admin/class.admin-renderer.php:183
+#, php-format
+msgid ""
+"Caching requires a persisten object cache to be effective. Different "
+"%sobject cache plugins%s are available for WordPress."
+msgstr ""
+"Caching requiere una memoria caché de objetos persistente para ser eficaz. "
+"Diferentes %plugins %s de caché objetos están disponibles para WordPress."
+
+#: ../admin/class.admin-renderer.php:195
+#, php-format
+msgid ""
+"JIT localization of scripts is only available for WordPress versions %s ."
+msgstr ""
+"Localización JIT de secuencias de comandos sólo está disponible para las "
+"versiones de WordPress %s."
+
+#: ../admin/class.admin-renderer.php:207
+msgid ""
+"Improved image handling requires Pretty Permalinks and is not available on "
+"multisite installations."
+msgstr ""
+"Mejor manejo de imagen requiere Pretty Permalinks y no está disponible en "
+"instalaciones de múltiples sitios."
+
+#: ../admin/class.admin-renderer.php:219
+msgid ""
+"Use of EXIF thumbnails requires the EXIF extension to be installed and GD "
+"support."
+msgstr ""
+"Uso de miniaturas EXIF requiere la instalación de la extensión EXIFy soporte "
+"GD."
+
+#: ../admin/class.admin-renderer.php:231
+#, php-format
+msgid ""
+"One of the following plugins has to be installed and activated for "
+"Regenerate Thumbnails integration: %s"
+msgstr ""
+"Uno de los siguientes plugins tiene que ser instalado y activado para la "
+"integración Regenerar Miniaturas:  %s"
+
+#: ../admin/class.admin-renderer.php:244
+msgid "Switch to advanced view"
+msgstr "Cambiar a vista avanzada"
+
+#: ../admin/class.admin-renderer.php:244
+msgid "Switch to simple view"
+msgstr "Cambiar a vista simple"
+
+#: ../admin/class.admin-renderer.php:267
+msgid "Enabled"
+msgstr "Activado"
+
+#: ../admin/class.admin-renderer.php:268
+msgid "Disabled"
+msgstr "Desactivado"
+
+#: ../admin/class.debug-bar-wppp.php:43 ../admin/class.wppp-admin-admin.php:91
+#: ../admin/class.wppp-admin-admin.php:93
+msgid "WP Performance Pack"
+msgstr "WP Performance"
+
+#: ../admin/class.renderer-advanced.php:38
+msgid ""
+"Welcome to WP Performance Pack, your first choice for speeding up WordPress "
+"core the easy way. The simple view helps you to easily apply  the optimal "
+"settings for your blog. Advanced view offers more in depth control of WPPP "
+"settings."
+msgstr ""
+"Bienvenido a WP Performance Pack, su primera elección para la aceleración "
+"del núcleo WordPress de manera fácil. La vista sencilla le ayuda a aplicar "
+"fácilmente los valores óptimos para su blog. Vista avanzada ofrece más en "
+"control de la profundidad de la configuración de WPPP."
+
+#: ../admin/class.renderer-advanced.php:43
+#: ../admin/class.renderer-advanced.php:90
+#: ../admin/class.renderer-simple.php:155
+msgid "Improve localization performance"
+msgstr "Mejorar el rendimiento de localización"
+
+#: ../admin/class.renderer-advanced.php:44
+msgid ""
+"WPPP offers different options to significantly improve translation "
+"performance. These only affect localization of WordPress core, themes and "
+"plugins, not translation of content (e.g. when using plugins like WPML). To "
+"automatically apply optimal settings for your blog, use the simple view. For "
+"implementation details refer to the WordPress plugin page or the development "
+"blog."
+msgstr ""
+"WPPP ofrece diferentes opciones para mejorar significativamente el "
+"rendimiento de la traducción. Estas sólo afectan a la localización del "
+"núcleo, temas y plugins WordPress, no la traducción de los contenidos (por "
+"ejemplo, al utilizar plugins como WPML). Para aplicar automáticamente los "
+"ajustes óptimos para su blog, utilice la vista simple. Para detalles de la "
+"implementación, consulte la página de plugin de WordPress o el blog de ​​"
+"desarrollo."
+
+#: ../admin/class.renderer-advanced.php:49
+#: ../admin/class.renderer-advanced.php:144
+#: ../admin/class.renderer-simple.php:48
+#: ../admin/class.renderer-simple.php:204
+msgid "Improve image handling"
+msgstr "Mejorar el manejo de imágenes."
+
+#: ../admin/class.renderer-advanced.php:50
+msgid ""
+"Using dynamic image resizing images don't get resized on upload. Instead "
+"resizing is done when an intermediate image size is first requested. This "
+"can significantly improve upload speed. Once created, the image can get "
+"saved and is then subsequently served directly."
+msgstr ""
+"Al usar cambio dinámico de tamaño de imágenes, las imágenes no consiguen "
+"cambiar el tamaño al subirse.  En su lugar, el cambio de tamaño se hace "
+"cuando se solicita por primera vez una imagen de tamaño intermedio. Esto "
+"puede mejorar significativamente la velocidad de subida. Una vez creada, la "
+"imagen puede ser guardada y posteriormente servirse directamente."
+
+#: ../admin/class.renderer-advanced.php:51
+msgid ""
+"Not saving intermediate images is only recommended for testing environments "
+"or when using caching or cdn for both front and back end."
+msgstr ""
+"No guardar las imágenes intermedias sólo se recomienda para entornos de "
+"prueba o cuando se utiliza el almacenamiento en caché o cdn tanto front-end "
+"y back-end."
+
+#: ../admin/class.renderer-advanced.php:52
+msgid ""
+"Usage of EXIF thumbs for thumbnail creation improves peformance but be aware "
+"that EXIF thumbs might differ from the actual image, depending on the "
+"editing software used to create the image."
+msgstr ""
+"Uso de las miniaturas EXIF para la creación de miniaturas mejora el "
+"desempeño pero tenga en cuenta que las miniaturas EXIF pueden diferir de la "
+"imagen real, dependiendo del software de edición utilizado para crear la "
+"imagen."
+
+#: ../admin/class.renderer-advanced.php:57
+msgid "CDN support"
+msgstr "Soporte CDN"
+
+#: ../admin/class.renderer-advanced.php:58
+msgid ""
+"CDN support allows to serve images through a CDN, both on front and back "
+"end. This eliminates the need to save intermediate images locally, thus "
+"reducing web space usage. Use of dynamic image linking is highly recommended "
+"when using WPPP CDN support for front end."
+msgstr ""
+"Soporte CDN permite servir las imágenes a través de un CDN, tanto en front-"
+"end y back-end. Esto elimina la necesidad de guardar las imágenes "
+"intermedias a nivel local, reduciendo así el uso de espacio web. El uso de "
+"la vinculación dinámica de la imagen es muy recomendable cuando se utiliza "
+"el Soporte WPPP CDN por front-end."
+
+#: ../admin/class.renderer-advanced.php:63
+#: ../admin/class.renderer-advanced.php:286
+msgid "Debugging"
+msgstr "Depuración"
+
+#: ../admin/class.renderer-advanced.php:64
+#, php-format
+msgid ""
+"WPPP supports debugging using the %s plugin. When installed and activated, "
+"debugging adds a new panel to the Debug Bar showing information about loaded "
+"textdomains, used translation implementations and translation calls, as well "
+"as information about gettext support and other details."
+msgstr ""
+"WPPP admite la depuración utilizando el pligin %s. Una vez instalado y "
+"activado, depuración agrega un nuevo panel a la barra de depuración que "
+"muestra información sobre textdomains cargados, las implementaciones de "
+"traducción utilizadas y llamadas de traducción, así como información acerca "
+"de la compatibilidad gettext y otros detalles."
+
+#: ../admin/class.renderer-advanced.php:69
+#: ../admin/class.renderer-simple.php:54
+msgid "Development Blog (german)"
+msgstr "Blog de ​​Desarrollo (alemán)"
+
+#: ../admin/class.renderer-advanced.php:93
+#: ../admin/class.renderer-simple.php:464
+#: ../admin/class.renderer-simple.php:487
+msgid "Use gettext"
+msgstr "Utilice gettext"
+
+#: ../admin/class.renderer-advanced.php:96
+msgid ""
+"Use php gettext extension for localization. This is in most cases the "
+"fastest way to localize your blog."
+msgstr ""
+"Utilice la extensión gettext php para localización. Esto es en la mayoría de "
+"los casos, la forma más rápida de localizar su blog."
+
+#: ../admin/class.renderer-advanced.php:101
+#: ../admin/class.renderer-simple.php:467
+#: ../admin/class.renderer-simple.php:490
+msgid "Use alternative MO reader"
+msgstr "Utilice lector MO alternativo"
+
+#: ../admin/class.renderer-advanced.php:104
+msgid ""
+"Alternative MO reader using on demand translation and loading of "
+"localization files (.mo). Faster and less memory intense than the default "
+"WordPress implementation."
+msgstr ""
+"Lector MO alternativo utilizando traducción sobre demanda y carga de "
+"archivos de localización (.mo). Más rápido y menos intenso en la memoria que "
+"la implementación por defecto de WordPress."
+
+#: ../admin/class.renderer-advanced.php:106
+#: ../admin/class.renderer-advanced.php:159
+#: ../admin/class.renderer-simple.php:418
+#: ../admin/class.renderer-simple.php:435
+#: ../admin/class.renderer-simple.php:469
+#: ../admin/class.renderer-simple.php:493
+msgid "Use caching"
+msgstr "Utilice almacenamiento en caché"
+
+#: ../admin/class.renderer-advanced.php:107
+msgid "Cache translations using WordPress' Object Cache API"
+msgstr "Traducciones caché usando API de Caché de Objetos WordPress"
+
+#: ../admin/class.renderer-advanced.php:113
+#: ../admin/class.renderer-simple.php:477
+#: ../admin/class.renderer-simple.php:496
+msgid "Use JIT localize"
+msgstr "Usar JIT localize"
+
+#: ../admin/class.renderer-advanced.php:117
+msgid "Just in time localization of scripts."
+msgstr "Justo a tiempo la localización de secuencias de comandos."
+
+#: ../admin/class.renderer-advanced.php:123
+msgid "Disable back end localization"
+msgstr "Desactivar localización back end"
+
+#: ../admin/class.renderer-advanced.php:127
+msgid "Disables localization of back end texts."
+msgstr "Desactiva la localización de los textos de back-end."
+
+#: ../admin/class.renderer-advanced.php:129
+#: ../admin/class.renderer-simple.php:482
+#: ../admin/class.renderer-simple.php:499
+msgid "Allow user override"
+msgstr "Permitir invalidación usuario"
+
+#: ../admin/class.renderer-advanced.php:130
+msgid ""
+"Allow users to reactivate back end localization in their profile settings."
+msgstr ""
+"Permitir reactivar localización back end en su configuración de perfil."
+
+#: ../admin/class.renderer-advanced.php:133
+msgid "Default user language:"
+msgstr "Idioma predeterminado del usuario:"
+
+#: ../admin/class.renderer-advanced.php:134
+msgid "English"
+msgstr "Inglés"
+
+#: ../admin/class.renderer-advanced.php:135
+msgid "Blog language"
+msgstr "Lenguaje Blog"
+
+#: ../admin/class.renderer-advanced.php:137
+msgid ""
+"Default back end language for new and existing users, who haven't updated "
+"their profile yet."
+msgstr ""
+"Lenguaje back end por defecto para usuarios nuevos y existentes, que no han "
+"actualizado su perfil"
+
+#: ../admin/class.renderer-advanced.php:147
+msgid "Dynamic image resizing"
+msgstr "Redimensionamiento dinámico de imagen"
+
+#: ../admin/class.renderer-advanced.php:150
+msgid ""
+"Create intermediate images on demand, not on upload. If you deactive this "
+"option after some time of usage you might have to recreate thumbnails using "
+"a plugin like Regenerate Thumbnails."
+msgstr ""
+"Crear imágenes intermedias bajo demanda, no en subida. Si desactivada esta "
+"opción después de un tiempo de uso usted podría tener que volver a crear "
+"miniaturas con un plugin como Regenerar Miniaturas."
+
+#: ../admin/class.renderer-advanced.php:153
+msgid "Use EXIF thumbnail"
+msgstr "Usar miniaturas EXIF"
+
+#: ../admin/class.renderer-advanced.php:154
+msgid ""
+"If available use EXIF thumbnail to create image sizes smaller than the EXIF "
+"thumbnail. <strong>Note that, depending on image editing software, the EXIF "
+"thumbnail might differ from the actual image!</strong>"
+msgstr ""
+"Si disponible, use EXIF miniatura para crear una imagen de tamaños más "
+"pequeños que la miniatura EXIF.<strong> Tenga en cuenta que, dependiendo del "
+"software de edición de imagen, la miniatura EXIF puede diferir de la imagen "
+"real! </strong>"
+
+#: ../admin/class.renderer-advanced.php:156
+msgid "Don't save intermediate images to disc"
+msgstr "No guardar imágenes intermedias a disco"
+
+#: ../admin/class.renderer-advanced.php:157
+msgid "Dynamically recreate intermediate images on each request."
+msgstr "Dinámicamente recrear imágenes intermedias en cada solicitud."
+
+#: ../admin/class.renderer-advanced.php:160
+#, php-format
+msgid ""
+"Cache intermediate images using Use WordPress' Object Cache API. Only "
+"applied if %s is activated."
+msgstr ""
+"Cachear imágenes intermedias utilizando WordPress 'ObjectAPI de caché. Sólo "
+"se aplica si %s se activa."
+
+#: ../admin/class.renderer-advanced.php:160
+#: ../admin/class.renderer-simple.php:416
+#: ../admin/class.renderer-simple.php:432
+msgid "Don't save intermediate images"
+msgstr "No guarde imágenes intermedias"
+
+#: ../admin/class.renderer-advanced.php:165
+msgid "Image quality"
+msgstr "Calidad de imagen"
+
+#: ../admin/class.renderer-advanced.php:168
+msgid "Quality setting for newly created intermediate images."
+msgstr ""
+"Configuración de Calidad para las imágenes intermedias de nueva creación."
+
+#: ../admin/class.renderer-advanced.php:172
+#: ../admin/class.renderer-simple.php:423
+#: ../admin/class.renderer-simple.php:438
+msgid "Regenerate Thumbnails integration"
+msgstr "Integración Regenerar Miniaturas"
+
+#: ../admin/class.renderer-advanced.php:175
+msgid ""
+"Integrate into thumbnail regeneration plugins to delete existing "
+"intermediate images."
+msgstr ""
+"Integrar en plugins de regeneración de miniatura para borrar las imágenes "
+"intermedias existentes."
+
+#: ../admin/class.renderer-advanced.php:178
+msgid "Force delete of all potential thumbnails"
+msgstr "Forzar a eliminar todas las miniaturas potenciales"
+
+#: ../admin/class.renderer-advanced.php:179
+msgid ""
+"Delete all potential intermediate images (i.e. those matching the pattern "
+"\"<em>imagefilename-*x*.ext</em>\") while regenerating. <strong>Use with "
+"care as this option might delete files that are no thumbnails!</strong>"
+msgstr ""
+"Eliminar todas las posibles imágenes intermedias (es decir, aquellas que "
+"coincidan con el patrón \"<em>imagefilename- *x* .ext </em> \"), durante la "
+"regeneración. <strong> ¡Usar con cuidado ya que esta opción podría eliminar "
+"archivos que no son miniaturas! </strong>"
+
+#: ../admin/class.renderer-advanced.php:186
+msgid "CDN Support"
+msgstr "Soporte CDN"
+
+#: ../admin/class.renderer-advanced.php:193
+#: ../admin/class.renderer-simple.php:267
+msgid "CDN active and working."
+msgstr "CDN.activo y funcionando"
+
+#: ../admin/class.renderer-advanced.php:197
+#: ../admin/class.renderer-simple.php:271
+msgid "CDN error!"
+msgstr "¡Error CDN!"
+
+#: ../admin/class.renderer-advanced.php:197
+#: ../admin/class.renderer-simple.php:271
+#, php-format
+msgid ""
+"Either the CDN is down or CDN configuration isn't working. CDN will be "
+"retested every 15 minutes until the configuration is changed or the CDN is "
+"back up. CDN test error message: <em>%s</em>"
+msgstr ""
+"O bien la CDN está inactiva o la configuración CDN no está funcionando. CDN "
+"será analizado de nuevo cada 15 minutos hasta que se cambie la configuración "
+"o la CDN se respalde. Mensaje de error CDN en la  <em>%s</em>"
+
+#: ../admin/class.renderer-advanced.php:206
+#: ../admin/class.renderer-simple.php:281
+msgid "Select CDN provider"
+msgstr "Seleccionar proveedor CDN"
+
+#: ../admin/class.renderer-advanced.php:209
+#: ../admin/class.renderer-simple.php:284
+msgid "None"
+msgstr "Ninguno"
+
+#: ../admin/class.renderer-advanced.php:212
+#: ../admin/class.renderer-simple.php:128
+#: ../admin/class.renderer-simple.php:287
+msgid "Custom"
+msgstr "Personalizado"
+
+#: ../admin/class.renderer-advanced.php:214
+#: ../admin/class.renderer-simple.php:289
+msgid "Sign up with MaxCDN"
+msgstr "Registrarse con MaxCDN"
+
+#: ../admin/class.renderer-advanced.php:214
+#: ../admin/class.renderer-simple.php:289
+msgid "<strong>Use <em>WPPP</em> as coupon code to save 25%!</strong>"
+msgstr ""
+"<strong> Utilice <em> WPPP </em> como código de descuento para ahorrar el "
+"25% </strong>"
+
+#: ../admin/class.renderer-advanced.php:216
+#: ../admin/class.renderer-simple.php:291
+msgid ""
+"CDN support is disabled. Choose a CDN provider to activate serving images "
+"through the selected CDN."
+msgstr ""
+"Soporte CDN esta inactivo. Elegir un proveedor de CDN para activar servir "
+"imágenes a través de la CDN seleccionada."
+
+#: ../admin/class.renderer-advanced.php:219
+#: ../admin/class.renderer-simple.php:294
+msgid ""
+"<a href=\"http://www.coralcdn.org\" target=\"_blank\">CoralCDN</a> does not "
+"require any additional settings."
+msgstr ""
+"<a Href=\"http://www.coralcdn.org\" target=\"_blank\"> CoralCDN </a> no "
+"requiere ninguna configuración adicional."
+
+#: ../admin/class.renderer-advanced.php:222
+#: ../admin/class.renderer-simple.php:297
+msgid "MaxCDN Pull Zone URL:"
+msgstr "URL MaxCDN Pull Zone:"
+
+#: ../admin/class.renderer-advanced.php:223
+#: ../admin/class.renderer-simple.php:298
+msgid ""
+"<a href=\"https://cp.maxcdn.com\" target=\"_blank\">Log in</a> to your <a "
+"href=\"http://www.maxcdn.com\" target=\"_blank\">MaxCDN</a> account, create "
+"a pull zone for your WordPress site and enter the CDN URL for that zone."
+msgstr ""
+"<a href=\"https://cp.maxcdn.com\" target=\"_blank\">Log in</a> to your <a "
+"href=\"http://www.maxcdn.com\" target=\"_blank\">MaxCDN</a> , crear una zona "
+"de atracción para su sitio de WordPress y entrar en la URL CDN para esa zona."
+
+#: ../admin/class.renderer-advanced.php:226
+#: ../admin/class.renderer-simple.php:301
+msgid "CDN URL:"
+msgstr "URL CDN"
+
+#: ../admin/class.renderer-advanced.php:227
+#: ../admin/class.renderer-simple.php:302
+msgid ""
+"Enter your CDN URL. This will be used to substitute the host name in image "
+"links."
+msgstr ""
+"Ingrese su URL CDN. Esto se utiliza para sustituir el nombre de host en los "
+"enlaces de imagen."
+
+#: ../admin/class.renderer-advanced.php:232
+#: ../admin/class.renderer-simple.php:258
+msgid "Use CDN for images"
+msgstr "Usar CDN para las imágenes"
+
+#: ../admin/class.renderer-advanced.php:234
+msgid "Use on"
+msgstr "Utilice en"
+
+#: ../admin/class.renderer-advanced.php:234
+msgid "front end"
+msgstr "front end"
+
+#: ../admin/class.renderer-advanced.php:235
+msgid "back end"
+msgstr "back end"
+
+#: ../admin/class.renderer-advanced.php:236
+msgid "both"
+msgstr "Ambos"
+
+#: ../admin/class.renderer-advanced.php:237
+msgid ""
+"Select if CDN should be used for front end and/or back end images. You can "
+"deactivate front end CDN to avoid conflicts with other CDN plugins."
+msgstr ""
+"Seleccione si CDN debe utilizarse para las imágenes de back-end y / o frront-"
+"end. Puede desactivar CDN front-end para evitar conflictos con otros plugins "
+"CDN."
+
+#: ../admin/class.renderer-advanced.php:240
+msgid "Dynamic image linking"
+msgstr "Vinculación Imagen dinámica"
+
+#: ../admin/class.renderer-advanced.php:243
+msgid ""
+"Instead of inserting fixed image urls into posts, urls get build dynamically "
+"when displaying the content. <strong>Highly recommended when using a CDN for "
+"front end images.</strong>"
+msgstr ""
+"En lugar de insertar urls de imágenes fijas en publicaciones, las urls se "
+"construyen dinámicamente cuando se muestra el contenido. <strong> Muy "
+"recomendable cuando se utiliza un CDN para las imágenes de front-end. </"
+"strong>"
+
+#: ../admin/class.renderer-advanced.php:245
+msgid "Restore static links"
+msgstr "Restaurar enlaces estáticos"
+
+#: ../admin/class.renderer-advanced.php:246
+msgid ""
+"Use this to restore all dynamic links to static links if you deactivate "
+"dynamic linking. Links will be automatically restored when WPPP gets "
+"deactivated."
+msgstr ""
+"Usar esta opción para restaurar todos los vínculos dinámicos a enlaces "
+"estáticos si se desactiva el enlace dinámico. Enlaces se restaurará "
+"automáticamente cuando WPPP se desactiva."
+
+#: ../admin/class.renderer-advanced.php:289
+msgid "Debug Panel"
+msgstr "Panel Depuración"
+
+#: ../admin/class.renderer-advanced.php:292
+msgid ""
+"Enables debugging, requires <a href=\"http://wordpress.org/plugins/debug-bar/"
+"\">Debug Bar</a> Plugin."
+msgstr ""
+"Activa la depuración, requiere el plugin<a href=\"http://wordpress.org/"
+"plugins/debug-bar/\">Barra de depuración</a>."
+
+#: ../admin/class.renderer-simple.php:37
+msgid ""
+"When you select an option, optimal settings will be applied. Applied "
+"settings will be displayed. If some settings couldn't be applied, e.g. due "
+"to missing requirements, these will be displayed in red and the next best "
+"setting (if available) will be chosen. Also hints as to why a setting "
+"couldn't be applied will be displayed. Advanced view offers more in depth "
+"control of WPPP settings."
+msgstr ""
+"Cuando se selecciona una opción, se aplicará la configuración óptima. Se "
+"mostrarán los ajustes aplicados. Si algunos ajustes no pueden aplicarse, por "
+"ejemplo, debido a los requisitos faltantes, éstos se mostrarán en rojo y se "
+"elegirá la siguiente mejor opción (si está disponible). También se mostrarán "
+"sugerencias de por qué un entorno no pudo ser aplicado. Vista avanzada "
+"ofrece más en control de la profundidad de la configuración de WPPP."
+
+#: ../admin/class.renderer-simple.php:42
+msgid "Improve translation performance"
+msgstr "Mejorar el rendimiento de traducción"
+
+#: ../admin/class.renderer-simple.php:43
+msgid ""
+"WPPP offers different levels of improving translation performance. "
+"<em>Stable</em> should work on any WordPress blog, <em>Fast</em> further "
+"improves performance, but JIT script localization might cause issues with "
+"some plugins (if you encounter any problems please report them in the "
+"support forums)."
+msgstr ""
+"WPPP ofrece diferentes niveles de mejora del rendimiento de traducción. <em> "
+"Estable </em> debería funcionar en cualquier blog de ​​WordPress, <em>Rápido</"
+"em>, mejora aún más el rendimiento, pero la localización del guión JIT "
+"podría causar problemas con algunos plugins (si tiene algún problema por "
+"favor háganoslo saber en los foros de soporte )."
+
+#: ../admin/class.renderer-simple.php:49
+msgid ""
+"Improve image upload speed and web space usage using this setting. Creation "
+"of different image sizes will be delayed upon the first access to the "
+"respective image. <em>Fast</em> uses EXIF thumbs to create small image "
+"sizes, which might cause issues as EXIF thumbs and actual images might "
+"differ (depending on used image editing software). Use <em>Webspace</em> "
+"only for testing environments or if you are really low on webspace, as this "
+"option will slow down your blog because intermediate images don't get saved "
+"to disc."
+msgstr ""
+"Mejorar la imagen de la velocidad de subida y el uso del espacio web "
+"utilizando este ajuste. La creación de diferentes tamaños de imagen se "
+"retrasará en el primer acceso a la imagen respectiva. <em> Rápido </em> "
+"utiliza las miniaturas EXIF para crear tamaños de imagen pequeños, lo que "
+"podría causar problemas pues las miniaturas EXIF e imágenes reales podrían "
+"diferir (dependiendo del software de edición de imagen que se utiliza). "
+"Utilice <em> Espacio web </em> sólo para entornos de prueba o si usted está "
+"realmente bajo en espacio web, ya que esta opción ralentizará su blog porque "
+"las imágenes intermedias no se guardan en el disco."
+
+#: ../admin/class.renderer-simple.php:125
+msgid "Off"
+msgstr "Apagado"
+
+#: ../admin/class.renderer-simple.php:126
+msgid "Stable"
+msgstr "Estable"
+
+#: ../admin/class.renderer-simple.php:127
+msgid "Speed"
+msgstr "Velocidad"
+
+#: ../admin/class.renderer-simple.php:129
+msgid "Webspace"
+msgstr "Espacio web"
+
+#: ../admin/class.renderer-simple.php:161
+msgid "Localization improvements turned off"
+msgstr "Mejoras de localización apagadas"
+
+#: ../admin/class.renderer-simple.php:165
+msgid "Fast WordPress localization"
+msgstr "Localización rápida de WordPress"
+
+#: ../admin/class.renderer-simple.php:166
+msgid "Safe settings that should work with any WordPress installation."
+msgstr ""
+"Configuraciones seguras que deberían funcionar con cualquier instalación de "
+"WordPress."
+
+#: ../admin/class.renderer-simple.php:170
+msgid "Fastest WordPress localization"
+msgstr "Localización WordPress más rápida."
+
+#: ../admin/class.renderer-simple.php:171
+msgid ""
+"Fastest localization settings. If any problems occur after activating, "
+"switch to stable setting."
+msgstr ""
+"Ajustes de localización más rápidos  Si se produce algún problema después de "
+"activar, cambiar a configuración estable."
+
+#: ../admin/class.renderer-simple.php:175
+#: ../admin/class.renderer-simple.php:230
+msgid "Custom settings"
+msgstr "Configuración personalizada"
+
+#: ../admin/class.renderer-simple.php:176
+#: ../admin/class.renderer-simple.php:231
+msgid "Select your own settings. Customize via advanced view."
+msgstr ""
+"Seleccione sus propios ajustes. Personalice a través de vista avanzada."
+
+#: ../admin/class.renderer-simple.php:211
+msgid "All image handling improvements turned off"
+msgstr "Todas las mejoras de manipulación de imágenes apagadas"
+
+#: ../admin/class.renderer-simple.php:215
+msgid "Faster image upload"
+msgstr "Carga de imágenes más rápida"
+
+#: ../admin/class.renderer-simple.php:216
+msgid ""
+"Improved upload performance due to dynamically created intermediate images. "
+"Once created images are saved to disc and served directly."
+msgstr ""
+"Mejora del rendimiento de carga debido a creado de imágenes intermedias "
+"dinámico. Una vez creadas las imágenes se guardan en el disco y se sirve "
+"directamente."
+
+#: ../admin/class.renderer-simple.php:220
+msgid "Faster image upload and thumbnail creation"
+msgstr "Carga de imágenes más rápida y creación de miniaturas"
+
+#: ../admin/class.renderer-simple.php:221
+msgid ""
+"Dynamically created intermediate images, use of EXIF thumbnails if "
+"available. <strong>Thumbnails may differ from actual image depending on EXIF "
+"thumbnail.</strong>"
+msgstr ""
+"Imágenes intermedias creadas dinámicamente dinámicamente, el uso de "
+"miniaturas EXIF si está disponible. <strong> Miniaturas puede diferir de la "
+"imagen real en función de EXIF miniatura. </strong>"
+
+#: ../admin/class.renderer-simple.php:225
+msgid ""
+"Faster upload / thumbnail creation creation and reduced disc space usage."
+msgstr ""
+"Subida más rápida / creación de miniaturas y reducción de uso de espacio en "
+"disco."
+
+#: ../admin/class.renderer-simple.php:226
+msgid ""
+"<strong>Without CDN not recommended for production sites!</strong><br/"
+">Intermediate images are created on demand but are not saved to disc."
+msgstr ""
+"<strong> ¡Sin CDN no se recomienda para los sitios de producción! </strong> "
+"<br/> Imágenes intermedias se crean bajo demanda, pero no se guardan en el "
+"disco."
+
+#: ../admin/class.renderer-simple.php:260
+msgid ""
+"Using a CDN for images improves loading times and eliminates the need to "
+"save intermediate images locally (select Webspace). The default settings "
+"when activating CDN support are activate dynamic image linking and serving "
+"images through CDN on both front and back end. These settings can be "
+"adjusted via advanced view. Dynamic links will be restored to static links "
+"when deactivating WPPP. If CDN support gets deactivated, links can be "
+"restored manually via advanced view."
+msgstr ""
+"Usar un CDN para las imágenes mejora los tiempos de carga y elimina la "
+"necesidad de guardar las imágenes intermedias a nivel local (seleccione "
+"espacio web). La configuración por defecto al activar el Soporte CDN son "
+"activar dinámica vincular la imagen y servir imágenes a través de CDN en "
+"ambos extremos delantero y trasero. Estos ajustes se pueden ajustar a través "
+"de la vista avanzada. Los enlaces dinámicos se restaurarán a los enlaces "
+"estáticos cuando se desactiva WPPP. Si el soporte de CDN se desactiva, los "
+"enlaces se pueden restaurar de forma manual a través de la vista avanzada."
+
+#: ../admin/class.renderer-simple.php:401
+msgid "All improved image handling settings disabled."
+msgstr ""
+"Todas las configuraciones mejoradas de manejo de imágenes deshabilitado."
+
+#: ../admin/class.renderer-simple.php:404
+msgid "Pretty Permalinks must be enabled for improved image handling"
+msgstr ""
+"Pretty Permalinks debe estar habilitada para un mejor manejo de la imagen"
+
+#: ../admin/class.renderer-simple.php:406
+msgid "Dynamic image resizing enabled"
+msgstr "Cambio de tamaño dinámico de imágenes activado"
+
+#: ../admin/class.renderer-simple.php:408
+msgid "Intermediate image quality set to 80%"
+msgstr "Calidad de imagen intermedia establecida en 80%"
+
+#: ../admin/class.renderer-simple.php:411
+#: ../admin/class.renderer-simple.php:444
+msgid "Use EXIF thumbnails if available."
+msgstr "Use miniaturas EXIF si está disponible."
+
+#: ../admin/class.renderer-simple.php:413
+msgid "EXIF extension not installed"
+msgstr "Extensión EXIF no se instaló"
+
+#: ../admin/class.renderer-simple.php:420
+#: ../admin/class.renderer-simple.php:471
+msgid "No persistent object cache installed."
+msgstr "Sin caché de objetos persistentes instalado."
+
+#: ../admin/class.renderer-simple.php:425
+msgid "No Regenerate Thumbnails plugin installed"
+msgstr "No Regenerar Miniaturas plugin instalado"
+
+#: ../admin/class.renderer-simple.php:440
+msgid "Force delte all on Regenerate Thumbnails"
+msgstr "Fuerza eliminar todo en Regenerar Miniaturas"
+
+#: ../admin/class.renderer-simple.php:446
+#, php-format
+msgid "Intermediate image quality set to %s%%"
+msgstr "Calidad de imagen Intermedia ajustada a %s%%"
+
+#: ../admin/class.renderer-simple.php:448
+msgid "Dynamic image links"
+msgstr "Enlaces de imágenes dinámicas"
+
+#: ../admin/class.renderer-simple.php:460
+msgid "All translation settings turned off."
+msgstr "Todas las configuraciones de traducción apagadas."
+
+#: ../admin/class.renderer-simple.php:466
+msgid "Gettext not available."
+msgstr "Gettext no disponible."
+
+#: ../admin/class.renderer-simple.php:479
+msgid "JIT localize not available"
+msgstr "Localizar JIT no disponible"
+
+#: ../admin/class.renderer-simple.php:482
+#: ../admin/class.renderer-simple.php:499
+msgid "Disable back end translation"
+msgstr "Desactivar traducción back-end"
+
+#: ../admin/class.wppp-admin-admin.php:91
+#: ../admin/class.wppp-admin-admin.php:93
+msgid "Performance Pack"
+msgstr "Performance Pack"
+
+#: ../admin/class.wppp-admin-user.php:43
+msgid "Translate back end"
+msgstr "Traducir back end"
+
+#: ../admin/class.wppp-admin-user.php:45
+msgid "Enable back end translation"
+msgstr "Habilitar traducción back-end"
+
+#: ../admin/class.wppp-admin-user.php:46
+msgid ""
+"Enable or disable back end translation. When disabled, back end will be "
+"displayed in english, else it will be translated to the blog language."
+msgstr ""
+"Activar o desactivar traducción back-end. Cuando se desactiva, back-end se "
+"mostrará en Inglés, de lo contrario se puede traducir al lenguaje del blog."

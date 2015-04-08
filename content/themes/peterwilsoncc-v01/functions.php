@@ -3,6 +3,12 @@ $content_width=1200;
 $pwcc_css_ver = "20150403-01";
 $pwcc_js_ver =  "20150404-01";
 
+function pwcc__return_ok($val){
+return 'ok';
+}
+add_filter( 'pre_transient_wppp_cdntest', 'pwcc__return_ok' );
+
+
 class PWCC_theme {
 	
 	
