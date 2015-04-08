@@ -81,7 +81,7 @@ function target_url_strategy_for($pattern) {
  */
 class URI_changer
 {
-	/** String: the blog's URL ( get_option('siteurl') ) */
+	/** String: the blog's URL ( get_option('home') ) */
 	var $blog_url		= null;
 	/** Target_URL_Strategy: results in URL of a CDN domain */
 	var $get_target_url	= null;
@@ -220,13 +220,13 @@ class URI_changer
  * This is called by Wordpress.
  */
 function register_as_output_buffer_handler() {
-	if (get_option('siteurl') == trim(get_option('ossdl_off_cdn_url'))) {
+	if (get_option('home') == trim(get_option('ossdl_off_cdn_url'))) {
 		return;
 	}
 
 	$excludes = array_map('trim', explode(',', get_option('ossdl_off_exclude')));
 	$rewriter = new URI_changer(
-		get_option('siteurl'),
+		get_option('home'),
 		target_url_strategy_for(trim(get_option('ossdl_off_cdn_url'))),
 		trim(get_option('ossdl_off_include_dirs')),
 		$excludes,
