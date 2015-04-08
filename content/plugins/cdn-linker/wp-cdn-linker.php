@@ -18,7 +18,7 @@ if ( @include_once('cdn-linker-base.php') ) {
 /********** WordPress Administrative ********/
 
 function on_plugin_activation() {
-	add_option('ossdl_off_cdn_url', get_option('siteurl'));
+	add_option('ossdl_off_cdn_url', get_option('home'));
 	add_option('ossdl_off_include_dirs', 'wp-content,wp-includes');
 	add_option('ossdl_off_exclude', '.php');
 	add_option('ossdl_off_rootrelative', '');
@@ -72,11 +72,11 @@ function on_handle_admin_page() {
 	}
 
 	$example_file_rr = '/wp-includes/images/rss.png';
-	if (get_option('ossdl_off_cdn_url') == get_option('siteurl')) {
-		$example_cdn_uri = str_replace('http://', 'http://cdn.', str_replace('www.', '', get_option('siteurl')))
+	if (get_option('ossdl_off_cdn_url') == get_option('home')) {
+		$example_cdn_uri = str_replace('http://', 'http://cdn.', str_replace('www.', '', get_option('home')))
 				. $example_file_rr;
 	} else {
-		$example_uri = get_option('siteurl') . $example_file_rr;
+		$example_uri = get_option('home') . $example_file_rr;
 		$get_target_url = cdn\target_url_strategy_for(trim(get_option('ossdl_off_cdn_url')));
 		$example_cdn_uri = $get_target_url->for_source($example_uri) . $example_file_rr;
 	}
@@ -95,7 +95,7 @@ function on_handle_admin_page() {
 				<th scope="row"><label for="ossdl_off_cdn_url">CDN URL</label></th>
 				<td>
 					<input type="text" name="ossdl_off_cdn_url" value="<?php echo(esc_attr(get_option('ossdl_off_cdn_url'))); ?>" size="64" class="regular-text code" />
-					<span class="description">The new URL to be used in place of <?php echo(get_option('siteurl')); ?> for rewriting. No trailing <code>/</code> please. E.&thinsp;g. <code><?php echo($example_cdn_uri); ?></code>.
+					<span class="description">The new URL to be used in place of <?php echo(get_option('home')); ?> for rewriting. No trailing <code>/</code> please. E.&thinsp;g. <code><?php echo($example_cdn_uri); ?></code>.
 					&mdash;
 					You can use <code>%4%</code> (a number between 1 and 9, surrounded by percent signs) to use that many hostname variations.
 					Should be between 2 and 4, with 4 being beyond an universal optimum.
