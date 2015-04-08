@@ -13,7 +13,7 @@ function pwcc_filter_asset_src( $src ){
 	$pwcc_non_cdn_string = '://peterwilson.cc/';
 	$pwcc_cdn_string     = '://s0.pwcc.cc/';
 
-	str_replace( $pwcc_non_cdn_string, $pwcc_cdn_string, $src );
+	$src = str_replace( $pwcc_non_cdn_string, $pwcc_cdn_string, $src );
 
 	return $src;
 }
