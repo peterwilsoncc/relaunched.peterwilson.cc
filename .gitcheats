@@ -1,0 +1,10 @@
+Remove all deleted files:
+git rm $(git ls-files --deleted)
+
+Add all
+git add .
+
+Commit everything
+git commit -am "Commit message"
+
+
