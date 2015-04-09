@@ -5,7 +5,7 @@
  Description: Webmention support for WordPress posts
  Author: pfefferle
  Author URI: http://notizblog.org/
- Version: 2.4.0-beta
+ Version: 2.3.3
 */
 
 // check if class already exists
@@ -43,8 +43,13 @@ class WebMentionPlugin {
     add_filter('query_vars', array('WebMentionPlugin', 'query_var'));
     add_action('parse_query', array('WebMentionPlugin', 'parse_query'));
 
+    add_action('admin_comment_types_dropdown', array('WebMentionPlugin', 'comment_types_dropdown'));
+
+    // endpoint discovery
     add_action('wp_head', array('WebMentionPlugin', 'html_header'), 99);
     add_action('send_headers', array('WebMentionPlugin', 'http_header'));
+    add_filter('host_meta', array('WebMentionPlugin', 'jrd_links'));
+    add_filter('webfinger_data', array('WebMentionPlugin', 'jrd_links'));
 
     // run webmentions before the other pinging stuff
     add_action('do_pings', array('WebMentionPlugin', 'do_webmentions'), 5, 1);
@@ -70,39 +75,6 @@ class WebMentionPlugin {
   }
 
   /**
-   * generate a valid expire code. 
-   * Three possible values are valid at any one time, ticks: 0, 1, or 2
-   * 
-   * @return array
-   */
-  public static function expire_code( $tick = 0 ) {
-    $action = 'web mention endpoint';
-    $time_format = 'Y-m-d a';
-    $time_block = 12 * HOUR_IN_SECONDS;
-    $tick = abs( intval( $tick ) );
-    if ( 3 < $tick ) {
-        // something wrong, tick too high/
-        // use default
-        $tick = 0;
-    }
-    $expire_code = date( $time_format, time() - ( $tick * $time_block ) );
-    
-    // always use logged out user code, endpoint may be looked up by a logged in user
-    // while the web mention comes from a logged out user (using curl or similar)
-    $uid = 0;
-    $uid = apply_filters( 'nonce_user_logged_out', $uid, $action );
-    
-    // as above, always use the lgoged out token.
-    $token = '';
-
-
-    $expire_code = wp_hash( $expire_code . '|' . $action . '|' . $uid . '|' . $token, 'nonce' );
-    
-    return $expire_code;
-  }
-  
-  
-  /**
    * Parse the WebMention request and render the document
    *
    * @param WP $wp WordPress request context
@@ -114,43 +86,23 @@ class WebMentionPlugin {
     if (!array_key_exists('webmention', $wp->query_vars)) {
       return;
     }
-    else {
-      // check if the end point has expired
-      $valid_ticks = array( 0, -1, -2 );
-      
-      $supplied_code = get_query_var( 'webmention' );
-      $is_valid = false;
- 
-      foreach ( $valid_ticks as $tick ) {
-        if ( hash_equals( WebMentionPlugin::expire_code( $tick ), $supplied_code ) ) {
-          $is_valid = true;
-          break;
-        }
-      }
-    }
+
+    $input = file_get_contents('php://input');
+    $params = array();
+    parse_str($input, $params);
 
     // plain text header
     header('Content-Type: text/plain; charset=' . get_option('blog_charset'));
 
-    // fail if invalide endpoint
-    if ( false == $is_valid ) {
-      status_header(400);
-      echo "invalid endpoint";
-      exit;
-    }
-
-    $content = file_get_contents('php://input');
-    parse_str($content);
-
     // check if source url is transmitted
-    if (!isset($source)) {
+    if (!isset($params['source'])) {
       status_header(400);
       echo "'source' is missing";
       exit;
     }
 
     // check if target url is transmitted
-    if (!isset($target)) {
+    if (!isset($params['target'])) {
       status_header(400);
       echo "'target' is missing";
       exit;
@@ -158,7 +110,7 @@ class WebMentionPlugin {
 
     // @todo check if target-host matches the blog-host
 
-    $response = wp_remote_get($source, array('timeout' => 100));
+    $response = wp_remote_get($params['source'], array('timeout' => 100));
 
     // check if source is accessible
     if (is_wp_error($response)) {
@@ -170,14 +122,14 @@ class WebMentionPlugin {
     $contents = wp_remote_retrieve_body($response);
 
     // check if source really links to target
-    if (!strpos($contents, str_replace(array('http://www.','http://','https://www.','https://'), '', untrailingslashit(preg_replace('/#.*/', '', $target))))) {
+    if (!strpos($contents, str_replace(array('http://www.','http://','https://www.','https://'), '', untrailingslashit(preg_replace('/#.*/', '', $params['target']))))) {
       status_header(400);
       echo "Can't find target link.";
       exit;
     }
 
     // be sure to add an "exit;" to the end of your request handler
-    do_action("webmention_request", $source, $target, $contents);
+    do_action("webmention_request", $params['source'], $params['target'], $contents);
 
     // if no "action" is responsible, return a 404
     status_header(404);
@@ -341,6 +293,20 @@ class WebMentionPlugin {
     $content = sprintf(__('This %s was mentioned on <a href="%s">%s</a>', 'webmention'), $post_format, esc_url($source), $host);
 
     return $content;
+  }
+
+  /**
+   * Extend the "filter by comment type" of in the comments section
+   * of the admin interface with "webmention"
+   *
+   * @param array $types the different comment types
+   *
+   * @return array the filtert comment types
+   */
+  public static function comment_types_dropdown($types) {
+    $types['webmention'] = __('Webmentions', 'webmention');
+
+    return $types;
   }
 
   /**
@@ -609,20 +575,34 @@ class WebMentionPlugin {
    * The WebMention autodicovery meta-tags
    */
   public static function html_header() {
+    $endpoint = apply_filters("webmention_endpoint", site_url("?webmention=endpoint"));
+
     // backwards compatibility with v0.1
-    $endpoint_code = WebMentionPlugin::expire_code();
-    echo '<link rel="http://webmention.org/" href="'.site_url("?webmention=" . $endpoint_code ).'" />'."\n";
-    echo '<link rel="webmention" href="'.site_url("?webmention=" . $endpoint_code ).'" />'."\n";
+    echo '<link rel="http://webmention.org/" href="'.$endpoint.'" />'."\n";
+    echo '<link rel="webmention" href="'.$endpoint.'" />'."\n";
   }
 
   /**
    * The WebMention autodicovery http-header
    */
   public static function http_header() {
+    $endpoint = apply_filters("webmention_endpoint", site_url("?webmention=endpoint"));
+
     // backwards compatibility with v0.1
-    $endpoint_code = WebMentionPlugin::expire_code();
-    header('Link: <'.site_url("?webmention=" . $endpoint_code).'>; rel="http://webmention.org/"', false);
-    header('Link: <'.site_url("?webmention=" . $endpoint_code).'>; rel="webmention"', false);
+    header('Link: <'.$endpoint.'>; rel="http://webmention.org/"', false);
+    header('Link: <'.$endpoint.'>; rel="webmention"', false);
+  }
+
+  /**
+   * Generates webfinger/host-meta links
+   */
+  public static function jrd_links($array) {
+    $endpoint = apply_filters("webmention_endpoint", site_url("?webmention=endpoint"));
+
+    $array["links"][] = array("rel" => "webmention", "href" => $endpoint);
+    $array["links"][] = array("rel" => "http://webmention.org/", "href" => $endpoint);
+
+    return $array;
   }
 
   /**
@@ -649,21 +629,21 @@ class WebMentionPlugin {
     // $scheme, $host, $path
     extract(parse_url($base));
     // remove  non-directory element from path
-    $path = preg_replace('#/[^/]*$#',  '', $path);
+    $path = preg_replace('#/[^/]*$#', '', $path);
     // destroy path if relative url points to root
-    if ($rel[0] ==  '/') $path = '';
+    if ($rel[0] == '/') $path = '';
     // dirty absolute  URL
-    $abs =  "$host";
+    $abs = "$host";
     // check port
     if (isset($port) && !empty($port))
       $abs .= ":$port";
     // add path + rel
-    $abs .=  "$path/$rel";
+    $abs .= "$path/$rel";
     // replace '//' or '/./' or '/foo/../' with '/'
-    $re =  array('#(/\.?/)#', '#/(?!\.\.)[^/]+/\.\./#');
+    $re = array('#(/\.?/)#', '#/(?!\.\.)[^/]+/\.\./#');
     for ($n=1; $n>0; $abs=preg_replace($re, '/', $abs, -1, $n)) {}
     // absolute URL is ready!
-    return  $scheme.'://'.$abs;
+    return $scheme.'://'.$abs;
   }
 }
 
