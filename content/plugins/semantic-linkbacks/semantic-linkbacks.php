@@ -129,7 +129,7 @@ class SemanticLinkbacksPlugin {
 
     // remove "webmention" comment-type if $type is "reply"
     if (isset($commentdata['_type']) && in_array($commentdata['_type'], apply_filters("semantic_linkbacks_comment_types", array("reply")))) {
-      // $commentdata["comment_type"] = "";
+      $commentdata["comment_type"] = "";
 			global $wpdb;
 			$wpdb->update($wpdb->comments, array('comment_type' => ''), array('comment_ID' => $commentdata["comment_ID"]));
     }
