@@ -23,7 +23,11 @@ add_filter( 'template_directory_uri',    'pwcc_filter_asset_src' );
 add_filter( 'style_loader_src',  'pwcc_filter_asset_src' );
 add_filter( 'script_loader_src', 'pwcc_filter_asset_src' );
 
-
+function pwcc_filter_pwcc_rapid_cache_busting_managed_hosts( $hosts ) {
+	$hosts[] = 's0.pwcc.cc';
+	return $hosts;
+}
+add_filter( 'pwcc_rapid_cache_busting_managed_hosts', 'pwcc_filter_pwcc_rapid_cache_busting_managed_hosts' );
 
 
 
