@@ -36,7 +36,7 @@ Add the following to your configuration
 
 	location / {
 		if (!-e $request_filename){
-			rewrite ^/(.*)\\.([0-9A-Fa-f]+)\\.(js|css)$ /$1.$3 break;
+			rewrite ^/(.*)\.([0-9A-Fa-f]+)\.(js|css)$ /$1.$3 break;
 		}
 	}
 
