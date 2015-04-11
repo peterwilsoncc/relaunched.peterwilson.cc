@@ -166,6 +166,7 @@ class PWCC_theme {
 		echo ';';
 		if ( !isset( $_COOKIE["pwccsscache"] ) || ( $pwcc_css_ver != $_COOKIE["pwccsscache"] ) ) {
 			$css = get_template_directory_uri() . '/assets/css/style.min.css?ver=' . $pwcc_css_ver ;
+			$css = apply_filters( 'style_loader_src', $css, 'pwcc-styles' );
 			
 			echo 'PWCC.loadCSS( "' . $css . '", document.getElementById("pwcc-inline-js") );';
 			echo 'document.cookie = "pwccsscache=' . $pwcc_css_ver . '; path=/";';
