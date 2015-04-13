@@ -1,4 +1,4 @@
-=== Rapid Cache Buster ===
+=== Rapid Cache Busting ===
 Contributors: peterwilsoncc
 Tags: css, javascript, assets, htaccess, caching
 Tested up to: 4.2
