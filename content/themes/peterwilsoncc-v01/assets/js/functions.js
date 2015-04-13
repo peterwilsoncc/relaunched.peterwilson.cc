@@ -314,13 +314,7 @@ var console = window.console || {  // jshint ignore:line
 	}
 	
 	function fitVids() {
-		var selectors = [
-			'iframe[src*="player.vimeo.com"]',
-			'iframe[src*="youtube.com"]',
-			'iframe[src*="youtube-nocookie.com"]',
-			'iframe[src*="kickstarter.com"][src*="video.html"]',
-			'object',
-			'embed'];
+		var selectors = PWCC_data.FitVid_Selectors;
 
 		var styles = [];
 

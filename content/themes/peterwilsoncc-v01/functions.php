@@ -1,7 +1,7 @@
 <?php
 $content_width=1200;
 $pwcc_css_ver = "20150403-01";
-$pwcc_js_ver =  "20150404-01";
+$pwcc_js_ver =  "20150413-01";
 
 function pwcc__return_ok($val){
 return 'ok';
@@ -136,6 +136,14 @@ class PWCC_theme {
 				'figure.aligncenter>img',
 				'figure.alignnone>img',
 				'.fluid-width-video-wrapper'
+			),
+			'FitVid_Selectors' => array(
+				'iframe[src*="player.vimeo.com"]',
+				'iframe[src*="youtube.com"]',
+				'iframe[src*="youtube-nocookie.com"]',
+				'iframe[src*="kickstarter.com"][src*="video.html"]',
+				'object',
+				'embed'
 			)
 		);
 		
