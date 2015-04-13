@@ -138,6 +138,7 @@ class PWCC_theme {
 				'.fluid-width-video-wrapper'
 			),
 			'FitVid_Selectors' => array(
+				'iframe[src*="speakerdeck.com"]',
 				'iframe[src*="player.vimeo.com"]',
 				'iframe[src*="youtube.com"]',
 				'iframe[src*="youtube-nocookie.com"]',
