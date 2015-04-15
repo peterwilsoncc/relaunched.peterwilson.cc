@@ -11,7 +11,7 @@ class WPPP_CDN_Support extends WPPP_Module {
 
 	public function load_renderer ( $view ) {
 		if ( $this->renderer == NULL ) {
-			if ( $view = 'advanced' ) {
+			if ( $view === 'advanced' ) {
 				$this->renderer = new WPPP_CDN_Support_Advanced ();
 			} else {
 				$this->renderer = new WPPP_CDN_Support_Simple ();
@@ -20,11 +20,6 @@ class WPPP_CDN_Support extends WPPP_Module {
 	}
 
 	public function get_default_options () { return static::$options_default; }
-
-	function is_active () { 
-		// always load cdn support for dynamic links - to keep once substituted urls working even if dyn_links is disabled
-		return $this->wppp->options['cdn'] || $this->wppp->options['dyn_links'];
-	}
 
 	function is_available () { return true; } // always available
 
@@ -102,6 +97,9 @@ class WPPP_CDN_Support extends WPPP_Module {
 		delete_transient( 'wppp_cdntest' ); // cdn settings might have changed, so delete last test result
 		return $output;
 	}
+
+	public function tabName() { return __( 'CDN', 'wppp' ); }
+	public function description() { return __( 'Serve images through CDN. Applies to images in both front end (what visitors see) and back end (your dashboard).', 'wppp' ); }
 }
 
 ?>

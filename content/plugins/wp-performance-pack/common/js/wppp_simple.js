@@ -32,25 +32,6 @@ jQuery(document).ready(function($){
 		}
 	}
 
-	$( "#l10n-slider" ).slider({
-		orientation: "vertical",
-		value: wpppData.l10n.current,
-		min: 0,
-		max: 3,
-		step: 1,
-		slide: function( event, ui ) {
-			displaySetting(lastL10n, 'l10n', ui.value );
-			setSettingInputValues( wpppData.l10n.settings, ui.value);
-		}
-	}).slider( 'pips', {
-		rest: 'label',
-		labels: [ 	wpppData.labels.Off,
-					wpppData.labels.Stable,
-					wpppData.labels.Speed,
-					wpppData.labels.Custom
-				]
-	});
-
 	function updateDynImgSlider ( level ) {
 		$( "#dynimg-slider" ).slider({
 			orientation: "vertical",
@@ -74,8 +55,32 @@ jQuery(document).ready(function($){
 		displaySetting ( lastDynimg, "dynimg", level );
 	}
 
-	updateDynImgSlider( wpppData.dynimg.current );
-	displaySetting( lastL10n, "l10n", wpppData.l10n.current );
+	if ( $( "#dynimg-slider" ).length !== 0 ) {
+		updateDynImgSlider( wpppData.dynimg.current );
+	}
+
+	if ( $( "#l10n-slider" ).length !== 0 ) {
+		$( "#l10n-slider" ).slider({
+			orientation: "vertical",
+			value: wpppData.l10n.current,
+			min: 0,
+			max: 3,
+			step: 1,
+			slide: function( event, ui ) {
+				displaySetting(lastL10n, 'l10n', ui.value );
+				setSettingInputValues( wpppData.l10n.settings, ui.value);
+			}
+		}).slider( 'pips', {
+			rest: 'label',
+			labels: [ 	wpppData.labels.Off,
+						wpppData.labels.Stable,
+						wpppData.labels.Speed,
+						wpppData.labels.Custom
+					]
+		});
+
+		displaySetting( lastL10n, "l10n", wpppData.l10n.current );
+	}
 	
 	// Support Sticky
 	var stickyNavTop = $('.wppp-sticky').offset().top - $('#wpadminbar').height();
@@ -106,48 +111,47 @@ jQuery(document).ready(function($){
 	});
 
 	// CDN dropbox
-	$( "#wppp-cdn-select" ).change( function() {
-		$( ".wppp-cdn-div").hide();
-		
-		var value = $( "#wppp-cdn-select option:selected" ).val();
+	if ( $( "#wppp-cdn-select" ).length !== 0 ) {
+		$( "#wppp-cdn-select" ).change( function() {
+			$( ".wppp-cdn-div").hide();
+			var value = $( "#wppp-cdn-select option:selected" ).val();
+			// show cdn info
+			if ( value == "coralcdn" ) {
+				$( "#wppp-coralcdn" ).show();
+				$( "#wppp-maxcdn-signup" ).hide();
+			} else if ( value == "maxcdn" ) {
+				$( "#wppp-maxcdn" ).show();
+				$( "#wppp-maxcdn-signup" ).show();
+			} else if ( value == "customcdn" ) {
+				$( "#wppp-customcdn" ).show();
+				$( "#wppp-maxcdn-signup" ).hide();
+			} else {
+				$( "#wppp-nocdn" ).show();
+				$( "#wppp-maxcdn-signup" ).hide();
+			}
 
-		// show cdn info
-		if ( value == "coralcdn" ) {
-			$( "#wppp-coralcdn" ).show();
-			$( "#wppp-maxcdn-signup" ).hide();
-		} else if ( value == "maxcdn" ) {
-			$( "#wppp-maxcdn" ).show();
-			$( "#wppp-maxcdn-signup" ).show();
-		} else if ( value == "customcdn" ) {
-			$( "#wppp-customcdn" ).show();
-			$( "#wppp-maxcdn-signup" ).hide();
-		} else {
-			$( "#wppp-nocdn" ).show();
-			$( "#wppp-maxcdn-signup" ).hide();
-		}
+			// set dynamic links
+			if ( value == "coralcdn" || value == "maxcdn" || value == "customcdn" ) {
+				$( "#dynamic-links" ).val( 'true' );
+			} else {
+				$( "#dynamic-links" ).val( 'false' );
+			}
+		});
 
-		// set dynamic links
-		if ( value == "coralcdn" || value == "maxcdn" || value == "customcdn" ) {
-			$( "#dynamic-links" ).val( 'true' );
-		} else {
-			$( "#dynamic-links" ).val( 'false' );
-		}
+		// Set CDN url on submit
+		$( "#wppp-settings" ).submit(function( event ) {
+			var value = $( "#wppp-cdn-select option:selected" ).val();
 
-	});
-
-	// Set CDN url on submit
-	$( "#wppp-settings" ).submit(function( event ) {
-		var value = $( "#wppp-cdn-select option:selected" ).val();
-
-		// set cdn url
-		if ( value == "coralcdn" ) {
-			$( "#cdn-url" ).val('');
-		} else if ( value == "maxcdn" ) {
-			$( "#cdn-url" ).val( $( "#maxcdn-url" ).val() );
-		} else if ( value == "customcdn" ) {
-			$( "#cdn-url" ).val( $( "#customcdn-url" ).val() );
-		} else {
-			$( "#cdn-url" ).val( '' );
-		}
-	});
+			// set cdn url
+			if ( value == "coralcdn" ) {
+				$( "#cdn-url" ).val('');
+			} else if ( value == "maxcdn" ) {
+				$( "#cdn-url" ).val( $( "#maxcdn-url" ).val() );
+			} else if ( value == "customcdn" ) {
+				$( "#cdn-url" ).val( $( "#customcdn-url" ).val() );
+			} else {
+				$( "#cdn-url" ).val( '' );
+			}
+		});
+	}
 });

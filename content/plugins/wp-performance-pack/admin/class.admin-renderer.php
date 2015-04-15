@@ -1,26 +1,61 @@
 <?php
 /**
- * Abstract admin settings renderer class.
+ * Admin settings renderer class.
  *
  * @author Björn Ahrens <bjoern@ahrens.net>
  * @package WP Performance Pack
  * @since 0.9
  */
  
-abstract class WPPP_Admin_Renderer {
+class WPPP_Admin_Renderer {
 	public $wppp = NULL;
 	private $admin = NULL;
 	public $view = '';
+	public $current_tab = '';
 
 	public function __construct( $wppp_parent ) {
 		$this->wppp = $wppp_parent;
 	}
 
-	abstract function render_options ();
+	function enqueue_scripts_and_styles() {}
 
-	abstract function enqueue_scripts_and_styles();
+	public function add_help_tab() {
+		$screen = get_current_screen();
 
-	abstract function add_help_tab();
+		if ( $this->current_tab === '' ) {
+			$this->current_tab = ( isset ( $_GET['tab'] ) && isset( $this->wppp->modules[ $_GET['tab'] ] ) ) ? $_GET['tab'] : 'general';
+		}
+
+		if ( isset( $this->wppp->modules[ $this->current_tab ] ) ) {
+			$this->wppp->modules[ $this->current_tab ]->enqueue_scripts_and_styles( $this );
+			$this->wppp->modules[ $this->current_tab ]->add_help_tab( $this );
+		} else if ( $this->current_tab === 'general' ) {
+			$screen->add_help_tab( array(
+				'id'	=> 'wppp_general',
+				'title'	=> __('Overview'),
+				'content'	=> '<p>' . __( "Welcome to WP Performance Pack, your first choice for speeding up WordPress core the easy way. Simple view helps you to easily apply optimal settings for your blog. If available you can select different options, for which optimal settings will be applied. Applied settings will be displayed. If some settings couldn't be applied, e.g. due to missing requirements, these will be displayed in red and the next best setting (if available) will be chosen. Also hints as to why a setting couldn't be applied will be displayed. Advanced view offers more in depth control of WPPP settings.", 'wppp' ) . '</p>',
+			) );
+
+			$screen->add_help_tab( array(
+				'id'	=> 'wppp_modules',
+				'title'	=> __('Modules'),
+				'content'	=> '<p>' . __( "WPPP offers different modules to improve performance of your blog. If you disable a module you don't need, it's settings won't be displayed and the module will not be loaded. Module settings will be remembered when disabling and reenabling a module.", 'wppp' ) . '</p>',
+			) );
+
+			if ( $this->view !== 'simple' ) {
+				$screen->add_help_tab( array(
+					'id'	=> 'wppp_advanced_debugging',
+					'title'	=> __( 'Debugging', 'wppp' ),
+					'content'	=> '<p>' . sprintf( __( 'WPPP supports debugging using the %s plugin. When installed and activated, debugging adds a new panel to the Debug Bar showing information about loaded textdomains, used translation implementations and translation calls, as well as information about gettext support and other details.', 'wppp' ), '<a href="http://wordpress.org/plugins/debug-bar/">Debug Bar</a>' ) . '</p>',
+				) );
+			}
+		}
+
+		$screen->set_help_sidebar(
+			'<p><a href="http://wordpress.org/support/plugin/wp-performance-pack" target="_blank">' . __( 'Support Forums' ) . '</a></p>'
+			. '<p><a href="http://www.bjoernahrens.de/software/wp-performance-pack/" target="_blank">' . __( 'Development Blog (german)', 'wppp' ) . '</a></p>'
+		);
+	}
 
 	public function on_do_options_page() {}
 
@@ -28,33 +63,50 @@ abstract class WPPP_Admin_Renderer {
 		add_thickbox();
 		?>
 		<div class="wrap">
-			<img src="<?php echo plugins_url( 'img/wppp_logo_150.png' , __FILE__ ); ?>" style="float:left; margin-right:10px;" />
-			<h2 style="height:80px"><?php _e( 'WP Performance Pack - Settings', 'wppp' ); ?></h2>
-			<div style="clear:right"></div>
+			<?php
+			$tabs = array( 'general' => __( 'General', 'wppp' ) );
+			foreach( $this->wppp->modules as $modname => $modinstance ) {
+				if ( $this->wppp->options[ 'mod_' . $modname ] ) {
+					$tabs[$modname] = $this->wppp->modules[ $modname ]->tabName();
+				}
+			}
+
+			if ( $this->current_tab === '' ) {
+				$this->current_tab = ( isset ( $_GET['tab'] ) && isset( $this->wppp->modules[ $_GET['tab'] ] ) ) ? $_GET['tab'] : 'general';
+			}
+
+			echo '<h2 class="nav-tab-wrapper">';
+			echo '<div style="width:90px; height:32px; background: url('. plugins_url( 'img/wppp_logo_62x32.png' , __FILE__ ) .') no-repeat left; float:left;"><p style="float:right; margin-right:5px;">v' . WP_Performance_Pack::wppp_version . '</p></div>';
+			foreach( $tabs as $tab => $name ){
+				$class = ( $tab == $this->current_tab ) ? ' nav-tab-active' : '';
+				echo "<a class='nav-tab$class' href='?page=wppp_options_page&tab=$tab'>$name</a>";
+			}
+			echo '</h2>';
+			?>
 			
 			<div class="wppp-sticky" style="float:right; width:195px;">
 				<?php
 				$show_support = get_transient( 'wppp-support-box' );
 				$today = new DateTime();
-				if ( $show_support !== $today->format('Y-m-d') ) :
-				?>
-				<div id="wppp-support-box" class="wppp-support" style="width:95%; border: 1px solid #ddd; background: #fff; padding: 5px; text-align:center; margin-bottom:2em;">
-					<h3><?php _e( 'Support WPPP', 'wppp' ); ?></h3>
-					<p><?php _e( 'Do you like this Plugin? If so, please support its development.', 'wppp' ); ?></p>
-					<p><a href="http://wordpress.org/support/view/plugin-reviews/wp-performance-pack"><?php _e( 'Rate WPPP', 'wppp' );?></a></p>
+				if ( $show_support !== $today->format('Y-m-d') ) : ?>
+					<div id="wppp-support-box" class="wppp-support" style="width:95%; border: 1px solid #ddd; background: #fff; padding: 5px; text-align:center; margin-bottom:2em;">
+						<h3><?php _e( 'Support WPPP', 'wppp' ); ?></h3>
+						<p><?php _e( 'Do you like this Plugin? If so, please support its development.', 'wppp' ); ?></p>
+						<p><a href="http://wordpress.org/support/view/plugin-reviews/wp-performance-pack"><?php _e( 'Rate WPPP', 'wppp' );?></a></p>
 
-					<div>
-						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-							<input type="hidden" name="cmd" value="_s-xclick" />
-							<input type="hidden" name="hosted_button_id" value="QCZP6B3QNVD8L" />
-							<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG_global.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online." />
-							<img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1" />
-						</form>
+						<div>
+							<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+								<input type="hidden" name="cmd" value="_s-xclick" />
+								<input type="hidden" name="hosted_button_id" value="QCZP6B3QNVD8L" />
+								<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG_global.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online." />
+								<img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1" />
+							</form>
+						</div>
+						<br/>
+						<p><small><a id="hidesupportbox" href="#" class="dismiss"><?php _e( 'Dismiss this message for today.', 'wppp' );?></a></small></p>
 					</div>
-					<br/>
-					<p><small><a id="hidesupportbox" href="#" class="dismiss"><?php _e( 'Dismiss this message for today.', 'wppp' );?></a></small></p>
-				</div>
 				<?php endif; ?>
+
 				<div style="width:95%; border: 1px solid #ddd; background: #fff; padding: 5px; text-align:center">
 					<h3><?php _e( 'Need help?', 'wppp' );?></h3>
 					<p><?php _e( 'Got any questions? Found a bug? Have any Suggestions?', 'wppp' );?></p>
@@ -70,8 +122,39 @@ abstract class WPPP_Admin_Renderer {
 							wp_nonce_field( 'update_wppp', 'wppp_nonce' );
 						}
 						settings_fields( 'wppp_options' );
-						$this->render_options();
-						submit_button(); 
+
+						if ( isset( $this->wppp->modules[ $this->current_tab ] ) ) {
+							$this->wppp->modules[ $this->current_tab ]->render_options( $this );
+						} else { ?>
+							<h3 class="title"><?php _e( 'Modules', 'wppp' ); ?></h3>
+							<table class="form-table" style="clear:none">
+								<?php foreach ( $this->wppp->modules as $modname => $modinstance ) { ?>
+									<tr>
+										<th><?php echo $modinstance->tabName(); ?></th>
+										<td>
+											<?php $this->e_radio_enable( 'id_mod_' . $modname, 'mod_' . $modname ); ?>
+											<p class="description"><?php echo $modinstance->description(); ?></p>
+										</td>
+									</tr>
+								<?php } ?>
+							</table>
+							<hr/>
+							<?php if ( $this->view !== 'simple' ) { ?>
+								<h3 class="title"><?php _e( 'Debugging', 'wppp' ); ?></h3>
+								<table class="form-table" style="clear:none">
+									<tr valign="top">
+										<th scope="row"><?php _e( 'Debug Panel', 'wppp' ); ?></th>
+										<td>
+											<?php $this->e_radio_enable( 'debug-panel', 'debug', !class_exists( 'Debug_Bar' ) ); ?>
+											<p class="description"><?php _e( 'Enables debugging, requires <a href="http://wordpress.org/plugins/debug-bar/">Debug Bar</a> Plugin.', 'wppp' ); ?></p>
+										</td>
+									</tr>
+								</table>
+								<hr/>
+							<?php } ?>
+						<?php }
+
+						submit_button();
 					?>
 				</form>
 				<?php $this->do_switch_view_button( $formaction, $this->wppp->options['advanced_admin_view'] ? 'false' : 'true' ); ?>
@@ -274,6 +357,18 @@ abstract class WPPP_Admin_Renderer {
 		?>
 		<label for="<?php echo $id; ?>"><input id="<?php echo $id; ?>" type="checkbox" <?php $this->e_opt_name( $opt_name ); ?> value="true" <?php if ( $disabled ) { echo 'disabled="true" '; } else { $this->e_checked( $opt_name ); } ?>/><?php echo $label; ?></label>
 		<?php
+	}
+	
+	 /*
+	 * Simple view helper functions
+	 */
+
+	function e_li_error ( $text ) {
+		echo '<li class="ui-state-error" style="border:none; background:none;"><span class="ui-icon ui-icon-closethick" style="float:left; margin-top:.2ex; margin-right:.5ex;"></span>' . $text . '</li>';
+	}
+
+	function e_li_check ( $text ) {
+		echo '<li class="ui-state-highlight" style="border:none; background:none;"><span class="ui-icon ui-icon-check" style="float:left; margin-top:.2ex; margin-right:.5ex;"></span>' . $text . '</li>';
 	}
 }
 

@@ -26,7 +26,10 @@ class WPPP_Dynamic_Images_Advanced {
 	}
 
 	public function render_options ( $renderer ) {
-	?>
+		wp_localize_script( 'wppp-admin-script', 'wpppData', array (
+			'dynimg-quality' => $renderer->wppp->options['dynimg_quality'],
+		));
+		?>
 		<input type="hidden" <?php $renderer->e_opt_name('dynimg_quality'); ?> value="<?php echo $renderer->wppp->options['dynimg_quality']; ?>" />
 
 		<h3 class="title"><?php _e( 'Improve image handling', 'wppp' ); ?></h3>
@@ -47,6 +50,12 @@ class WPPP_Dynamic_Images_Advanced {
 					<?php $renderer->e_checkbox( 'dynimg-cache', 'dynamic_images_cache', __( 'Use caching', 'wppp' ), !$renderer->is_dynamic_images_available() ); ?>
 					<p class="description"><?php printf( __( "Cache intermediate images using Use WordPress' Object Cache API. Only applied if %s is activated.", 'wppp' ), '"' . __( "Don't save intermediate images", 'wppp' ) . '"' ) ; ?></p>
 					<?php $renderer->do_hint_caching(); ?>
+					<br/>
+					Serve image method:
+					<select <?php $renderer->e_opt_name( 'dynimg_serve_method' ); ?> value="short_init">
+						<option value="short_init" <?php echo ( $renderer->wppp->options[ 'dynimg_serve_method' ] === 'short_init' ) ? 'selected="selected"' : ''; ?>>SHORTINIT</option>
+						<option value="use_themes" <?php echo ( $renderer->wppp->options[ 'dynimg_serve_method' ] === 'use_themes' ) ? 'selected="selected"' : ''; ?>>WP_USE_THEMES</option>
+					</select>
 				</td>
 			</tr>
 			<tr valign="top">
@@ -70,7 +79,7 @@ class WPPP_Dynamic_Images_Advanced {
 		</table>
 
 		<hr/>
-	<?php
+		<?php
 	}
 }
 

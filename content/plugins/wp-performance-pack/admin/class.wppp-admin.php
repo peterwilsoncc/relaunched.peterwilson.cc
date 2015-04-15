@@ -98,48 +98,61 @@ Loaded extensions: <?php
 	 */
 
 	public function validate( $input ) {
-		$output = array();
+	
+		var_dump( $input );
+		$output = $this->wppp->options; // default output are current settings
+		var_dump( $output );
+		
 		if ( isset( $input ) && is_array( $input ) ) {
 
 			// test if view mode has changed. if so, leave all other settings as they are
 			if ( isset( $input['advanced_admin_view'] ) ) {
 				$view = $input['advanced_admin_view'] == 'true' ? true : false;
 				if ( $view != $this->wppp->options['advanced_admin_view'] ) {
-					$output = $this->wppp->options;
 					$output['advanced_admin_view'] = $view;
 					return $output;
 				}
 			}
 
-			// process direct WPPP default options (module options get processed later)
-			foreach ( WP_Performance_Pack::$options_default as $key => $val ) {
-				if ( isset( $input[$key] ) ) {
-					// validate set input values
-					switch ( $key ) {
-						case 'advanced_admin_view' 	: $output[$key] = $this->wppp->options['advanced_admin_view'];
-													  break;
-						case 'dynimg_quality'		: $output[$key] = ( is_numeric( $input[$key] ) && $input[$key] >= 10 && $input[$key] <= 100 ) ? $input[ $key] : $val;
-													  break;
-						default						: $output[$key] = ( $input[$key] == 'true' ? true : false );
-													  break;
-					}
-					unset( $input[$key] );
-				} else {
-					// not set values are assumed as false or the respective value (not necessarily the default value)
-					switch ( $key ) {
-						case 'advanced_admin_view' 	: $output[$key] = $this->wppp->options['advanced_admin_view'];
-													  break;
-						case 'dynimg_quality'		: $output[$key] = $val;
-													  break;
-						default						: $output[$key] = false;
-													  break;
-					}
-				} // if isset...
-			} // foreach
-
-			// process module options
-			foreach ( $this->wppp->modules as $module ) {
-				$output = $module->validate_options( $input, $output );
+			$current = ( isset ( $_GET['tab'] ) ) ? $_GET['tab'] : 'general';
+			var_dump( $current );
+			if ( isset( $this->wppp->modules[ $current ] ) ) {
+				// process module options
+				$output = $this->wppp->modules[ $current ]->validate_options( $input, $output );
+			} else {
+				// process WPPP general options
+				foreach ( WP_Performance_Pack::$options_default as $key => $val ) {
+					if ( isset( $input[$key] ) ) {
+						// validate set input values
+						switch ( $key ) {
+							case 'advanced_admin_view' 	: $output[$key] = $this->wppp->options['advanced_admin_view'];
+														  break;
+							default						: $output[$key] = ( $input[$key] == 'true' ? true : false );
+														  break;
+						}
+						unset( $input[$key] );
+					} else {
+						// not set values are assumed as false or the respective value (not necessarily the default value)
+						switch ( $key ) {
+							case 'advanced_admin_view' 	: $output[$key] = $this->wppp->options['advanced_admin_view'];
+														  break;
+							default						: $output[$key] = false;
+														  break;
+						}
+					} // if isset...
+				} // foreach
+				
+				// process module activation
+				foreach ( $this->wppp->modules as $modname => $modinstance ) {
+					if ( isset( $input[ 'mod_' . $modname ] ) ) {
+						// validate set input values
+						$output[ 'mod_' . $modname ] = ( $input[ 'mod_' . $modname ] == 'true' ? true : false );
+						unset( $input[ 'mod_' . $modname ] );
+					} else {
+						// not set values are assumed as false or the respective value (not necessarily the default value)
+						$output[ 'mod_' . $modname ] = false;
+					} // if isset...
+				} // foreach
 			}
 		}
 		return $output;
@@ -166,13 +179,11 @@ Loaded extensions: <?php
 
 	private function load_renderer () {
 		if ( $this->renderer == NULL) {
+			include( sprintf( "%s/class.admin-renderer.php", dirname( __FILE__ ) ) );
+			$this->renderer = new WPPP_Admin_Renderer( $this->wppp );
 			if ( $this->wppp->options['advanced_admin_view'] ) {
-				include( sprintf( "%s/class.renderer-advanced.php", dirname( __FILE__ ) ) );
-				$this->renderer = new WPPP_Admin_Renderer_Advanced( $this->wppp );
 				$this->renderer->view = 'advanced';
 			} else {
-				include( sprintf( "%s/class.renderer-simple.php", dirname( __FILE__ ) ) );
-				$this->renderer = new WPPP_Admin_Renderer_Simple( $this->wppp );
 				$this->renderer->view = 'simple';
 			}
 		}
@@ -188,17 +199,14 @@ Loaded extensions: <?php
 		$this->load_renderer();
 		$this->renderer->enqueue_scripts_and_styles();
 		$this->renderer->add_help_tab();
-		foreach ( $this->wppp->modules as $module ) {
-			$module->enqueue_scripts_and_styles( $this->renderer );
-			$module->add_help_tab( $this->renderer );
-		}
 	}
 
 	public function do_options_page() {
+		$current = ( isset ( $_GET['tab'] ) ) ? $_GET['tab'] : 'general';
 		if ( $this->wppp->is_network ) {
-			$formaction = network_admin_url('settings.php?page=wppp_options_page&action=update_wppp');
+			$formaction = network_admin_url('settings.php?page=wppp_options_page&action=update_wppp&tab=' . $current);
 		} else {
-			$formaction = 'options.php';
+			$formaction = admin_url( 'options.php?tab=' . $current );
 		}
 
 		if ( $this->show_update_info ) {
@@ -206,7 +214,6 @@ Loaded extensions: <?php
 		}
 
 		$this->load_renderer();
-		$this->renderer->on_do_options_page();
 		$this->renderer->render_page( $formaction );
 	}
 }

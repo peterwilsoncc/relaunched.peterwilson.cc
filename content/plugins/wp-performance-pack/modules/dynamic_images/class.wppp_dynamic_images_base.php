@@ -17,7 +17,7 @@ class WPPP_Dynamic_Images_Base extends WPPP_Dynamic_Images {
 	}
 
 	function init () {
-		self::set_rewrite_rules();
+		$this->set_rewrite_rules();
 
 		add_filter( 'wp_image_editors', array ( $this, 'filter_wp_image_editor' ), 1000, 1 ); // set to very low priority, so it is hopefully called last as this overrides previously registered editors
 		add_action( 'shutdown', array( $this, 'save_preset_image_sizes' ) );
@@ -36,17 +36,22 @@ class WPPP_Dynamic_Images_Base extends WPPP_Dynamic_Images {
 		}
 	}
 
-	public static function set_rewrite_rules () {
-		$path = substr( plugins_url( 'serve-dynamic-images.php', __FILE__ ), strlen( site_url() ) + 1 ); // cut wp-content including trailing slash
+	public function set_rewrite_rules ( $method = false ) {
+		if ( ( $method === 'use_themes' ) || ( ( $method === false ) && ( $this->wppp->options[ 'dynimg_serve_method' ] === 'use_themes' ) ) ) {
+			$file = 'serve-dynamic-images-ut.php';
+		} else {
+			$file = 'serve-dynamic-images.php';
+		}
+		$path = substr( plugins_url( $file, __FILE__ ), strlen( site_url() ) + 1 ); // cut wp-content including trailing slash
 		add_rewrite_rule( '(.*)-([0-9]+)x([0-9]+)?\.((?i)jpeg|jpg|png|gif)' , $path, 'top' );
-		add_filter ( 'mod_rewrite_rules', array ( 'WPPP_Dynamic_Images_Base', 'mod_rewrite_rules' ) );
+		add_filter ( 'mod_rewrite_rules', array ( $this, 'mod_rewrite_rules' ) );
 	}
 
-	public static function flush_rewrite_rules ( $enabled ) {
+	public function flush_rewrite_rules ( $enabled, $method = false ) {
 		// init is called prior to options update
 		// so add or remove rules before flushing
 		if ( $enabled ) {
-			self::set_rewrite_rules();
+			$this->set_rewrite_rules( $method );
 		} else {
 			global $wp_rewrite;
 			if ( $wp_rewrite && isset( $wp_rewrite->non_wp_rules['(.*)-([0-9]+)x([0-9]+)?\.((?i)jpeg|jpg|png|gif)'] ) ) {
@@ -56,11 +61,16 @@ class WPPP_Dynamic_Images_Base extends WPPP_Dynamic_Images {
 		flush_rewrite_rules();
 	}
 
-	public static function mod_rewrite_rules ( $rules ) {
+	public function mod_rewrite_rules ( $rules ) {
 		$lines = explode( "\n", $rules );
 		$rules = '';
+		if ( $this->wppp->options[ 'dynimg_serve_method' ] === 'use_themes' ) {
+			$file = 'serve-dynamic-images-ut.php';
+		} else {
+			$file = 'serve-dynamic-images.php';
+		}
 		for ($i = 0, $max = count($lines); $i<$max; $i++ ) {
-			if ( strpos( $lines[$i], 'serve-dynamic-images.php' ) !== false ){
+			if ( strpos( $lines[$i], $file ) !== false ){
 				// extend rewrite rule by conditionals, so if the requested file exist it gets served directly
 				$rules .= "RewriteCond %{REQUEST_FILENAME} !-f \n";
 			}

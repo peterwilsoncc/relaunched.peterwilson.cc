@@ -11,6 +11,8 @@ class WPPP_L10n_Improvements extends WPPP_Module {
 		'3.9.2'	=> '3.9',
 		'4.0'	=> '4.0',
 		'4.0.1'	=> '4.0',
+		'4.1'	=> '4.1',
+		'4.1.1'	=> '4.1.1',
 	);
 
 	protected static $options_default = array(
@@ -24,13 +26,6 @@ class WPPP_L10n_Improvements extends WPPP_Module {
 	);
 
 	public function get_default_options () { return static::$options_default; }
-
-	public function is_active () {
-		return ( $this->wppp->options['use_mo_dynamic']
-				|| $this->wppp->options['use_jit_localize']
-				|| $this->wppp->options['disable_backend_translation']
-				|| $this->wppp->options['use_native_gettext'] );
-	}
 
 	public function is_available () { return true; }
 
@@ -54,6 +49,9 @@ class WPPP_L10n_Improvements extends WPPP_Module {
 		}
 		return $output;
 	}
+
+	public function tabName() { return __( 'Localization', 'wppp' ); }
+	public function description() { return __( 'Improve performance of localizing wordpress by using native gettext or alternative MO file reader, disabling back end translation and just in time localization of scripts.', 'wppp' ); }
 }
 
 ?>

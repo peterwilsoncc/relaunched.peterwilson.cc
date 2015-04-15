@@ -10,7 +10,7 @@
 class WPPP_L10n_Improvements_Admin extends WPPP_L10n_Improvements_Base  {
 	public function load_renderer ( $view ) {
 		if ( $this->renderer == NULL ) {
-			if ( $view = 'advanced' ) {
+			if ( $view === 'advanced' ) {
 				$this->renderer = new WPPP_L10n_Improvements_Advanced ();
 			} else {
 				$this->renderer = new WPPP_L10n_Improvements_Simple ();

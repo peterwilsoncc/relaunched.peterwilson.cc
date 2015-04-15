@@ -3,7 +3,7 @@
 	Plugin Name: WP Performance Pack
 	Plugin URI: http://wordpress.org/plugins/wp-performance-pack
 	Description: Performance optimizations for WordPress. Improve localization performance and image handling, serve images through CDN.  
-	Version: 1.9.2
+	Version: 1.10.1
 	Text Domain: wppp
 	Domain Path: /languages/
 	Author: Bj&ouml;rn Ahrens
@@ -31,11 +31,8 @@ abstract class WPPP_Module {
 	protected $renderer = NULL;
 
 	public abstract function get_default_options ();
-	// return if module is activated
-	public abstract function is_active ();
 	// return if module is available, i.e. can be activated
 	public abstract function is_available ();
-
 	public abstract function spawn_module ();
 	// validate options
 	// input contains actual input
@@ -52,6 +49,8 @@ abstract class WPPP_Module {
 	public function admin_init () {}
 
 	// admin render functions
+	public function tabName () { return 'unnamed'; }
+	public function description () { return 'no description'; }
 	public function load_renderer ( $view ) {}
 	public function enqueue_scripts_and_styles ( $renderer ) {
 		$this->load_renderer( $renderer->view );
@@ -76,13 +75,12 @@ abstract class WPPP_Module {
 class WP_Performance_Pack {
 	const cache_group = 'wppp1.0'; 	// WPPP cache group name = wppp + version of last change to cache. 
 									// This way no cache conflicts occur while old cache entries just expire.
-	const wppp_version = '1.9.2';
+	const wppp_version = '1.10.1';
 	const wppp_options_name = 'wppp_option';
 
 	public static $options_default = array(
 		'debug' => false,
 		'advanced_admin_view' => false,
-		'dynimg_quality' => 80,
 	);
 	private $admin_opts = NULL;
 	private $late_updates = array();
@@ -96,7 +94,8 @@ class WP_Performance_Pack {
 
 	function get_options_default () {
 		$def_opts = WP_Performance_Pack::$options_default;
-		foreach ( $this->modules as $module ) {
+		foreach ( $this->modules as $modname => $module ) {
+			$def_opts['mod_' . $modname] = true;
 			$def_opts = array_merge( $def_opts, $module->get_default_options() );
 		}
 		return $def_opts;
@@ -173,27 +172,16 @@ class WP_Performance_Pack {
 		// add actions
 		add_action( 'init', array ( $this, 'init' ) );
 		add_action( 'admin_init', array ( $this, 'admin_init' ) );
-		add_filter( 'update_option_' . self::wppp_options_name, array( $this, 'do_options_changed' ), 10, 2 );
 
 		// activate and initialize modules
 		foreach ( $this->modules as $modname => $module ) {
-			if ( $module->is_active() ) {
+			if ( $this->options[ 'mod_' . $modname ] === true ) { //  module->is_active() ) {
 				$this->modules[$modname] = $module->spawn_module();
 			}
 			$this->modules[$modname]->early_init();
 		}
 		
 		self::plugin_load_first(); // check WPPP is loaded as first plugin
-	}
-
-	function do_options_changed( $old_value, $new_value )
-	{
-		// flush rewrite rules if dynamic images setting changed
-		if ( ( isset( $new_value['dynamic_images'] ) && $old_value['dynamic_images'] !== $new_value['dynamic_images'] )
-				|| ( !isset( $new_value['dynamic_images'] ) && $old_value['dynamic_images'] === true ) ) {
-			WPPP_Dynamic_Images_Base::flush_rewrite_rules( $new_value['dynamic_images'] );
-		}
-
 	}
 
 	public function init () {
@@ -213,7 +201,7 @@ class WP_Performance_Pack {
 			load_plugin_textdomain( 'wppp', false, dirname( plugin_basename( __FILE__ ) ) . '/lang');
 
 			if ( current_user_can ( 'manage_options' ) ) {
-				include( sprintf( "%s/admin/class.wppp-admin-admin.php", dirname( __FILE__ ) ) );
+				include( sprintf( "%s/admin/class.wppp-admin.php", dirname( __FILE__ ) ) );
 				$this->admin_opts = new WPPP_Admin ($this);
 			}
 		}
@@ -278,7 +266,7 @@ class WP_Performance_Pack {
 	public function deactivate() {
 		if ( $this->options['dynamic_images'] ) {
 			// Delete rewrite rules from htaccess
-			WPPP_Dynamic_Images_Base::flush_rewrite_rules( false ); // hopefully WPPP_Dynamic_images didn't get initialized elsewhere. Not sure at which point deactivation occurs, but I think it's save to assume DynImg didn't get initialized so rewrite rules didn't get set.
+			//TODO: Module->deactivate(); //WPPP_Dynamic_Images_Base::flush_rewrite_rules( false ); // hopefully WPPP_Dynamic_images didn't get initialized elsewhere. Not sure at which point deactivation occurs, but I think it's save to assume DynImg didn't get initialized so rewrite rules didn't get set.
 		}
 
 		if ( is_multisite() && isset( $_GET['networkwide'] ) && 1 == $_GET['networkwide'] ) {
@@ -352,7 +340,7 @@ class WP_Performance_Pack {
 	}
 	
 	function update_163 () {
-		WPPP_Dynamic_Images_Base::flush_rewrite_rules( true );
+		//TODO: if module then flush //WPPP_Dynamic_Images_Base::flush_rewrite_rules( true );
 	}
 } 
 
