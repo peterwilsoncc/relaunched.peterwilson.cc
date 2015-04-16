@@ -16,7 +16,7 @@ if ( file_exists( dirname( __FILE__ ) . '/local-config.php' ) ) {
 // Custom Content Directory
 // ========================
 define( 'WP_CONTENT_DIR', dirname( __FILE__ ) . '/content' );
-define( 'WP_CONTENT_URL', 'https://' . $_SERVER['HTTP_HOST'] . '/content' );
+define( 'WP_CONTENT_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/content' );
 
 // ================================================
 // You almost certainly do not want to change these
@@ -69,6 +69,7 @@ if ( true !== PWCC_DEBUG_DISPLAY ) {
 // Misc config options
 // ===================
 define( 'WP_POST_REVISIONS', 3 );
+define('FORCE_SSL_ADMIN', true);
 
 
 // =================================================================
