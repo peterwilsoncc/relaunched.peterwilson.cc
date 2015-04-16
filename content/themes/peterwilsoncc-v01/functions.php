@@ -32,7 +32,7 @@ add_filter( 'pwcc_rapid_cache_busting_managed_hosts', 'pwcc_filter_pwcc_rapid_ca
 
 function pwcc_force_canonical_protocol( $canonical ) {
 	$canonical = preg_replace( '`^http[s]?`', 'http', $canonical );
-	return $canonical
+	return $canonical;
 }
 add_filter( 'wpseo_canonical', 'pwcc_force_canonical_protocol' );
 
