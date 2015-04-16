@@ -30,6 +30,13 @@ function pwcc_filter_pwcc_rapid_cache_busting_managed_hosts( $hosts ) {
 add_filter( 'pwcc_rapid_cache_busting_managed_hosts', 'pwcc_filter_pwcc_rapid_cache_busting_managed_hosts' );
 
 
+function pwcc_force_canonical_protocol( $canonical ) {
+	$canonical = preg_replace( '`^http[s]?`', 'http', $canonical );
+	return $canonical
+}
+add_filter( 'wpseo_canonical', 'pwcc_force_canonical_protocol' );
+
+
 
 class PWCC_theme {
 	
