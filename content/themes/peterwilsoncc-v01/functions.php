@@ -1,7 +1,7 @@
 <?php
 $content_width=1200;
-$pwcc_css_ver = "20150403-01";
-$pwcc_js_ver =  "20150413-01";
+$pwcc_css_ver = "20150416-01";
+$pwcc_js_ver =  "20150416-01";
 
 function pwcc__return_ok($val){
 return 'ok';
@@ -18,10 +18,10 @@ function pwcc_filter_asset_src( $src ){
 	return $src;
 }
 
-add_filter( 'stylesheet_directory_uri',  'pwcc_filter_asset_src' );
-add_filter( 'template_directory_uri',    'pwcc_filter_asset_src' );
-add_filter( 'style_loader_src',  'pwcc_filter_asset_src' );
-add_filter( 'script_loader_src', 'pwcc_filter_asset_src' );
+// add_filter( 'stylesheet_directory_uri',  'pwcc_filter_asset_src' );
+// add_filter( 'template_directory_uri',    'pwcc_filter_asset_src' );
+// add_filter( 'style_loader_src',  'pwcc_filter_asset_src' );
+// add_filter( 'script_loader_src', 'pwcc_filter_asset_src' );
 
 function pwcc_filter_pwcc_rapid_cache_busting_managed_hosts( $hosts ) {
 	$hosts[] = 's0.pwcc.cc';
