@@ -33,7 +33,13 @@ add_filter( 'pwcc_rapid_cache_busting_managed_hosts', 'pwcc_filter_pwcc_rapid_ca
 function pwcc_force_canonical_protocol( $canonical ) {
 	// ensure this only happens on front end
 	if ( !is_admin() ) {
-		$canonical = preg_replace( '`^http[s]?`', 'http', $canonical );
+		$home = get_option( 'home' );
+		$canonical_scheme = parse_url( $home, PHP_URL_SCHEME );
+		
+		$canonical_scheme = ( 'https' == $canonical_scheme ) ? 'https' : 'http';
+		
+		$canonical = set_url_scheme( $canonical, $canonical_scheme );
+
 	}
 	return $canonical;
 }
@@ -50,17 +56,17 @@ function pwcc_fuckit_redirect_the_front_end() {
 		$ssl_preferred = ( 'https' == $canonical_scheme ) ? true : false;
 		
 		
-		if ( ( is_ssl() != $ssl_preferred ) && ! is_admin() && 'wp-login.php' !== $GLOBALS['pagenow'] ) {
-			$requested_url  = $ssl_preferred ? 'https://' : 'http://';
-			$requested_url .= $_SERVER['HTTP_HOST'];
-			$requested_url .= $_SERVER['REQUEST_URI'];
+		if ( ( is_ssl() != $ssl_preferred ) && 'wp-login.php' !== $GLOBALS['pagenow'] ) {
+			$redirect_url  = $ssl_preferred ? 'https://' : 'http://';
+			$redirect_url .= $_SERVER['HTTP_HOST'];
+			$redirect_url .= $_SERVER['REQUEST_URI'];
 
-			header( 'X-pwcc-hacker: ' . $requested_url );
+			wp_redirect($redirect_url, 301);
 
 		}
 	}
 }
-add_action( 'send_headers', 'pwcc_fuckit_redirect_the_front_end' );
+add_action( 'template_redirect', 'pwcc_fuckit_redirect_the_front_end', 1 );
 
 
 
