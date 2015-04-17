@@ -38,7 +38,7 @@ function pwcc_force_canonical_protocol( $canonical ) {
 	return $canonical;
 }
 add_filter( 'wpseo_canonical', 'pwcc_force_canonical_protocol' );
-add_filter( 'the_permalink', 'pwcc_force_canonical_protocol' );
+add_filter( 'home_url', 'pwcc_force_canonical_protocol' );
 add_filter( 'get_pagenum_link', 'pwcc_force_canonical_protocol' );
 
 
