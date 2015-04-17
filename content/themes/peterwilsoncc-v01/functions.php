@@ -43,8 +43,22 @@ add_filter( 'get_pagenum_link', 'pwcc_force_canonical_protocol' );
 
 
 function pwcc_fuckit_redirect_the_front_end() {
-	$is_admin = is_admin() ? '1' : '0';
-	header( 'X-pwcc-hacker: ' . $is_admin );
+	if ( ! is_admin() ) {
+		$home = get_option( 'home' );
+		$canonical_scheme = parse_url( $home, PHP_URL_SCHEME );
+		
+		$ssl_preferred = ( 'https' == $canonical_scheme ) ? true : false;
+		
+		
+		if ( ( is_ssl() != $ssl_preferred ) && ! is_admin() && 'wp-login.php' !== $GLOBALS['pagenow'] ) {
+			$requested_url  = $ssl_preferred ? 'https://' : 'http://';
+			$requested_url .= $_SERVER['HTTP_HOST'];
+			$requested_url .= $_SERVER['REQUEST_URI'];
+
+			header( 'X-pwcc-hacker: ' . $requested_url );
+
+		}
+	}
 }
 add_action( 'send_headers', 'pwcc_fuckit_redirect_the_front_end' );
 
