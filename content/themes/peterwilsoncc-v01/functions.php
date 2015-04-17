@@ -42,6 +42,11 @@ add_filter( 'the_permalink', 'pwcc_force_canonical_protocol' );
 add_filter( 'get_pagenum_link', 'pwcc_force_canonical_protocol' );
 
 
+function pwcc_fuckit_redirect_the_front_end() {
+	header( 'X-pwcc-hacker: ' . is_admin() ? '1' : '0' );
+}
+add_action( 'send_headers', 'pwcc_fuckit_redirect_the_front_end' );
+
 
 
 class PWCC_theme {
