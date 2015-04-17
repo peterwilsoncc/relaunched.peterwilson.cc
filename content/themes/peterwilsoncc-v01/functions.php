@@ -43,7 +43,8 @@ add_filter( 'get_pagenum_link', 'pwcc_force_canonical_protocol' );
 
 
 function pwcc_fuckit_redirect_the_front_end() {
-	header( 'X-pwcc-hacker: ' . is_admin() ? '1' : '0' );
+	$is_admin = is_admin() ? '1' : '0';
+	header( 'X-pwcc-hacker: ' . $is_admin );
 }
 add_action( 'send_headers', 'pwcc_fuckit_redirect_the_front_end' );
 
