@@ -1,7 +1,7 @@
 <?php
 $content_width=1200;
 $pwcc_css_ver = "20150416-01";
-$pwcc_js_ver =  "20150416-01";
+$pwcc_js_ver =  "20150418-01";
 
 function pwcc__return_ok($val){
 return 'ok';
@@ -136,7 +136,7 @@ class PWCC_theme {
 	}
 	
 	function action_enqueue_assets() {
-		global $content_width, $pwcc_css_ver, $pwcc_js_ver;
+		global $content_width, $pwcc_css_ver, $pwcc_js_ver, $wp_styles;
 		if ( is_attachment() )
 			$content_width = 1200;
 		elseif ( has_post_format( 'audio' ) )
@@ -146,15 +146,23 @@ class PWCC_theme {
 
 		$assets = get_template_directory_uri() . '/assets';
 		
+		wp_enqueue_style(
+			'pwcc-styles',
+			$assets . '/css/style.min.css',
+			null,
+			$pwcc_css_ver
+		);
+		$loadCss = array();
+
 		if ( isset( $_COOKIE["pwccsscache"] ) && ( $pwcc_css_ver == $_COOKIE["pwccsscache"] ) ) {
-			wp_enqueue_style(
-				'pwcc-styles',
-				$assets . '/css/style.min.css',
-				null,
-				$pwcc_css_ver
-			);
+			wp_enqueue_style( 'pwcc-styles' );
+		}
+		else {
+			// apply_filters( 'stylestyle_loader_src', $css, 'pwcc-styles' )
+			$loadCss[] = $wp_styles->registered["pwcc-styles"];
 		}
 		
+		// print_r( $wp_styles->registered["pwcc-styles"] );
 		
 		wp_register_script(
 			'pwcc-scripts',
@@ -163,6 +171,12 @@ class PWCC_theme {
 			$pwcc_js_ver,
 			true
 		);
+		
+		foreach ( $loadCss as $k => $file ) {
+			$src = add_query_arg( array( 'ver' => $file->ver ), $file->src );
+			$loadCss[$k]->src = apply_filters( 'style_loader_src', $src, $file->handle );
+		}
+		
 		
 		$js_config = array(
 			'siteHome' => home_url( '/' ),
@@ -184,7 +198,9 @@ class PWCC_theme {
 				'iframe[src*="kickstarter.com"][src*="video.html"]',
 				'object',
 				'embed'
-			)
+			),
+			'loadCss' => $loadCss,
+			'cssCookieVal' => $pwcc_css_ver
 		);
 		
 		wp_localize_script(
@@ -216,13 +232,6 @@ class PWCC_theme {
 		<?php
 		readfile ( get_stylesheet_directory() . '/assets/js/min/inline-header-min.js' );
 		echo ';';
-		if ( !isset( $_COOKIE["pwccsscache"] ) || ( $pwcc_css_ver != $_COOKIE["pwccsscache"] ) ) {
-			$css = get_template_directory_uri() . '/assets/css/style.min.css?ver=' . $pwcc_css_ver ;
-			$css = apply_filters( 'style_loader_src', $css, 'pwcc-styles' );
-			
-			echo 'PWCC.loadCSS( "' . $css . '", document.getElementById("pwcc-inline-js") );';
-			echo 'document.cookie = "pwccsscache=' . $pwcc_css_ver . '; path=/";';
-		}
 		?>
 		</script>
 		<?php
