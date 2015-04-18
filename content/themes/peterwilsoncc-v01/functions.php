@@ -146,7 +146,7 @@ class PWCC_theme {
 
 		$assets = get_template_directory_uri() . '/assets';
 		
-		wp_enqueue_style(
+		wp_register_style(
 			'pwcc-styles',
 			$assets . '/css/style.min.css',
 			null,
