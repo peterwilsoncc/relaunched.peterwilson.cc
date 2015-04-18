@@ -374,15 +374,24 @@ function pwccindieweb_notes_meta_boxes( array $meta_boxes ) {
 		array( 
 			'id'   => 'post_on_twitter', 
 			'name' => 'Post on twitter', 
-			'type' => 'checkbox', 
+			'type' => 'radio', 
+			'options' => array(
+				'1' => 'Yes',
+				'no' => 'No'
+			),
 			'cols' => '6',
-			'default' => true,
+			'default' => '1',
 			'class' => 'pwccindieweb-note-post-on-twitter'
 		),
 		array( 
 			'id'   => 'append_url', 
 			'name' => 'Append URL to post', 
-			'type' => 'checkbox',
+			'type' => 'radio', 
+			'options' => array(
+				'1' => 'Yes',
+				'no' => 'No'
+			),
+			'default' => 'no',
 			'cols' => '6',
 			'class'=> 'pwccindieweb-note-append-url'
 		),
@@ -507,7 +516,7 @@ function pwccindieweb_notes_javascript() {
 		function calculateRemaining() {
 			var remaining = 140,
 				counterHtml;
-			if ( $appendUrl.is( ':checked' ) ) {
+			if ( '1' === $appendUrl.filter(':checked').val() ) {
 				remaining = remaining - 1 - options.short_url_length_https;
 			}
 		
@@ -632,7 +641,7 @@ function pwccindieweb_note_to_content( $post_id, $post ) {
 		
 	}
 	
-	$tweet_this = isset( $note[ 'post_on_twitter' ] ) ? true : false;
+	$tweet_this = isset( $note[ 'post_on_twitter' ] ) && ('1' == $note[ 'post_on_twitter' ]) ? true : false;
 	// $attachments = array();
 	if ( 'publish' != $post->post_status ) {
 		$tweet_this = false;
@@ -641,7 +650,7 @@ function pwccindieweb_note_to_content( $post_id, $post ) {
 		$twitter_id = get_post_meta( $post_id, 'twitter_id', true );
 		$twitter_url = get_post_meta( $post_id, 'twitter_permalink', true );
 		
-		$append_permalink = isset( $note[ 'append_url' ] )? true : false;
+		$append_permalink = isset( $note[ 'append_url' ] ) && ('1' == $note[ 'append_url' ]) ? true : false;
 		
 		if ( '' == $twitter_id ) {
 			// never been tweeted
