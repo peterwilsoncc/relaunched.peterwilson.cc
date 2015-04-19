@@ -8,3 +8,5 @@
 /content/upgrade/
 /content/plugins/wp-rocket/
 .DS_Store
+content/plugins/google-analytics-premium
+content/plugins/wordpress-seo-premium
