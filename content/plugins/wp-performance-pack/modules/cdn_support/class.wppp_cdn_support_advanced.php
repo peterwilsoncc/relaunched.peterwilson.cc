@@ -21,7 +21,11 @@ class WPPP_CDN_Support_Advanced {
 			'title'	=>	__( 'CDN support', 'wppp' ),
 			'content'	=> '<p>' . __( "CDN support allows to serve images through a CDN, both on front and back end. This eliminates the need to save intermediate images locally, thus reducing web space usage. Use of dynamic image linking is highly recommended when using WPPP CDN support for front end.", 'wppp' ) . '</p>',
 		) );
-	}
+		$screen->add_help_tab( array(
+			'id'	=> 'wppp_advanced_dynlinks',
+			'title'	=>	__( 'Dynamic image linking', 'wppp' ),
+			'content'	=> '<p>' . __( "By default WordPress inserts fixed URLs to images in posts and pages. Activating this option will create those links dynamically so they will change when your blog URL changes or when you use a CDN for serving images. Substitution improves the speed of this replacement by replacing image URLs with a placeholder in your posts and pages. Substitution should be reverted, when you deactivate WPPP (or by using <em>Restore static links</em>), but there's a chance your image links will be broken when you no longer use WPPP. See plugin page on WordPress.com for further details on how to fix broken image links manually.", 'wppp' ) . '</p>',
+		) );	}
 
 	public function render_options ( $renderer ) {
 	?>

@@ -32,7 +32,11 @@ class WPPP_Dynamic_Images_Base extends WPPP_Dynamic_Images {
 
 	function replace_wp_rewrite () {
 		if ( $this->wppp->is_network ) {
-			$GLOBALS['wp_rewrite'] = new WPPP_Rewrite();
+			include( sprintf( "%s/class.wppp_rewrite.php", dirname( __FILE__ ) ) );
+			$rewrite = new WPPP_Rewrite();
+			$rewrite->wppp_enabled = $this->wppp->options[ 'dynamic_images' ];
+			$rewrite->wppp_method = $this->wppp->options[ 'dynimg_serve_method' ];
+			$GLOBALS['wp_rewrite'] = $rewrite;
 		}
 	}
 
@@ -58,6 +62,12 @@ class WPPP_Dynamic_Images_Base extends WPPP_Dynamic_Images {
 				unset( $wp_rewrite->non_wp_rules['(.*)-([0-9]+)x([0-9]+)?\.((?i)jpeg|jpg|png|gif)'] );
 			}
 		}
+		
+		if ( $this->wppp->is_network ) {
+			$GLOBALS['wp_rewrite']->wppp_enabled = $enabled;
+			$GLOBALS['wp_rewrite']->wppp_method = $method;
+		}
+		
 		flush_rewrite_rules();
 	}
 

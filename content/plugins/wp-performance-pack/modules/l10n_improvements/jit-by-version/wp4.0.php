@@ -99,7 +99,7 @@ function wp_jit_default_scripts( &$scripts ) {
 		 * @param int $interval The interval in which to check a user's authentication.
 		 *                      Default 3 minutes in seconds, or 180.
 		 */
-		'interval' => array( 'func' => apply_filters( 'wp_auth_check_interval', 3 * MINUTE_IN_SECONDS ) ),
+		'interval' => apply_filters( 'wp_auth_check_interval', 3 * MINUTE_IN_SECONDS ),
 	) ) );
 
 	$scripts->add( 'wp-lists', "/wp-includes/js/wp-lists$suffix.js", array( 'wp-ajax-response', 'jquery-color' ), false, 1 );
@@ -187,7 +187,7 @@ function wp_jit_default_scripts( &$scripts ) {
 			'of' => array( '__', 'of'),
 			'close' => array( '__', 'Close'),
 			'noiframes' => array( '__', 'This feature requires inline frames. You have iframes disabled or your browser does not support them.'),
-			'loadingAnimation' => array( 'func' => includes_url('js/thickbox/loadingAnimation.gif') ),
+			'loadingAnimation' => array( 'includes_url', 'js/thickbox/loadingAnimation.gif' ),
 	) ) );
 
 	$scripts->add( 'jcrop', "/wp-includes/js/jcrop/jquery.Jcrop.min.js", array('jquery'), '0.9.12');
@@ -388,8 +388,8 @@ function wp_jit_default_scripts( &$scripts ) {
 
 		$scripts->add( 'admin-comments', "/wp-admin/js/edit-comments$suffix.js", array('wp-lists', 'quicktags', 'jquery-query'), false, 1 );
 		did_action( 'init' ) && $scripts->localize( 'admin-comments', 'adminCommentsL10n', new LabelsObject( array(
-			'hotkeys_highlight_first' => array( 'func' => isset($_GET['hotkeys_highlight_first']) ),
-			'hotkeys_highlight_last' => array( 'func' => isset($_GET['hotkeys_highlight_last']) ),
+			'hotkeys_highlight_first' => isset($_GET['hotkeys_highlight_first']),
+			'hotkeys_highlight_last' => isset($_GET['hotkeys_highlight_last']),
 			'replyApprove' => array( '__', 'Approve and Reply' ),
 			'reply' => array( '__', 'Reply' )
 		) ) );

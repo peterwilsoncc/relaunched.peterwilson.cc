@@ -11,8 +11,28 @@ class WPPP_L10n_Improvements_Advanced {
 
 		$screen->add_help_tab( array(
 			'id'	=> 'wppp_advanced_l10n',
-			'title'	=> __( 'Improve localization performance', 'wppp' ),
-			'content'	=> '<p>' . __( 'WPPP offers different options to significantly improve translation performance. These only affect localization of WordPress core, themes and plugins, not translation of content (e.g. when using plugins like WPML). To automatically apply optimal settings for your blog, use the simple view. For implementation details refer to the WordPress plugin page or the development blog.', 'wppp' ) . '</p>',
+			'title'	=> __( 'Overview', 'wppp' ),
+			'content'	=> '<p>' . __( 'WPPP offers different options to significantly improve localization performance. These only affect localization of WordPress core, themes and plugins, not translation of content (e.g. by using plugins like WPML).', 'wppp' ) . '</p>',
+		) );
+		$screen->add_help_tab( array(
+			'id'	=> 'wppp_advanced_gettext',
+			'title'	=> __( 'GNU gettext', 'wppp' ),
+			'content'	=> '<p>' . __( 'Using native GNU gettext is the fastest way for localization. It requires the PHP gettext extension to be installed and your <em>wp-content/languages</em> folder has to be writable. WPPP will store copies of translation files in the subfolder <em>wppp</em>.', 'wppp' ) . '</p>',
+		) );
+		$screen->add_help_tab( array(
+			'id'	=> 'wppp_advanced_moreader',
+			'title'	=> __( 'MO reader', 'wppp' ),
+			'content'	=> '<p>' . __( 'The alternative MO reader is a complete rewrite of the default MO reader. It loads translation files only when needed and only the needed translations. This improves memory usage and localization performance significantly. For best performance activate caching. This requires a persistent Object Cache to be effective.', 'wppp' ) . '</p>',
+		) );
+		$screen->add_help_tab( array(
+			'id'	=> 'wppp_advanced_jit',
+			'title'	=> __( 'JIT', 'wppp' ),
+			'content'	=> '<p>' . __( 'WordPress translates many texts by default, regardless if they are used or not. JIT script localization, as the name suggests, delays localizing default scripts to when (and if) they are used, thus reducing translation calls and improving performance a bit.', 'wppp' ) . '</p>',
+		) );
+		$screen->add_help_tab( array(
+			'id'	=> 'wppp_advanced_backend',
+			'title'	=> __( 'Back end localization', 'wppp' ),
+			'content'	=> '<p>' . __( "The fastest option is to not localize WordPress. This might not be an option for the front end, but if you don't mind an english back end, you can disable backend localization. By activating <em>Allow user override</em> you can allow your users to reenable localization.", 'wppp' ) . '</p>',
 		) );
 	}
 

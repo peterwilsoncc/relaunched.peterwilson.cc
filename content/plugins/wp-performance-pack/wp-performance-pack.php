@@ -3,7 +3,7 @@
 	Plugin Name: WP Performance Pack
 	Plugin URI: http://wordpress.org/plugins/wp-performance-pack
 	Description: Performance optimizations for WordPress. Improve localization performance and image handling, serve images through CDN.  
-	Version: 1.10.1
+	Version: 1.10.3
 	Text Domain: wppp
 	Domain Path: /languages/
 	Author: Bj&ouml;rn Ahrens
@@ -75,7 +75,7 @@ abstract class WPPP_Module {
 class WP_Performance_Pack {
 	const cache_group = 'wppp1.0'; 	// WPPP cache group name = wppp + version of last change to cache. 
 									// This way no cache conflicts occur while old cache entries just expire.
-	const wppp_version = '1.10.1';
+	const wppp_version = '1.10.3';
 	const wppp_options_name = 'wppp_option';
 
 	public static $options_default = array(
@@ -160,12 +160,12 @@ class WP_Performance_Pack {
 		}
 
 		if ( $fullinit ) {
+			$this->is_network = is_multisite() && is_plugin_active_for_network( plugin_basename( __FILE__ ) );
 			$this->check_update();
 			$this->load_options();
-			$this->is_network = is_multisite() && is_plugin_active_for_network( plugin_basename( __FILE__ ) );
 		} else {
-			$this->load_options();
 			$this->is_network = is_multisite(); // TODO: add is_plugin_active... - removed for now, because fullinit is only set to false from serve-dynamic-images which should not be used when multisite is active (and plugin_basename would cause problems)
+			$this->load_options();
 			return;
 		}
 

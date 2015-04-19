@@ -51,7 +51,7 @@ class WPPP_L10n_Improvements extends WPPP_Module {
 	}
 
 	public function tabName() { return __( 'Localization', 'wppp' ); }
-	public function description() { return __( 'Improve performance of localizing wordpress by using native gettext or alternative MO file reader, disabling back end translation and just in time localization of scripts.', 'wppp' ); }
+	public function description() { return __( 'Improve performance of WordPress localization by using native gettext or alternative MO file reader, disabling back end translation and just in time localization of scripts.', 'wppp' ); }
 }
 
 ?>

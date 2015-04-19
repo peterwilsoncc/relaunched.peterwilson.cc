@@ -199,11 +199,15 @@ class WPPP_Native_Gettext extends Gettext_Translations {
  
 		// Retrive MD5-hash of the file
 		# DIRTY! But there is no other way at the moment to make this work
-		if (!($Domain = md5_file ($filename)))
+		
+		$info = pathinfo( $filename );
+		$name =  basename( $filename, '.' . $info[ 'extension' ] );
+		
+		if ( !( $Domain = $name . '-' . md5_file ( $filename ) ) )
 			return false;
       
 		// Make sure that the language-directory exists
-		$Path = WP_LANG_DIR . '/' . $locale . '/LC_MESSAGES';
+		$Path = WP_LANG_DIR . '/wppp/' . $locale . '/LC_MESSAGES';
       
 		if (!wp_mkdir_p ($Path))
 			return false;
@@ -215,7 +219,7 @@ class WPPP_Native_Gettext extends Gettext_Translations {
 			return false;
       
 		// Setup the "domain" for gettext
-		bindtextdomain ($Domain, WP_LANG_DIR);
+		bindtextdomain ($Domain, WP_LANG_DIR . '/wppp');
 		bind_textdomain_codeset ($Domain, 'UTF-8');
       
 		// Do the final stuff and return success

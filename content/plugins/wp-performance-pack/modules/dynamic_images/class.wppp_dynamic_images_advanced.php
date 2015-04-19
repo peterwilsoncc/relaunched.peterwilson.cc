@@ -18,12 +18,25 @@ class WPPP_Dynamic_Images_Advanced {
 		$screen = get_current_screen();
 		$screen->add_help_tab( array(
 			'id'	=> 'wppp_advanced_dynimg',
-			'title'	=> __( 'Improve image handling', 'wppp' ),
-			'content'	=> '<p>' . __( "Using dynamic image resizing images don't get resized on upload. Instead resizing is done when an intermediate image size is first requested. This can significantly improve upload speed. Once created, the image can get saved and is then subsequently served directly.", 'wppp' ) . '</p>'
-							. '<p>' . __ ( "Not saving intermediate images is only recommended for testing environments or when using caching or cdn for both front and back end.", 'wppp' ) . '</p>'
-							. '<p>' . __( "Usage of EXIF thumbs for thumbnail creation improves peformance but be aware that EXIF thumbs might differ from the actual image, depending on the editing software used to create the image.", 'wppp' ) . '</p>',
+			'title'	=> __( 'Overview', 'wppp' ),
+			'content'	=> '<p>' . __( "When using dynamic image resizing images don't get resized on upload. Instead resizing is done when an intermediate image size is first requested. This can significantly improve upload speed. Once created, the image can get saved and is then subsequently served directly.", 'wppp' ) . '</p>'
+							. '<p>' . __ ( "Not saving intermediate images is only recommended for testing environments or when using caching or CDN for both front and back end.", 'wppp' ) . '</p>'
 		) );
-	}
+		$screen->add_help_tab( array(
+			'id'	=> 'wppp_advanced_exif',
+			'title'	=> __( 'EXIF thumbs', 'wppp' ),
+			'content'	=> '<p>' . __( "Usage of EXIF thumbs for thumbnail creation improves peformance when creating small thumbs. If the intermediate image size is smaller than the size of the EXIF thumbnail, the EXIF image will be used for resizing instead of the full image, which is way faster and less memory intense. But be aware that EXIF thumbs might differ from the actual image, depending on the editing software used to create the image.", 'wppp' ) . '</p>'
+		) );
+		$screen->add_help_tab( array(
+			'id'	=> 'wppp_advanced_servemethod',
+			'title'	=> __( 'Serve method', 'wppp' ),
+			'content'	=> '<p>' . __( "Dynamic images can be served using one of two methods which differ in how much of WordPress will be loaded. <em>SHORTINIT</em> will only load the WordPress core, no themes or plugins and is the faster of both options. <em>WP_USE_THEMES</em> will load core and plugins, but not the theme files. That way other image processing plugins will be loaded and used when images get resized (if they are based on WP_Image_Editor).", 'wppp' ) . '</p>'
+		) );
+		$screen->add_help_tab( array(
+			'id'	=> 'wppp_advanced_regenthumbs',
+			'title'	=> __( 'Regenerate Thumbnails integration', 'wppp' ),
+			'content'	=> '<p>' . __( "Using this feature you can clean up old and unused intermediate images. WPPP will hook into on of the supported plugins and instead of recreating intermediate images they will get deleted.", 'wppp' ) . '</p>'
+		) );	}
 
 	public function render_options ( $renderer ) {
 		wp_localize_script( 'wppp-admin-script', 'wpppData', array (

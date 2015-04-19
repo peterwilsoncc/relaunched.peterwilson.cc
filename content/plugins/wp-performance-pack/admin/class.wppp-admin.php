@@ -15,10 +15,12 @@ class WPPP_Admin {
 
 	public function __construct($wppp_parent) {
 		$this->wppp = $wppp_parent;
-		register_setting( 'wppp_options', WP_Performance_Pack::wppp_options_name, array( $this, 'validate' ) );
+
 		if ( $this->wppp->is_network ) {
 			add_action( 'network_admin_menu', array( $this, 'add_menu_page' ) );
 		} else {
+			// register setting only if not multisite - multisite performs validate on its own
+			register_setting( 'wppp_options', WP_Performance_Pack::wppp_options_name, array( $this, 'validate' ) );
 			add_action( 'admin_menu', array( $this, 'add_menu_page' ) );
 		}
 		add_action('wp_ajax_wpppsupport', array( $this, 'support_dialog' ) );
@@ -98,11 +100,7 @@ Loaded extensions: <?php
 	 */
 
 	public function validate( $input ) {
-	
-		var_dump( $input );
 		$output = $this->wppp->options; // default output are current settings
-		var_dump( $output );
-		
 		if ( isset( $input ) && is_array( $input ) ) {
 
 			// test if view mode has changed. if so, leave all other settings as they are
@@ -115,7 +113,6 @@ Loaded extensions: <?php
 			}
 
 			$current = ( isset ( $_GET['tab'] ) ) ? $_GET['tab'] : 'general';
-			var_dump( $current );
 			if ( isset( $this->wppp->modules[ $current ] ) ) {
 				// process module options
 				$output = $this->wppp->modules[ $current ]->validate_options( $input, $output );
@@ -169,7 +166,7 @@ Loaded extensions: <?php
 				}
 			}
 			$this->wppp->options = $this->validate( $input );
-			update_site_option( WP_Performance_Pack::wppp_options_name, $this->wppp->options );
+			$this->wppp->update_option( WP_Performance_Pack::wppp_options_name, $this->wppp->options );
 		}
 	}
 

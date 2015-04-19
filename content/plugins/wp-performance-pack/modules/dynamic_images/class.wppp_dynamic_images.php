@@ -46,13 +46,13 @@ class WPPP_Dynamic_Images extends WPPP_Module {
 			if ( isset( $input[$key] ) ) {
 				switch( $key ) {
 					case 'dynamic_images'		: $val = ( $input[$key] == 'true' ? true : false );
-												  $flush = ( $this->wppp->options[ $key ] !== $val );
+												  $flush = ( $this->wppp->options[ $key ] !== $val ) || $flush;
 												  $output[ $key ] = $val;
 												  break;
 					case 'dynimg_quality'		: $output[$key] = ( is_numeric( $input[$key] ) && $input[$key] >= 10 && $input[$key] <= 100 ) ? $input[ $key] : $val;
 												  break;
 					case 'dynimg_serve_method'	: $val = ( $input[$key] === 'use_themes' ) ? 'use_themes' : 'short_init';
-												  $flush = ( $this->wppp->options[ $key ] !== $val );
+												  $flush = ( $this->wppp->options[ $key ] !== $val ) || $flush;
 												  $output[ $key ] = $val;
 												  break;
 					default						: $output[$key] = ( $input[$key] == 'true' ? true : false );
@@ -63,13 +63,15 @@ class WPPP_Dynamic_Images extends WPPP_Module {
 				$output[$key] = $value;
 			}
 		}
-		
+
 		if ( $flush ) {
 			$this->flush_rewrite_rules( $output[ 'dynamic_images' ], $output[ 'dynimg_serve_method' ] );
 		}
 		
 		return $output;
 	}
+	
+	public function flush_rewrite_rules ( $enabled, $method = false ) {} // Dummy
 	
 	public function tabName() { return __( 'Images', 'wppp' );  }
 

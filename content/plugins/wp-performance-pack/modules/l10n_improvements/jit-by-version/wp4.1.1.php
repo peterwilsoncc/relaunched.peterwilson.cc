@@ -45,16 +45,16 @@ function wp_jit_default_scripts( &$scripts ) {
 
 	$scripts->add( 'quicktags', "/wp-includes/js/quicktags$suffix.js", array(), false, 1 );
 	did_action( 'init' ) && $scripts->localize( 'quicktags', 'quicktagsL10n', new LabelsObject( array(
-		'closeAllOpenTags'      => array( 'func' => esc_attr__( 'Close all open tags' ) ),
-		'closeTags'             => array( 'func' => esc_attr__( 'close tags' ) ),
+		'closeAllOpenTags'      => array( 'esc_attr__', 'Close all open tags' ),
+		'closeTags'             => array( 'esc_attr__', 'close tags' ),
 		'enterURL'              => array( '__', 'Enter the URL' ),
 		'enterImageURL'         => array( '__', 'Enter the URL of the image' ),
 		'enterImageDescription' => array( '__', 'Enter a description of the image' ),
 		'fullscreen'            => array( '__', 'fullscreen' ),
-		'toggleFullscreen'      => array( 'func' => esc_attr__( 'Toggle fullscreen mode' ) ),
-		'textdirection'         => array( 'func' => esc_attr__( 'text direction' ) ),
-		'toggleTextdirection'   => array( 'func' => esc_attr__( 'Toggle Editor Text Direction' ) ),
-		'dfw'                   => array( 'func' => esc_attr__( 'Distraction-free writing mode' ) )
+		'toggleFullscreen'      => array( 'esc_attr__', 'Toggle fullscreen mode' ),
+		'textdirection'         => array( 'esc_attr__', 'text direction' ),
+		'toggleTextdirection'   => array( 'esc_attr__', 'Toggle Editor Text Direction' ),
+		'dfw'                   => array( 'esc_attr__', 'Distraction-free writing mode' )
 	) ) );
 
 	$scripts->add( 'colorpicker', "/wp-includes/js/colorpicker$suffix.js", array('prototype'), '3517m' );
@@ -100,7 +100,7 @@ function wp_jit_default_scripts( &$scripts ) {
 		 * @param int $interval The interval in which to check a user's authentication.
 		 *                      Default 3 minutes in seconds, or 180.
 		 */
-		'interval' => array( 'func' => apply_filters( 'wp_auth_check_interval', 3 * MINUTE_IN_SECONDS ) ),
+		'interval' => apply_filters( 'wp_auth_check_interval', 3 * MINUTE_IN_SECONDS ),
 	) ) );
 
 	$scripts->add( 'wp-lists', "/wp-includes/js/wp-lists$suffix.js", array( 'wp-ajax-response', 'jquery-color' ), false, 1 );
@@ -191,8 +191,18 @@ function wp_jit_default_scripts( &$scripts ) {
 			'of' => array( '__', 'of' ),
 			'close' => array( '__', 'Close' ),
 			'noiframes' => array( '__', 'This feature requires inline frames. You have iframes disabled or your browser does not support them.' ),
-			'loadingAnimation' => array( 'func' => includes_url('js/thickbox/loadingAnimation.gif') ),
+			'loadingAnimation' => array( 'includes_url', 'js/thickbox/loadingAnimation.gif' ),
 	) ) );
+
+/*	did_action( 'init' ) && $scripts->localize( 'thickbox', 'thickboxL10n', array(
+			'next' => __( 'Next &gt;' ),
+			'prev' => __( '&lt; Prev' ),
+			'image' => __( 'Image' ),
+			'of' => __( 'of' ),
+			'close' => __( 'Close' ),
+			'noiframes' => __( 'This feature requires inline frames. You have iframes disabled or your browser does not support them.' ),
+			'loadingAnimation' => includes_url('js/thickbox/loadingAnimation.gif'),
+	) ); */
 
 	$scripts->add( 'jcrop', "/wp-includes/js/jcrop/jquery.Jcrop.min.js", array('jquery'), '0.9.12');
 
@@ -386,8 +396,8 @@ function wp_jit_default_scripts( &$scripts ) {
 
 		$scripts->add( 'admin-comments', "/wp-admin/js/edit-comments$suffix.js", array('wp-lists', 'quicktags', 'jquery-query'), false, 1 );
 		did_action( 'init' ) && $scripts->localize( 'admin-comments', 'adminCommentsL10n', new LabelsObject( array(
-			'hotkeys_highlight_first' => array( 'func' => isset($_GET['hotkeys_highlight_first']) ),
-			'hotkeys_highlight_last' => array( 'func' => isset($_GET['hotkeys_highlight_last']) ),
+			'hotkeys_highlight_first' => isset($_GET['hotkeys_highlight_first']),
+			'hotkeys_highlight_last' => isset($_GET['hotkeys_highlight_last']),
 			'replyApprove' => array( '__', 'Approve and Reply' ),
 			'reply' => array( '__', 'Reply' )
 		) ) );
