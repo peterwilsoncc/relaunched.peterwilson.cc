@@ -30,7 +30,7 @@
                 "dev-master": "1.0-dev"
             }
         },
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-0": {
                 "Composer\\Installers\\": "src/"
@@ -118,7 +118,7 @@
                 "dev-default": "1.x-dev"
             }
         },
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-0": {
                 "xrstf\\Composer52": "lib/"
@@ -147,7 +147,7 @@
         },
         "time": "2015-02-17 14:41:34",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "classmap": [
                 "class-api-libs.php"
@@ -187,7 +187,7 @@
         },
         "time": "2015-04-15 06:48:03",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "classmap": [
                 "i18n-module.php"
@@ -227,7 +227,7 @@
         },
         "time": "2015-03-16 11:51:33",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "classmap": [
                 "class-api-request.php",
