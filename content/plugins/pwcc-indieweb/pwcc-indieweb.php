@@ -577,12 +577,14 @@ function pwccindieweb_notes_save_post( $post_id, $post, $update ) {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return;
 	}
-
+	
+	$doing_cron = ( defined( 'DOING_CRON' ) && DOING_CRON ) ? true : false;
+	
 	if( isset( $_POST['action'] ) && ( $_POST['action'] == 'inline-save' ) ) {
 		return;
 	}
 
-	if ( !current_user_can( 'edit_post', $post_id ) ) {
+	if ( !current_user_can( 'edit_post', $post_id ) && !$doing_cron ) {
 		 return;
 	}
 
