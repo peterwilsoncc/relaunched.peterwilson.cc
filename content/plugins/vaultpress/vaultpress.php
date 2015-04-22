@@ -3,7 +3,7 @@
  * Plugin Name: VaultPress
  * Plugin URI: http://vaultpress.com/?utm_source=plugin-uri&amp;utm_medium=plugin-description&amp;utm_campaign=1.0
  * Description: Protect your content, themes, plugins, and settings with <strong>realtime backup</strong> and <strong>automated security scanning</strong> from <a href="http://vaultpress.com/?utm_source=wp-admin&amp;utm_medium=plugin-description&amp;utm_campaign=1.0" rel="nofollow">VaultPress</a>. Activate, enter your registration key, and never worry again. <a href="http://vaultpress.com/help/?utm_source=wp-admin&amp;utm_medium=plugin-description&amp;utm_campaign=1.0" rel="nofollow">Need some help?</a>
- * Version: 1.7.1
+ * Version: 1.7.2
  * Author: Automattic
  * Author URI: http://vaultpress.com/?utm_source=author-uri&amp;utm_medium=plugin-description&amp;utm_campaign=1.0
  * License: GPL2+
@@ -12,13 +12,12 @@
  */
 
 // don't call the file directly
-if ( !defined( 'ABSPATH' ) )
-	return;
+defined( 'ABSPATH' ) or die();
 
 class VaultPress {
 	var $option_name    = 'vaultpress';
 	var $db_version     = 4;
-	var $plugin_version = '1.7.1';
+	var $plugin_version = '1.7.2';
 
 	function __construct() {
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
@@ -1028,7 +1027,9 @@ class VaultPress {
 		$external_data = $this->request_firewall_update( true );
 		if ( $external_data ) {
 			$external_newval = array( 'updated' => time(), 'data' => $external_data );
-			update_option( 'vaultpress_service_ips_external_cidr', $external_newval );
+
+			delete_option( 'vaultpress_service_ips_external_cidr' );
+			add_option( 'vaultpress_service_ips_external_cidr', $external_newval, '', 'no' );
 		}
 
 		if ( !empty( $data ) && !empty( $external_data ) )
