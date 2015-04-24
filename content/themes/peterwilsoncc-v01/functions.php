@@ -68,7 +68,17 @@ function pwcc_fuckit_redirect_the_front_end() {
 }
 add_action( 'template_redirect', 'pwcc_fuckit_redirect_the_front_end', 1 );
 
-
+function pwcc_theme_async_scripts($tag, $handle, $src) {
+	switch ($handle) {
+		case 'picturefill' : // falls through
+		case 'pwcc-scripts' : // falls through
+		case 'devicepx' : // falls through
+			$tag = str_replace('></script>', ' async></script>', $tag );
+	}
+	
+	return $tag;
+}
+add_filter('script_loader_tag', 'pwcc_theme_async_scripts', 10, 3);
 
 class PWCC_theme {
 	
