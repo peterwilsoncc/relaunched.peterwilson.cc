@@ -3,6 +3,12 @@ $content_width=1200;
 $pwcc_css_ver = "20150416-01";
 $pwcc_js_ver =  "20150418-01";
 
+
+add_filter( 'comments_open', '__return_false' );
+add_filter( 'pings_open'   , '__return_false' );
+
+
+
 function pwcc__return_ok($val){
 return 'ok';
 }
