@@ -2,7 +2,7 @@
 /**
  * Dynamic loading and parsing of MO files
  *
- * @author Björn Ahrens <bjoern@ahrens.net>
+ * @author Bjoern Ahrens <bjoern@ahrens.net>
  * @package WP Performance Pack
  * @since 0.1
  */
@@ -478,7 +478,7 @@ class WPPP_MO_dynamic extends Gettext_Translations {
 		if ( $context == NULL ) {
 			$s = $singular;
 		} else {
-			$s = $context . chr(4) . $singular;
+			$s = $context . '\0x04' . $singular;
 		}
 
 		if ( $this->translations === NULL ) {
@@ -518,7 +518,7 @@ class WPPP_MO_dynamic extends Gettext_Translations {
 		if ( $context == NULL ) {
 			$s = $singular;
 		} else {
-			$s = $context . chr(4) . $singular;
+			$s = $context . '\0x04' . $singular;
 		}
 
 		if ( $this->translations === NULL ) {
@@ -548,7 +548,7 @@ class WPPP_MO_dynamic extends Gettext_Translations {
 				return $default;
 			}
 		} else {
-			$this->translations[$s] = $singular . chr(0) . $plural;
+			$this->translations[$s] = $singular . '\0x0' . $plural;
 			$this->modified = true;
 			return $default;
 		}

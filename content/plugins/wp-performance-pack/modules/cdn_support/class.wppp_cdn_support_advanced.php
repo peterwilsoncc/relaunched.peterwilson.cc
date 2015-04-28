@@ -18,14 +18,23 @@ class WPPP_CDN_Support_Advanced {
 		$screen = get_current_screen();
 		$screen->add_help_tab( array(
 			'id'	=> 'wppp_advanced_cdn',
-			'title'	=>	__( 'CDN support', 'wppp' ),
+			'title'	=>	__( 'Overview', 'wppp' ),
 			'content'	=> '<p>' . __( "CDN support allows to serve images through a CDN, both on front and back end. This eliminates the need to save intermediate images locally, thus reducing web space usage. Use of dynamic image linking is highly recommended when using WPPP CDN support for front end.", 'wppp' ) . '</p>',
 		) );
+
 		$screen->add_help_tab( array(
 			'id'	=> 'wppp_advanced_dynlinks',
 			'title'	=>	__( 'Dynamic image linking', 'wppp' ),
 			'content'	=> '<p>' . __( "By default WordPress inserts fixed URLs to images in posts and pages. Activating this option will create those links dynamically so they will change when your blog URL changes or when you use a CDN for serving images. Substitution improves the speed of this replacement by replacing image URLs with a placeholder in your posts and pages. Substitution should be reverted, when you deactivate WPPP (or by using <em>Restore static links</em>), but there's a chance your image links will be broken when you no longer use WPPP. See plugin page on WordPress.com for further details on how to fix broken image links manually.", 'wppp' ) . '</p>',
-		) );	}
+		) );
+
+		$screen->add_help_tab( array(
+			'id'	=> 'wppp_advanced_substitution',
+			'title'	=>	__( 'Link substituion', 'wppp' ),
+			'content'	=> '<p>' . __( "To improve performance of dynamic links you can use link substituion. If activated image URLs in your posts will be replaced with <em>{{wpppdynamic}}</em> which allows a faster string replace instead of using regular expressions when setting the correct image URL. Be aware that this will alter your post contents! You can revert the changes using <em>Restore static links</em>. This should be executed automatically when deactivating this feature or deactivating WPPP.", 'wppp' ) . '</p>',
+		) );
+
+	}
 
 	public function render_options ( $renderer ) {
 	?>
