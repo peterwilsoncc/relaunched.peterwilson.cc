@@ -170,12 +170,12 @@ class PWCC_theme {
 		);
 		$loadCss = array();
 
-		if ( isset( $_COOKIE["pwccsscache"] ) && ( $pwcc_css_ver == $_COOKIE["pwccsscache"] ) ) {
+		if ( false && isset( $_COOKIE["pwccsscache"] ) && ( $pwcc_css_ver == $_COOKIE["pwccsscache"] ) ) {
 			wp_enqueue_style( 'pwcc-styles' );
 		}
 		else {
 			// apply_filters( 'stylestyle_loader_src', $css, 'pwcc-styles' )
-			$loadCss[] = $wp_styles->registered["pwcc-styles"];
+			// $loadCss[] = $wp_styles->registered["pwcc-styles"];
 		}
 		
 		// print_r( $wp_styles->registered["pwcc-styles"] );
@@ -236,7 +236,7 @@ class PWCC_theme {
 	function action_header_javascript() {
 		global $pwcc_css_ver;
 		
-		if ( !isset( $_COOKIE["pwccsscache"] ) || ( $pwcc_css_ver != $_COOKIE["pwccsscache"] ) ) {
+		if ( !false || !isset( $_COOKIE["pwccsscache"] ) || ( $pwcc_css_ver != $_COOKIE["pwccsscache"] ) ) {
 			echo '<style>';
 			readfile ( get_stylesheet_directory() . '/assets/css/style.min.css' );
 			echo '</style>';
