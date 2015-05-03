@@ -13,6 +13,7 @@ class WPPP_L10n_Improvements extends WPPP_Module {
 		'4.0.1'	=> '4.0',
 		'4.1'	=> '4.1',
 		'4.1.1'	=> '4.1.1',
+		'4.2'	=> '4.2',
 	);
 
 	protected static $options_default = array(
