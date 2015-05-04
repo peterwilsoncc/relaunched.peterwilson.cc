@@ -600,6 +600,7 @@ class PWCC_theme {
 			else {
 				echo '<abbr class="util-silentAbbr" title="South">S</abbr>';
 			}
+			echo '</data>';
 			echo ', ';
 			echo '<data class="p-longitude"  value="' . esc_attr( $geo_longitude ) . '">';
 			$int_long = intval( $geo_longitude );
