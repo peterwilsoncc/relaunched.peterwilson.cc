@@ -35,7 +35,7 @@ h1, .util-h1,
 h2, .util-h2,
 h3, .util-h3 {
 	@include font-size(18/16);
-	line-height: 24/18;
+	line-height: (24/18);
 	margin-bottom: 1rem;
 }
 
