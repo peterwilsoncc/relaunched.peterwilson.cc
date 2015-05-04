@@ -2,6 +2,9 @@
 *.codekit-cache/
 /shared
 /content/languages
+/content/cache/
+/content/advanced-cache.php
+/content/wp-rocket-config/
 /local-config.php
 /sql-dump-*.sql
 /db-sync
