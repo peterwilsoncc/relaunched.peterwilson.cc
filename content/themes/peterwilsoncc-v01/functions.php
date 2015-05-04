@@ -1,6 +1,6 @@
 <?php
 $content_width=1200;
-$pwcc_css_ver = "20150416-01";
+$pwcc_css_ver = "20150504-01";
 $pwcc_js_ver =  "20150418-01";
 
 function pwcc__return_ok($val){
@@ -600,6 +600,7 @@ class PWCC_theme {
 			else {
 				echo '<abbr class="util-silentAbbr" title="South">S</abbr>';
 			}
+			echo '</data>';
 			echo ', ';
 			echo '<data class="p-longitude"  value="' . esc_attr( $geo_longitude ) . '">';
 			$int_long = intval( $geo_longitude );

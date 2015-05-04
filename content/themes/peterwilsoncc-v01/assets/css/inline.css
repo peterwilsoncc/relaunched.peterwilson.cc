@@ -577,7 +577,7 @@ h2, .util-h2,
 h3, .util-h3 {
   font-size: 18px;
   font-size: 1.125rem;
-  line-height: 24/18;
+  line-height: 1.3333333333;
   margin-bottom: 1rem; }
 
 h4, .util-h4,
