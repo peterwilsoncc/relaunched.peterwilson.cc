@@ -614,12 +614,11 @@ blockquote {
   padding-top: 1.5rem;
   /* these are 1.5rem to account for line height of 2 */
   padding-bottom: 1.5rem;
-  /* these are 1.5rem to account for line height of 2 */ }
-  .Article_Body > blockquote {
-    margin-left: -1em;
-    margin-right: -1em;
-    padding-left: 1em;
-    padding-right: 1em; }
+  /* these are 1.5rem to account for line height of 2 */
+  padding-left: 1em;
+  padding-right: 1em;
+  margin-left: -1em;
+  margin-right: -1em; }
   blockquote > :last-child {
     margin-bottom: 0; }
   @media only screen and (min-width: 48em) {

@@ -5,13 +5,12 @@ blockquote {
 
 	padding-top: 1.5rem; /* these are 1.5rem to account for line height of 2 */
 	padding-bottom: 1.5rem; /* these are 1.5rem to account for line height of 2 */
-	.Article_Body > & {
-		margin-left: -1em;
-		margin-right: -1em;
+	padding-left: 1em;
+	padding-right: 1em;
 
-		padding-left: 1em;
-		padding-right: 1em;
-	}
+	margin-left: -1em;
+	margin-right: -1em;
+
 	> :last-child {
 		margin-bottom: 0;
 	}
