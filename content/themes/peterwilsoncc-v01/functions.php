@@ -221,7 +221,9 @@ class PWCC_theme {
 		
 		wp_enqueue_script( 'pwcc-scripts' );
 		
-		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) && ( 0 < pwcc_theme_get_comments_number() ) ) {
+		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) && ( 0 < get_comments_number() ) ) {
+			// this will get some false positive (webmentions, pingback)
+			// so double check in comments template when we have comments
 			wp_enqueue_script( 'comment-reply' );
 		}
 		
@@ -910,6 +912,46 @@ class PWCC_theme {
 		<?php
 	}
 
+	function have_comments() {
+		// this runs in comments template, 
+		if ( 0 == $this->get_comments_number() ) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	function get_comments_number() {
+		// Get all comments, match the query made by call to load
+		// the comment template
+		global $user_ID;
+		
+		$comment_args = array(
+			'order'   => 'ASC',
+			'orderby' => 'comment_date_gmt',
+			'status'  => 'approve',
+			'post_id' => get_the_ID(),
+		);
+
+		$commenter = wp_get_current_commenter();
+		$comment_author_email = $commenter['comment_author_email'];
+
+		
+		if ( $user_ID ) {
+			$comment_args['include_unapproved'] = array( $user_ID );
+		} elseif ( ! empty( $comment_author_email ) ) {
+			$comment_args['include_unapproved'] = array( $comment_author_email );
+		}
+		
+		
+		$my_comments = get_comments( $comment_args );
+		$separate_comments = separate_comments( $my_comments );
+
+		$count = count( $separate_comments["comment"] );
+		return $count;
+	}
+
 	function filter_wpseo_twitter_domain( $value ) {
 		
 		$value = 'peterwilson.cc';
@@ -947,11 +989,13 @@ function pwcc_theme_post_nav() {
 }
 
 function pwcc_theme_have_comments() {
-	return have_comments();
+	global $pwcc_theme;
+	return $pwcc_theme->have_comments();
 }
 
 function pwcc_theme_get_comments_number() {
-	return get_comments_number();
+	global $pwcc_theme;
+	return $pwcc_theme->get_comments_number();
 }
 
 function pwcc_theme_comment_template( $comment, $args, $depth ) {

@@ -42,6 +42,9 @@ if ( pwcc_theme_have_comments() || comments_open() ):
 
 
 		<?php
+		else: // IE: !pwcc_theme_have_comments()
+			// ensure comment reply isn't queued.
+			wp_dequeue_script( 'comment-reply' );
 		endif; // ( pwcc_theme_have_comments() ):
 		?>
 
