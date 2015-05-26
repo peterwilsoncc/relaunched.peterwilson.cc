@@ -22,7 +22,7 @@ if ( pwcc_theme_have_comments() || comments_open() ):
 						'short_ping'  => true,
 						'avatar_size' => 96,
 						'callback'    => 'pwcc_theme_comment_template',
-						'type'        => 'comments',
+						'type'        => 'comment',
 					) );
 				?>
 			</ol><!-- //.CommentList -->
