@@ -126,6 +126,9 @@ class PWCC_theme {
 		add_theme_support( 'post-thumbnails' );
 		set_post_thumbnail_size( 1200, 675, true ); // 16:9
 		
+		// advanced image compress via ricg responsive images plugin
+		add_theme_support( 'advanced-image-compression' );
+		
 		// This theme uses wp_nav_menu() in two locations.
 		register_nav_menus( array(
 			'header'  => __( 'Primary Menu',      'pwcc-theme' ),
