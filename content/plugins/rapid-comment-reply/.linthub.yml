@@ -1,0 +1,17 @@
+go:
+  lint: false
+php:
+  lint: true
+  config: ruleset.xml
+java: 
+  lint: false
+scala:
+  lint: false
+shell:
+  lint: false
+css:
+  lint: true
+js: 
+  lint: jshint # jshint (default) | eslint | false
+  config: .jshintrc
+  

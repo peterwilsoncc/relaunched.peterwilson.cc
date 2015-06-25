@@ -4,6 +4,9 @@ PWCC.commentReply = (function( window, undefined ){
 	var document = window.document;
 	var PWCC = window.PWCC;
 
+	// check browser cuts the mustard
+	var cutsTheMustard = 'querySelector' in document && 'addEventListener' in window;
+
 	// initialise the events
 	init();
 
@@ -19,6 +22,10 @@ PWCC.commentReply = (function( window, undefined ){
 	 * @param {HTMLElement} context The parent DOM element to search for links.
 	 */
 	function init( context ) {
+		if ( true !== cutsTheMustard ) {
+			return;
+		}
+		
 		var links = replyLinks();
 		var i,l;
 		var element;
@@ -26,7 +33,7 @@ PWCC.commentReply = (function( window, undefined ){
 		for ( i=0, l=links.length; i<l; i++ ) {
 			element = links[i];
 
-			addEvent(element, "click", clickEvent );
+			element.addEventListener( 'click', clickEvent );
 		}
 	}
 
@@ -43,8 +50,6 @@ PWCC.commentReply = (function( window, undefined ){
 	function replyLinks( context ) {
 		var selectorClass = 'comment-reply-link';
 		var allReplyLinks;
-		var allLinks;
-		var i,l;
 
 		// childNodes is a handy check to ensure the context is a HTMLElement
 		if ( !context || !context.childNodes ) {
@@ -55,47 +60,14 @@ PWCC.commentReply = (function( window, undefined ){
 			// fastest
 			allReplyLinks = context.getElementsByClassName( selectorClass );
 		}
-		else if ( document.querySelectorAll ) {
+		else {
 			// fast
 			allReplyLinks = context.querySelectorAll( '.' + selectorClass );
-		}
-		else {
-			// slow (IE7 and earlier)
-			allReplyLinks = [];
-			allLinks = context.getElementsByTagName( 'a' );
-
-			for ( i=0,l=allLinks.length; i<l; i++ ) {
-				if ( hasClass( allLinks[i], selectorClass ) ) {
-					allReplyLinks.push( allLinks[i] );
-				}
-			}
 		}
 
 		return allReplyLinks;
 	}
 
-
-	/**
-	 * Check if an element includes a particular class
-	 *
-	 * @since 0.2
-	 *
-	 * @param {HTMLElement} element   The element to check for the class
-	 * @param {String}      className The class to check for
-	 * @returns Boolean
-	 */
-	function hasClass( element, className ) {
-		var elementClass = ' ' + element.className + ' ';
-		className = ' ' + className + ' ';
-
-		if ( elementClass.indexOf( className ) === -1 ) {
-			// class not found
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
 
 	/**
 	 * Click event handler
@@ -114,82 +86,6 @@ PWCC.commentReply = (function( window, undefined ){
 		addComment.moveForm(commId, parentId, respondId, postId);
 		event.preventDefault();
 	}
-
-
-	// written by Dean Edwards, 2005
-	// with input from Tino Zijdel, Matthias Miller, Diego Perini
-
-	// http://dean.edwards.name/weblog/2005/10/add-event/
-
-	function addEvent(element, type, handler) {
-		if (element.addEventListener) {
-			element.addEventListener(type, handler, false);
-		} else {
-			// assign each event handler a unique ID
-			if (!handler.$$guid) handler.$$guid = addEvent.guid++;
-			// create a hash table of event types for the element
-			if (!element.events) element.events = {};
-			// create a hash table of event handlers for each element/event pair
-			var handlers = element.events[type];
-			if (!handlers) {
-				handlers = element.events[type] = {};
-				// store the existing event handler (if there is one)
-				if (element["on" + type]) {
-					handlers[0] = element["on" + type];
-				}
-			}
-			// store the event handler in the hash table
-			handlers[handler.$$guid] = handler;
-			// assign a global event handler to do all the work
-			element["on" + type] = handleEvent;
-		}
-	}
-
-	// a counter used to create unique IDs
-	addEvent.guid = 1;
-
-	function removeEvent(element, type, handler) {
-		if (element.removeEventListener) {
-			element.removeEventListener(type, handler, false);
-		} else {
-			// delete the event handler from the hash table
-			if (element.events && element.events[type]) {
-				delete element.events[type][handler.$$guid];
-			}
-		}
-	}
-
-	function handleEvent(event) {
-		var returnValue = true;
-		// grab the event object (IE uses a global event object)
-		event = event || fixEvent(((this.ownerDocument || this.document || this).parentWindow || window).event);
-		// get a reference to the hash table of event handlers
-		var handlers = this.events[event.type];
-		// execute each event handler
-		for (var i in handlers) {
-			this.$$handleEvent = handlers[i];
-			if (this.$$handleEvent(event) === false) {
-				returnValue = false;
-			}
-		}
-		return returnValue;
-	}
-
-	function fixEvent(event) {
-		// add W3C standard event methods
-		event.preventDefault = fixEvent.preventDefault;
-		event.stopPropagation = fixEvent.stopPropagation;
-		return event;
-	}
-
-	fixEvent.preventDefault = function() {
-		this.returnValue = false;
-	};
-
-	fixEvent.stopPropagation = function() {
-		this.cancelBubble = true;
-	};
-
 
 
 	var addComment = {
