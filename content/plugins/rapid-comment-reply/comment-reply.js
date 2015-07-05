@@ -3,9 +3,15 @@ PWCC.commentReply = (function( window, undefined ){
 	// Avoid scope lookups on commonly used variables
 	var document = window.document;
 	var PWCC = window.PWCC;
-
+	
 	// check browser cuts the mustard
 	var cutsTheMustard = 'querySelector' in document && 'addEventListener' in window;
+	
+	// for holding the cancel element
+	var cancelElement;
+	
+	// the respond element
+	var respondElement;
 
 	// initialise the events
 	init();
@@ -25,7 +31,17 @@ PWCC.commentReply = (function( window, undefined ){
 		if ( true !== cutsTheMustard ) {
 			return;
 		}
+
+		// get the cancel element
+		cancelElement = getElementById( 'cancel-comment-reply-link' );
+
+		// no cancel element, no replies
+		if ( ! cancelElement ) {
+			return;
+		}
 		
+		cancelElement.addEventListener( 'click', cancelEvent );
+
 		var links = replyLinks();
 		var i,l;
 		var element;
@@ -67,6 +83,32 @@ PWCC.commentReply = (function( window, undefined ){
 
 		return allReplyLinks;
 	}
+	
+	
+	/**
+	 * Cance event handler
+	 * 
+	 * @since 1.0
+	 *
+	 * @param {Event} event The calling event
+	 */
+	function cancelEvent( event ) {
+		var cancelLink = this;
+		var temporaryFormId  = "wp-temp-form-div";
+		var temporaryElement = getElementById( temporaryFormId );
+		
+		if ( ! temporaryElement || ! respondElement ) {
+			// conditions for cancel link fail
+			return;
+		}
+
+		getElementById('comment_parent').value = '0';
+		
+		// move the respond form back in place of the tempory element
+		temporaryElement.parentNode.replaceChild( respondElement ,temporaryElement );
+		cancelLink.style.display = 'none';
+		event.preventDefault();
+	}
 
 
 	/**
@@ -83,59 +125,94 @@ PWCC.commentReply = (function( window, undefined ){
 			respondId = replyLink.getAttribute( 'data-respond-element'),
 			postId =  replyLink.getAttribute( 'data-post-id');
 
-		addComment.moveForm(commId, parentId, respondId, postId);
+		moveForm(commId, parentId, respondId, postId);
 		event.preventDefault();
 	}
 
 
-	var addComment = {
-		moveForm : function(commId, parentId, respondId, postId) {
-			var t = this, div, comm = t.I(commId), respond = t.I(respondId), cancel = t.I('cancel-comment-reply-link'), parent = t.I('comment_parent'), post = t.I('comment_post_ID');
+	/**
+	 * Get element by Id
+	 *
+	 * local alias for document.getElementById
+	 *
+	 * @since 0.4
+	 *
+	 * @param {HTMLElement} The requested element
+	 */
+	function getElementById( elementId ) {
+		return document.getElementById( elementId );
+	}
 
-			if ( ! comm || ! respond || ! cancel || ! parent )
-				return;
 
-			t.respondId = respondId;
-			postId = postId || false;
-
-			if ( ! t.I('wp-temp-form-div') ) {
-				div = document.createElement('div');
-				div.id = 'wp-temp-form-div';
-				div.style.display = 'none';
-				respond.parentNode.insertBefore(div, respond);
-			}
-
-			comm.parentNode.insertBefore(respond, comm.nextSibling);
-			if ( post && postId )
-				post.value = postId;
-			parent.value = parentId;
-			cancel.style.display = '';
-
-			cancel.onclick = function() {
-				var t = addComment, temp = t.I('wp-temp-form-div'), respond = t.I(t.respondId);
-
-				if ( ! temp || ! respond )
-					return;
-
-				t.I('comment_parent').value = '0';
-				temp.parentNode.insertBefore(respond, temp);
-				temp.parentNode.removeChild(temp);
-				this.style.display = 'none';
-				this.onclick = null;
-				return false;
-			};
-
-			try { t.I('comment').focus(); }
-			catch(e) {}
-
-			return false;
-		},
-
-		I : function(e) {
-			return document.getElementById(e);
+	/**
+	 * moveForm
+	 * 
+	 * Moves the reply form from it's current position to the reply location
+	 *
+	 * @since 1.0
+	 *
+	 * @param {String} addBelowId HTML ID of element the form follows
+	 * @param {String} commentId  Database ID of comment being replied to
+	 * @param {String} respondId  HTML ID of 'respond' element
+	 * @param {String} postId     Database ID of the post
+	 */
+	
+	function moveForm( addBelowId, commentId, respondId, postId ) {
+		// get elements based on their IDs
+		var addBelowElement = getElementById( addBelowId );
+		respondElement  = getElementById( respondId );
+		
+		// get the hidden fields
+		var parentIdField   = getElementById( 'comment_parent' );
+		var postIdField     = getElementById( 'comment_post_ID' );
+		
+		if ( ! addBelowElement || ! respondElement || ! parentIdField ) {
+			// missing key elements, fail
+			return;
 		}
-	};
+		
+		addPlaceHolder( respondElement );
+		
+		// set the value of the post
+		if ( postId && postIdField ) {
+			postIdField.value = postId;
+		}
+		
+		parentIdField.value = commentId;
+		
+		cancelElement.style.display = '';
+		addBelowElement.parentNode.insertBefore( respondElement, addBelowElement.nextSibling );
 
+	}
+
+
+	/**
+	 * add placeholder element 
+	 *
+	 * Places a place holder element above the #respond element for 
+	 * the form to be returned to if needs be.
+	 *
+	 * @param {HTMLelement} respondElement the #respond element holding comment form
+	 *
+	 * @since 1.0
+	 */
+	function addPlaceHolder( respondElement ) {
+		var temporaryFormId  = "wp-temp-form-div";
+		var temporaryElement = getElementById( temporaryFormId );
+		
+		if ( temporaryElement ) {
+			// the element already exists.
+			// no need to recreate 
+			return;
+		}
+		
+		temporaryElement = document.createElement( 'div' );
+		temporaryElement.id = temporaryFormId;
+		temporaryElement.style.display = 'none';
+		respondElement.parentNode.insertBefore( temporaryElement, respondElement );
+		
+		return;
+	}
 
 
 	return {

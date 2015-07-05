@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rapid Comment Reply
 Description: Reworking of WordPress's frontend comment-reply.js to be unobtrusive. Refer to trac ticket #31590.
-Version: 0.3
+Version: 1.0
 Author: Peter Wilson
 Author URI: http://peterwilson.cc/
 */
@@ -13,7 +13,7 @@ class PWCC_RapidCommentReply {
 	private $version;
 
 	function __construct() {
-		$this->version = "0.3";
+		$this->version = "1.0";
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'replace_comment_reply_source' ), 99 );
 
@@ -125,7 +125,7 @@ class PWCC_RapidCommentReply {
 
 			$data_attribute_string = trim( $data_attribute_string );
 
-			$link = sprintf( "<a class='comment-reply-link' href='%s' %s aria-label='%s'>%s</a>",
+			$link = sprintf( "<a rel='nofollow' class='comment-reply-link' href='%s' %s aria-label='%s'>%s</a>",
 				esc_url( add_query_arg( 'replytocom', $comment->comment_ID ) ) . "#" . $args['respond_id'],
 				$data_attribute_string,
 				esc_attr( sprintf( $args['reply_to_text'], $comment->comment_author ) ),
