@@ -1,14 +1,25 @@
-PWCC = window.PWCC || {};
-PWCC.commentReply = (function( window, undefined ){
+addComment = (function( window, undefined ){
 	// Avoid scope lookups on commonly used variables
 	var document = window.document;
-	var PWCC = window.PWCC;
+
+	// settings
+	var config = {
+		commentReplyClass : 'comment-reply-link',
+		cancelReplyId     : 'cancel-comment-reply-link',
+		commentFieldId    : 'comment',
+		temporaryFormId   : 'wp-temp-form-div',
+		parentIdFieldId   : 'comment_parent',
+		postIdFieldId     : 'comment_post_ID'
+	};
 	
 	// check browser cuts the mustard
 	var cutsTheMustard = 'querySelector' in document && 'addEventListener' in window;
 	
 	// for holding the cancel element
 	var cancelElement;
+	
+	// for holding the comment field element
+	var commentFieldElement;
 	
 	// the respond element
 	var respondElement;
@@ -32,8 +43,9 @@ PWCC.commentReply = (function( window, undefined ){
 			return;
 		}
 
-		// get the cancel element
-		cancelElement = getElementById( 'cancel-comment-reply-link' );
+		// get required elements
+		cancelElement = getElementById( config.cancelReplyId );
+		commentFieldElement = getElementById( config.commentFieldId );
 
 		// no cancel element, no replies
 		if ( ! cancelElement ) {
@@ -64,7 +76,7 @@ PWCC.commentReply = (function( window, undefined ){
 	 * @return {HTMLCollection|NodeList|Array}
 	 */
 	function replyLinks( context ) {
-		var selectorClass = 'comment-reply-link';
+		var selectorClass = config.commentReplyClass;
 		var allReplyLinks;
 
 		// childNodes is a handy check to ensure the context is a HTMLElement
@@ -94,7 +106,7 @@ PWCC.commentReply = (function( window, undefined ){
 	 */
 	function cancelEvent( event ) {
 		var cancelLink = this;
-		var temporaryFormId  = "wp-temp-form-div";
+		var temporaryFormId  = config.temporaryFormId;
 		var temporaryElement = getElementById( temporaryFormId );
 		
 		if ( ! temporaryElement || ! respondElement ) {
@@ -102,7 +114,7 @@ PWCC.commentReply = (function( window, undefined ){
 			return;
 		}
 
-		getElementById('comment_parent').value = '0';
+		getElementById( config.parentIdFieldId ).value = '0';
 		
 		// move the respond form back in place of the tempory element
 		temporaryElement.parentNode.replaceChild( respondElement ,temporaryElement );
@@ -125,7 +137,9 @@ PWCC.commentReply = (function( window, undefined ){
 			respondId = replyLink.getAttribute( 'data-respond-element'),
 			postId =  replyLink.getAttribute( 'data-post-id');
 
-		moveForm(commId, parentId, respondId, postId);
+		// third party comments systems can hook into this function via the gloabl scope.
+		// therefore the click event needs to reference the gloabl scope.
+		window.addComment.moveForm(commId, parentId, respondId, postId);
 		event.preventDefault();
 	}
 
@@ -163,8 +177,8 @@ PWCC.commentReply = (function( window, undefined ){
 		respondElement  = getElementById( respondId );
 		
 		// get the hidden fields
-		var parentIdField   = getElementById( 'comment_parent' );
-		var postIdField     = getElementById( 'comment_post_ID' );
+		var parentIdField   = getElementById( config.parentIdFieldId );
+		var postIdField     = getElementById( config.postIdFieldId );
 		
 		if ( ! addBelowElement || ! respondElement || ! parentIdField ) {
 			// missing key elements, fail
@@ -182,7 +196,24 @@ PWCC.commentReply = (function( window, undefined ){
 		
 		cancelElement.style.display = '';
 		addBelowElement.parentNode.insertBefore( respondElement, addBelowElement.nextSibling );
-
+		
+		// this uglyness is for backward compatibility with third party commenting systems
+		// hooking into the event using older techniques.
+		cancelElement.onclick = function(){
+			return false;
+		};
+		
+		// focus on the comment field
+		try {
+			commentFieldElement.focus();
+		}
+		catch(e) {
+			
+		}
+		
+		// false is returned for backward compatibilty with third party commenting systems
+		// hooking into this function. Eg Jetpack Comments.
+		return false;
 	}
 
 
@@ -197,7 +228,7 @@ PWCC.commentReply = (function( window, undefined ){
 	 * @since 1.0
 	 */
 	function addPlaceHolder( respondElement ) {
-		var temporaryFormId  = "wp-temp-form-div";
+		var temporaryFormId  = config.temporaryFormId;
 		var temporaryElement = getElementById( temporaryFormId );
 		
 		if ( temporaryElement ) {
@@ -216,7 +247,8 @@ PWCC.commentReply = (function( window, undefined ){
 
 
 	return {
-		init: init
+		init: init,
+		moveForm: moveForm
 	};
 
 })( window );

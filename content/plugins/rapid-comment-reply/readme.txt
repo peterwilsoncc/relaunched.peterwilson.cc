@@ -3,7 +3,7 @@ Contributors: peterwilsoncc
 Tags: comments, javascript
 Requires at least: 4.1
 Tested up to: 4.3-alpha
-Stable tag: 1.0
+Stable tag: 1.0.1
 License: GPL
 License URI: https://wordpress.org/about/gpl/
 
@@ -14,14 +14,24 @@ Reworking of WordPress's frontend comment-reply.js to be unobtrusive. Refer to t
 
 I am writing this as a plugin for the purposes of dogfooding, I hope to contribute the changes back to core.
 
-== Contributing ==
+= Browser support =
 
-Development of this plugin is done on [Github](https://github.com/peterwilsoncc/rapid-comment-reply). Pull requests are welcome.
+All browsers support comment replies using this plugin.
+
+Visitors using older browsers will use a non-JavaScript fallback when replying to comments. In practical terms, on most sites the fallback will be limited to visitors using IE8 or earlier.
+
+= Contributing =
+
+Development of this plugin is done on [Github](https://github.com/peterwilsoncc/rapid-comment-reply). Pull requests and issue reports are welcome.
 
 == Installation ==
 Install this from your WordPress dashboard
 
 == Changelog ==
+
+= 1.0.1 =
+* Fix incompatibility with Jetpack Comments
+* Use config object for class names and IDs
 
 = 1.0 =
 * Refactor the move form code to use modern web techniques
@@ -44,3 +54,8 @@ Install this from your WordPress dashboard
 = 0.1 =
 
 * Initial version: replaces the WordPress comment-reply.js with the plugin's version
+
+== Upgrade Notice ==
+
+= 1.0.1 =
+Now compatible with Jetpack comments.
