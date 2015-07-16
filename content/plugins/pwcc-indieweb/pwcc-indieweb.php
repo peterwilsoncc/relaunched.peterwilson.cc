@@ -349,7 +349,7 @@ function pwccindieweb_notes_register_content_type() {
 		'capability_type'   => 'post',
 		'has_archive'       => true,
 		'hierarchical'      => false,
-		'supports'          => array( 'comments', 'author', 'editor', 'title', 'post-formats' ),
+		'supports'          => array( 'comments', 'trackbacks', 'author', 'editor', 'title', 'post-formats' ),
 		'rewrite'           => array( 'slug' => '~' )
 	);
 	
