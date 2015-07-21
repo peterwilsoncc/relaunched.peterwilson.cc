@@ -1,3 +1,4 @@
+var addComment;
 addComment = (function( window, undefined ){
 	// Avoid scope lookups on commonly used variables
 	var document = window.document;
@@ -14,6 +15,10 @@ addComment = (function( window, undefined ){
 	
 	// check browser cuts the mustard
 	var cutsTheMustard = 'querySelector' in document && 'addEventListener' in window;
+
+	// check browser supports dataset
+	// !! sets the variable to truthy if the property exists.
+	var supportsDataset = !!document.body.dataset;
 	
 	// for holding the cancel element
 	var cancelElement;
@@ -52,7 +57,8 @@ addComment = (function( window, undefined ){
 			return;
 		}
 		
-		cancelElement.addEventListener( 'click', cancelEvent );
+		cancelElement.addEventListener( 'touchstart', cancelEvent );
+		cancelElement.addEventListener( 'click',      cancelEvent );
 
 		var links = replyLinks();
 		var i,l;
@@ -61,7 +67,8 @@ addComment = (function( window, undefined ){
 		for ( i=0, l=links.length; i<l; i++ ) {
 			element = links[i];
 
-			element.addEventListener( 'click', clickEvent );
+			element.addEventListener( 'touchstart', clickEvent );
+			element.addEventListener( 'click',      clickEvent );
 		}
 	}
 
@@ -132,17 +139,41 @@ addComment = (function( window, undefined ){
 	 */
 	function clickEvent( event ) {
 		var replyLink = this,
-			commId = replyLink.getAttribute( 'data-add-below-element'),
-			parentId = replyLink.getAttribute( 'data-comment-id' ),
-			respondId = replyLink.getAttribute( 'data-respond-element'),
-			postId =  replyLink.getAttribute( 'data-post-id');
+			commId    = getDataAttribute( replyLink, 'belowelement'),
+			parentId  = getDataAttribute( replyLink, 'commentid' ),
+			respondId = getDataAttribute( replyLink, 'respondelement'),
+			postId    = getDataAttribute( replyLink, 'postid'),
+			follow    = true;
 
 		// third party comments systems can hook into this function via the gloabl scope.
 		// therefore the click event needs to reference the gloabl scope.
-		window.addComment.moveForm(commId, parentId, respondId, postId);
-		event.preventDefault();
+		follow = window.addComment.moveForm(commId, parentId, respondId, postId);
+		if ( false === follow ) {
+			event.preventDefault();
+		}
 	}
 
+
+	/**
+	 * Backward compatible getter of data-* attribute
+	 *
+	 * Uses element.dataset if it exists, otherwise uses getAttribute
+	 *
+	 * @since 1.1
+	 *
+	 * @param {HTMLElement} element DOM element with the attribute
+	 * @param {String}      attribute the attribute to get
+	 *
+	 * @return {String}
+	 */
+	function getDataAttribute( element, attribute ) {
+		if ( supportsDataset ) {
+			return element.dataset[attribute];
+		}
+		else {
+			return element.getAttribute( 'data-' + attribute );
+		}
+	}
 
 	/**
 	 * Get element by Id

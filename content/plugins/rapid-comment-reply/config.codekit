@@ -464,7 +464,7 @@
 			"flagValue": -1
 			},
 		"undef": {
-			"active": 0,
+			"active": 1,
 			"flagValue": -1
 			},
 		"unused": {

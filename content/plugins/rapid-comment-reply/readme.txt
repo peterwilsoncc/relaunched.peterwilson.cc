@@ -3,7 +3,7 @@ Contributors: peterwilsoncc
 Tags: comments, javascript
 Requires at least: 4.1
 Tested up to: 4.3-alpha
-Stable tag: 1.0.1
+Stable tag: 1.1
 License: GPL
 License URI: https://wordpress.org/about/gpl/
 
@@ -28,6 +28,10 @@ Development of this plugin is done on [Github](https://github.com/peterwilsoncc/
 Install this from your WordPress dashboard
 
 == Changelog ==
+
+= 1.1 =
+* Adds touch events to JavaScript to avoid 300ms delay
+* Uses element.dataset as data-* attribute getter when possible
 
 = 1.0.1 =
 * Fix incompatibility with Jetpack Comments
@@ -56,6 +60,10 @@ Install this from your WordPress dashboard
 * Initial version: replaces the WordPress comment-reply.js with the plugin's version
 
 == Upgrade Notice ==
+
+= 1.1 =
+
+Now featuring touch events, removes delay on touch devices.
 
 = 1.0.1 =
 Now compatible with Jetpack comments.
