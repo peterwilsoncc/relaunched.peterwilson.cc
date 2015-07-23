@@ -12,20 +12,20 @@ addComment = (function( window, undefined ){
 		parentIdFieldId   : 'comment_parent',
 		postIdFieldId     : 'comment_post_ID'
 	};
-	
+
 	// check browser cuts the mustard
 	var cutsTheMustard = 'querySelector' in document && 'addEventListener' in window;
 
 	// check browser supports dataset
 	// !! sets the variable to truthy if the property exists.
 	var supportsDataset = !!document.body.dataset;
-	
+
 	// for holding the cancel element
 	var cancelElement;
-	
+
 	// for holding the comment field element
 	var commentFieldElement;
-	
+
 	// the respond element
 	var respondElement;
 
@@ -39,7 +39,7 @@ addComment = (function( window, undefined ){
 	 * required to move the comment form. To allow for lazy loading of
 	 * comments this method is exposed as PWCC.commentReply.init()
 	 *
-	 * @since 0.2
+	 * @ticket 31590
 	 *
 	 * @param {HTMLElement} context The parent DOM element to search for links.
 	 */
@@ -56,11 +56,11 @@ addComment = (function( window, undefined ){
 		if ( ! cancelElement ) {
 			return;
 		}
-		
+
 		cancelElement.addEventListener( 'touchstart', cancelEvent );
 		cancelElement.addEventListener( 'click',      cancelEvent );
 
-		var links = replyLinks();
+		var links = replyLinks( context );
 		var i,l;
 		var element;
 
@@ -76,7 +76,7 @@ addComment = (function( window, undefined ){
 	/**
 	 * Return all links classed .comment-reply-link
 	 *
-	 * @since 0.2
+	 * @ticket 31590
 	 *
 	 * @param {HTMLElement} context The parent DOM element to search for links.
 	 *
@@ -102,12 +102,12 @@ addComment = (function( window, undefined ){
 
 		return allReplyLinks;
 	}
-	
-	
+
+
 	/**
 	 * Cance event handler
-	 * 
-	 * @since 1.0
+	 *
+	 * @ticket 31590
 	 *
 	 * @param {Event} event The calling event
 	 */
@@ -115,14 +115,14 @@ addComment = (function( window, undefined ){
 		var cancelLink = this;
 		var temporaryFormId  = config.temporaryFormId;
 		var temporaryElement = getElementById( temporaryFormId );
-		
+
 		if ( ! temporaryElement || ! respondElement ) {
 			// conditions for cancel link fail
 			return;
 		}
 
 		getElementById( config.parentIdFieldId ).value = '0';
-		
+
 		// move the respond form back in place of the tempory element
 		temporaryElement.parentNode.replaceChild( respondElement ,temporaryElement );
 		cancelLink.style.display = 'none';
@@ -133,7 +133,7 @@ addComment = (function( window, undefined ){
 	/**
 	 * Click event handler
 	 *
-	 * @since 0.2
+	 * @ticket 31590
 	 *
 	 * @param {Event} event The calling event
 	 */
@@ -159,7 +159,7 @@ addComment = (function( window, undefined ){
 	 *
 	 * Uses element.dataset if it exists, otherwise uses getAttribute
 	 *
-	 * @since 1.1
+	 * @ticket 31590
 	 *
 	 * @param {HTMLElement} element DOM element with the attribute
 	 * @param {String}      attribute the attribute to get
@@ -180,7 +180,7 @@ addComment = (function( window, undefined ){
 	 *
 	 * local alias for document.getElementById
 	 *
-	 * @since 0.4
+	 * @ticket 31590
 	 *
 	 * @param {HTMLElement} The requested element
 	 */
@@ -191,57 +191,57 @@ addComment = (function( window, undefined ){
 
 	/**
 	 * moveForm
-	 * 
+	 *
 	 * Moves the reply form from it's current position to the reply location
 	 *
-	 * @since 1.0
+	 * @ticket 31590
 	 *
 	 * @param {String} addBelowId HTML ID of element the form follows
 	 * @param {String} commentId  Database ID of comment being replied to
 	 * @param {String} respondId  HTML ID of 'respond' element
 	 * @param {String} postId     Database ID of the post
 	 */
-	
+
 	function moveForm( addBelowId, commentId, respondId, postId ) {
 		// get elements based on their IDs
 		var addBelowElement = getElementById( addBelowId );
 		respondElement  = getElementById( respondId );
-		
+
 		// get the hidden fields
 		var parentIdField   = getElementById( config.parentIdFieldId );
 		var postIdField     = getElementById( config.postIdFieldId );
-		
+
 		if ( ! addBelowElement || ! respondElement || ! parentIdField ) {
 			// missing key elements, fail
 			return;
 		}
-		
+
 		addPlaceHolder( respondElement );
-		
+
 		// set the value of the post
 		if ( postId && postIdField ) {
 			postIdField.value = postId;
 		}
-		
+
 		parentIdField.value = commentId;
-		
+
 		cancelElement.style.display = '';
 		addBelowElement.parentNode.insertBefore( respondElement, addBelowElement.nextSibling );
-		
+
 		// this uglyness is for backward compatibility with third party commenting systems
 		// hooking into the event using older techniques.
 		cancelElement.onclick = function(){
 			return false;
 		};
-		
+
 		// focus on the comment field
 		try {
 			commentFieldElement.focus();
 		}
 		catch(e) {
-			
+
 		}
-		
+
 		// false is returned for backward compatibilty with third party commenting systems
 		// hooking into this function. Eg Jetpack Comments.
 		return false;
@@ -249,30 +249,30 @@ addComment = (function( window, undefined ){
 
 
 	/**
-	 * add placeholder element 
+	 * add placeholder element
 	 *
-	 * Places a place holder element above the #respond element for 
+	 * Places a place holder element above the #respond element for
 	 * the form to be returned to if needs be.
 	 *
 	 * @param {HTMLelement} respondElement the #respond element holding comment form
 	 *
-	 * @since 1.0
+	 * @ticket 31590
 	 */
 	function addPlaceHolder( respondElement ) {
 		var temporaryFormId  = config.temporaryFormId;
 		var temporaryElement = getElementById( temporaryFormId );
-		
+
 		if ( temporaryElement ) {
 			// the element already exists.
-			// no need to recreate 
+			// no need to recreate
 			return;
 		}
-		
+
 		temporaryElement = document.createElement( 'div' );
 		temporaryElement.id = temporaryFormId;
 		temporaryElement.style.display = 'none';
 		respondElement.parentNode.insertBefore( temporaryElement, respondElement );
-		
+
 		return;
 	}
 

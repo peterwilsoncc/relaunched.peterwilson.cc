@@ -2,8 +2,8 @@
 Contributors: peterwilsoncc
 Tags: comments, javascript
 Requires at least: 4.1
-Tested up to: 4.3-alpha
-Stable tag: 1.1
+Tested up to: 4.3-beta
+Stable tag: 1.1.1
 License: GPL
 License URI: https://wordpress.org/about/gpl/
 
