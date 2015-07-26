@@ -663,12 +663,12 @@ function pwccindieweb_note_to_content( $post_id, $post ) {
 			
 			if ( $append_permalink ) {
 				$remaining_text = 140 - $link_length - 1; //url length plus space;
-				$tweet_text = $tweet_text . ' ' . wp_get_shortlink( $post_id );
+				$tweet_text = $tweet_text . ' ' . get_permalink( $post_id );
 			}
 			
 			if ( 0 != count( $attachments ) ) {
 				$remaining_text = 140 - $link_length - 1; //url length plus space;
-				// $tweet_text = $tweet_text . ' ' . wp_get_shortlink( $post_id );
+				// $tweet_text = $tweet_text . ' ' . get_permalink( $post_id );
 				
 			}
 			
