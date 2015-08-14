@@ -184,7 +184,7 @@ var console = window.console || {  // jshint ignore:line
 		return;
 	}
 	
-	domReadyEvent(); // in footer, no need to wait
+	document.addEventListener( "DOMContentLoaded", domReadyEvent );
 	
 	function domReadyEvent() {
 		commentForm();

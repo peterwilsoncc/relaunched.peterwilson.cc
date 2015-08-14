@@ -80,6 +80,17 @@ function pwcc_theme_async_scripts($tag, $handle, $src) {
 }
 add_filter('script_loader_tag', 'pwcc_theme_async_scripts', 10, 3);
 
+function pwcc_async_to_header() {
+	global $wp_scripts;
+	$wp_scripts->add_data( 'picturefill',  'group', 0 );
+	$wp_scripts->add_data( 'pwcc-scripts', 'group', 0 );
+	$wp_scripts->add_data( 'devicepx',     'group', 0 );
+}
+add_action( 'wp_enqueue_scripts', 'pwcc_async_to_header', 99 );
+
+
+
+
 class PWCC_theme {
 	
 	
