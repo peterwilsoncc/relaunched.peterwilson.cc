@@ -1,7 +1,7 @@
 <?php
 $content_width=1200;
 $pwcc_css_ver = "20150525-01";
-$pwcc_js_ver =  "20150418-01";
+$pwcc_js_ver =  "20150814-01";
 
 function pwcc__return_ok($val){
 return 'ok';
@@ -84,7 +84,6 @@ function pwcc_async_to_header() {
 	global $wp_scripts;
 	$wp_scripts->add_data( 'picturefill',  'group', 0 );
 	$wp_scripts->add_data( 'pwcc-scripts', 'group', 0 );
-	$wp_scripts->add_data( 'devicepx',     'group', 0 );
 }
 add_action( 'wp_enqueue_scripts', 'pwcc_async_to_header', 99 );
 

@@ -187,6 +187,7 @@ var console = window.console || {  // jshint ignore:line
 	document.addEventListener( "DOMContentLoaded", domReadyEvent );
 	
 	function domReadyEvent() {
+		PWCC.hljs( window );
 		commentForm();
 		fitVids();
 		fullWidthBlocks();
@@ -521,7 +522,7 @@ var console = window.console || {  // jshint ignore:line
 }( window, PWCC_data ));
 
 /* jshint ignore: start */
-(PWCC.hljs = function( window, undefined ) {
+PWCC.hljs = function( window, undefined ) {
 	var document = window.document;
 
 	if ( document.body.classList.contains("lte8") ) {
@@ -537,7 +538,7 @@ var console = window.console || {  // jshint ignore:line
 	
 	window.hljs = hljs;
 
-}( window ));
+};
 /* jshint ignore: end */
 
 
