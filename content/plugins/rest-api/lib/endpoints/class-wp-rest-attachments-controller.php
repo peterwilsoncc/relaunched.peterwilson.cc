@@ -73,6 +73,10 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 
 		wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $file ) );
 
+		if ( isset( $request['alt_text'] ) ) {
+			update_post_meta( $id, '_wp_attachment_image_alt', sanitize_text_field( $request['alt_text'] ) );
+		}
+
 		$this->update_additional_fields_for_object( $attachment, $request );
 
 		$response = $this->get_item( array(
@@ -103,16 +107,15 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 		$data = $response->get_data();
 
 		if ( isset( $request['alt_text'] ) ) {
-			update_post_meta( $data['id'], '_wp_attachment_image_alt', sanitize_text_field( $request['alt_text'] ) );
+			update_post_meta( $data['id'], '_wp_attachment_image_alt', $request['alt_text'] );
 		}
 
 		$response = $this->get_item( array(
 			'id'      => $data['id'],
 			'context' => 'edit',
 		));
-		$response = rest_ensure_response( $response );
-		$response->header( 'Location', rest_url( '/wp/v2/' . $this->get_post_type_base( $this->post_type ) . '/' . $data['id'] ) );
-		return $response;
+
+		return rest_ensure_response( $response );
 	}
 
 	/**
@@ -125,15 +128,15 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 		$prepared_attachment = parent::prepare_item_for_database( $request );
 
 		if ( isset( $request['caption'] ) ) {
-			$prepared_attachment->post_excerpt = wp_filter_post_kses( $request['caption'] );
+			$prepared_attachment->post_excerpt = $request['caption'];
 		}
 
 		if ( isset( $request['description'] ) ) {
-			$prepared_attachment->post_content = wp_filter_post_kses( $request['description'] );
+			$prepared_attachment->post_content = $request['description'];
 		}
 
 		if ( isset( $request['post'] ) ) {
-			$prepared_attachment->post_parent = (int) $request['post_parent'];
+			$prepared_attachment->post_parent = (int) $request['post'];
 		}
 
 		return $prepared_attachment;
@@ -166,7 +169,13 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 
 			foreach ( $data['media_details']['sizes'] as $size => &$size_data ) {
 				// Use the same method image_downsize() does
-				$size_data['source_url'] = str_replace( $img_url_basename, $size_data['file'], $data['source_url'] );
+				$image_src = wp_get_attachment_image_src( $post->ID, $size );
+
+				if ( ! $image_src ) {
+					continue;
+				}
+
+				$size_data['source_url'] = $image_src[0];
 			}
 		} else {
 			$data['media_details']['sizes'] = new stdClass;
@@ -197,16 +206,25 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 			'description'     => 'Alternative text to display when attachment is not displayed.',
 			'type'            => 'string',
 			'context'         => array( 'view', 'edit', 'embed' ),
+			'arg_options'     => array(
+				'sanitize_callback' => 'sanitize_text_field',
+			),
 			);
 		$schema['properties']['caption'] = array(
 			'description'     => 'The caption for the attachment.',
 			'type'            => 'string',
 			'context'         => array( 'view', 'edit' ),
+			'arg_options'     => array(
+				'sanitize_callback' => 'wp_filter_post_kses',
+			),
 			);
 		$schema['properties']['description'] = array(
 			'description'     => 'The description for the attachment.',
 			'type'            => 'string',
 			'context'         => array( 'view', 'edit' ),
+			'arg_options'     => array(
+				'sanitize_callback' => 'wp_filter_post_kses',
+			),
 			);
 		$schema['properties']['media_type'] = array(
 			'description'     => 'Type of attachment.',

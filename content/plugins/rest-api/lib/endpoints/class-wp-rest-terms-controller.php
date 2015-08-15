@@ -32,20 +32,10 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 				'methods'     => WP_REST_Server::CREATABLE,
 				'callback'    => array( $this, 'create_item' ),
 				'permission_callback' => array( $this, 'create_item_permissions_check' ),
-				'args'        => array(
-					'name'        => array(
-						'required'          => true,
-						'sanitize_callback' => 'sanitize_text_field',
-					),
-					'description' => array(
-						'sanitize_callback' => 'wp_filter_post_kses',
-					),
-					'slug'        => array(
-						'sanitize_callback' => 'sanitize_title',
-					),
-					'parent'      => array(),
-				),
+				'args'        => $this->get_endpoint_args_for_item_schema( true ),
 			),
+
+			'schema' => array( $this, 'get_public_item_schema' ),
 		));
 		register_rest_route( 'wp/v2', '/terms/' . $base . '/(?P<id>[\d]+)', array(
 			array(
@@ -57,28 +47,15 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 				'methods'    => WP_REST_Server::EDITABLE,
 				'callback'   => array( $this, 'update_item' ),
 				'permission_callback' => array( $this, 'update_item_permissions_check' ),
-				'args'       => array(
-					'name'        => array(
-						'sanitize_callback' => 'sanitize_text_field',
-					),
-					'description' => array(
-						'sanitize_callback' => 'wp_filter_post_kses',
-					),
-					'slug'        => array(
-						'sanitize_callback' => 'sanitize_title',
-					),
-					'parent'         => array(),
-				),
+				'args'        => $this->get_endpoint_args_for_item_schema( false ),
 			),
 			array(
 				'methods'    => WP_REST_Server::DELETABLE,
 				'callback'   => array( $this, 'delete_item' ),
 				'permission_callback' => array( $this, 'delete_item_permissions_check' ),
 			),
-		) );
-		register_rest_route( 'wp/v2', '/terms/' . $base . '/schema', array(
-			'methods'         => WP_REST_Server::READABLE,
-			'callback'        => array( $this, 'get_public_item_schema' ),
+
+			'schema' => array( $this, 'get_public_item_schema' ),
 		) );
 	}
 
@@ -193,6 +170,15 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 
 		$term = wp_insert_term( $name, $this->taxonomy, $args );
 		if ( is_wp_error( $term ) ) {
+
+			// If we're going to inform the client that the term exists, give them the identifier
+			// they can actually use (term_taxonomy_id) -- NOT term_id.
+
+			if ( ( $term_id = $term->get_error_data( 'term_exists' ) ) ) {
+				$existing_term = get_term( $term_id, $this->taxonomy );
+				$term->add_data( $existing_term->term_taxonomy_id, 'term_exists' );
+			}
+
 			return $term;
 		}
 
@@ -496,44 +482,54 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 					'type'         => 'integer',
 					'context'      => array( 'view', 'embed' ),
 					'readonly'     => true,
-					),
+				),
 				'count'            => array(
 					'description'  => 'Number of published posts for the object.',
 					'type'         => 'integer',
 					'context'      => array( 'view' ),
 					'readonly'     => true,
-					),
+				),
 				'description'      => array(
 					'description'  => 'A human-readable description of the object.',
 					'type'         => 'string',
 					'context'      => array( 'view' ),
+					'arg_options'  => array(
+						'sanitize_callback' => 'wp_filter_post_kses',
 					),
+				),
 				'link'             => array(
 					'description'  => 'URL to the object.',
 					'type'         => 'string',
 					'format'       => 'uri',
 					'context'      => array( 'view', 'embed' ),
 					'readonly'     => true,
-					),
+				),
 				'name'             => array(
 					'description'  => 'The title for the object.',
 					'type'         => 'string',
 					'context'      => array( 'view', 'embed' ),
+					'arg_options'  => array(
+						'sanitize_callback' => 'sanitize_text_field',
 					),
+					'required'     => true,
+				),
 				'slug'             => array(
 					'description'  => 'An alphanumeric identifier for the object unique to its type.',
 					'type'         => 'string',
 					'context'      => array( 'view', 'embed' ),
+					'arg_options'  => array(
+						'sanitize_callback' => 'sanitize_title',
 					),
+				),
 				'taxonomy'         => array(
 					'description'  => 'Type attribution for the object.',
 					'type'         => 'string',
 					'enum'         => array_keys( get_taxonomies() ),
 					'context'      => array( 'view', 'embed' ),
 					'readonly'     => true,
-					),
 				),
-			);
+			),
+		);
 		$taxonomy = get_taxonomy( $this->taxonomy );
 		if ( $taxonomy->hierarchical ) {
 			$schema['properties']['parent'] = array(

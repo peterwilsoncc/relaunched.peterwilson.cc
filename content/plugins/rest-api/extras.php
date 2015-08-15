@@ -74,7 +74,7 @@ function rest_output_link_header() {
 
 	$api_root = get_rest_url();
 
-	if ( empty($api_root) ) {
+	if ( empty( $api_root ) ) {
 		return;
 	}
 
@@ -234,6 +234,7 @@ function rest_get_date_with_gmt( $date, $force_utc = false ) {
  * information. Including any information on the offset could be misleading.
  *
  * @param string $date
+ * @return string Date formatted for ISO8601/RFC3339.
  */
 function rest_mysql_to_rfc3339( $date_string ) {
 	$formatted = mysql2date( 'c', $date_string, false );
