@@ -1,11 +1,11 @@
 === Hum ===
-Contributors: willnorris  
-Tags: shortlink, whistle, diso  
-Requires at least: 3.0  
-Tested up to: 4.0.1  
-Stable tag: 1.2  
-License: MIT  
-License URI: http://opensource.org/licenses/MIT  
+Contributors: willnorris, pfefferle
+Tags: shortlink, whistle, diso
+Requires at least: 3.0
+Tested up to: 4.0.1
+Stable tag: 1.2.1
+License: MIT
+License URI: http://opensource.org/licenses/MIT
 
 Personal URL shortener for WordPress
 
@@ -137,6 +137,13 @@ using:
 Project maintined on github at
 [willnorris/wordpress-hum](https://github.com/willnorris/wordpress-hum).
 
+= 1.2.1 =
+
+ - add `amazon_domain` filter, to support different countries
+ - add `hum_process_redirect` action, to overwrite default rewrite method (see [#17][])
+
+[full changelog](https://github.com/willnorris/wordpress-hum/compare/1.2...1.2.1)
+
 = 1.2 =
 
  - move link post format to use 't' prefix instead of 'h' and add support for
@@ -168,6 +175,7 @@ Project maintined on github at
 [#3]: https://github.com/willnorris/wordpress-hum/issues/3
 [#4]: https://github.com/willnorris/wordpress-hum/issues/4
 [#6]: https://github.com/willnorris/wordpress-hum/issues/6
+[#17]: https://github.com/willnorris/wordpress-hum/pull/17
 
 = 1.0 =
  - initial public release

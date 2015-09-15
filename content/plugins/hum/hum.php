@@ -5,12 +5,11 @@
  Description: Personal URL shortener for WordPress
  Author: Will Norris
  Author URI: https://willnorris.com/
- Version: 1.2
+ Version: 1.2.1
  License: MIT (http://opensource.org/licenses/MIT)
  Text Domain: hum
  */
 
-if (!class_exists('Hum')):
 class Hum {
 
   public function __construct() {
@@ -34,6 +33,7 @@ class Hum {
     add_action('parse_request', array( $this, 'parse_request' ));
     add_filter('hum_redirect', array( $this, 'redirect_request' ), 10, 3);
     add_filter('hum_redirect_i', array( $this, 'redirect_request_i' ), 10, 2);
+    add_filter('hum_process_redirect', array( $this, 'process_redirect' ), 10, 2);
     add_action('generate_rewrite_rules', array( $this, 'rewrite_rules' ));
     add_filter('pre_option_hum_shortlink_base', array( $this, 'config_shortlink_base' ));
     add_filter('pre_get_shortlink', array( $this, 'get_shortlink' ), 10, 4);
@@ -59,6 +59,7 @@ class Hum {
    * short URLs.
    *
    * @uses apply_filters() Calls 'hum_redirect' filter
+   * @uses apply_filters() Calls 'hum_process_redirect' filter
    *
    * @param WP $wp the WordPress environment for the request
    */
@@ -71,6 +72,7 @@ class Hum {
         $type = $hum_path;
         $id = null;
       }
+
       $url = apply_filters('hum_redirect', null, $type, $id);
 
       // hum hasn't handled the request yet, so try again but strip common
@@ -83,8 +85,7 @@ class Hum {
       }
 
       if ( $url ) {
-        wp_redirect($url, 301);
-        exit;
+        do_action('hum_process_redirect', $url, $id);
       }
 
       // hum didn't handle request, so issue 404.
@@ -92,6 +93,17 @@ class Hum {
       // $wp_query->set_404() doesn't do what we need here.
       $wp->query_vars['error'] = '404';
     }
+  }
+
+  /**
+   * Process the redirect.
+   *
+   * @param string $url the permalink of the post
+   * @param string $id the requested post ID
+   */
+  public function process_redirect( $url, $id ) {
+    wp_redirect($url, 301);
+    exit;
   }
 
   /**
@@ -124,6 +136,7 @@ class Hum {
    * @uses apply_filters() Calls 'hum_redirect_{$type}' action
    * @uses apply_filters() Calls 'hum_redirect_base_{$type}' filter on redirect base URL
    *
+   * @param string $url the short URL
    * @param string $type the content-type prefix
    * @param string $id the requested post ID
    */
@@ -153,25 +166,29 @@ class Hum {
    * Handles /i/ URLs that have ISBN or ASIN subpaths by redirecting to Amazon.
    *
    * @uses apply_filters() Calls 'hum_redirect_i_{$subtype}' action
+   * @uses apply_filters() Calls 'amazon_domain' filter
    * @uses apply_filters() Calls 'amazon_affiliate_id' filter
    *
+   * @param string $url the short URL
    * @param string $path subpath of URL (after /i/)
    */
   public function redirect_request_i( $url, $path ) {
     list($subtype, $id) = explode('/', $path, 2);
+
     if ( $subtype ) {
       switch ($subtype) {
         case 'a':
         case 'asin':
         case 'i':
         case 'isbn':
+          $amazon_domain = apply_filters('amazon_domain', 'www.amazon.com');
           $amazon_id = apply_filters('amazon_affiliate_id', false);
           if ($amazon_id) {
-            $url = 'http://www.amazon.com/gp/redirect.html?ie=UTF8&location=' .
-                'http%3A%2F%2Fwww.amazon.com%2Fdp%2F' . $id . '&tag=' . $amazon_id .
-                '&linkCode=ur2&camp=1789&creative=9325';
+            // valid partner shortlink, checked by
+            // https://partnernet.amazon.de/gp/associates/network/tools/link-checker/main.html
+            $url = 'http://' . $amazon_domain . '/dp/product/' . $id . '?tag=' . $amazon_id;
           } else {
-            $url = 'http://www.amazon.com/dp/' . $id;
+            $url = 'http://' . $amazon_domain . '/dp/product/' . $id;
           }
           break;
       }
@@ -212,6 +229,8 @@ class Hum {
 
   /**
    * Allow the constant named 'HUM_SHORTLINK_BASE' to override the base URL for shortlinks.
+   *
+   * @param string $url the short URL
    */
   public function config_shortlink_base( $url = '' ) {
     if ( defined( 'HUM_SHORTLINK_BASE') ) {
@@ -395,13 +414,12 @@ class Hum {
   public function shortlink_atom_entry() {
     $shortlink = wp_get_shortlink();
     if ( $shortlink ) {
-      echo "\t\t" . '<link rel="shortlink" href="' . esc_attr( $shortlink ) . '" />' . "\n";
+      echo "\t\t" . '<link rel="shortlink" href="' . esc_attr( $shortlink ) . '" />' . PHP_EOL;
     }
   }
 }
 
 new Hum;
-endif; // if class_exists
 
 
 // New Base 60 - see http://ttk.me/w/NewBase60
@@ -451,4 +469,3 @@ function sxg_to_num($s) {
   return $n;
 }
 endif;
-
