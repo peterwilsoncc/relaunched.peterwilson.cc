@@ -219,6 +219,7 @@ class PWCC_theme {
 				'iframe[src*="youtube.com"]',
 				'iframe[src*="youtube-nocookie.com"]',
 				'iframe[src*="kickstarter.com"][src*="video.html"]',
+				'iframe[src*="videopress.com/embed/"]',
 				'object',
 				'embed'
 			),
