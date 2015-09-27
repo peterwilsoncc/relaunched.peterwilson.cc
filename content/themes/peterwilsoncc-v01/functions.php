@@ -530,9 +530,9 @@ class PWCC_theme {
 		$aria_req = ( $req ? " aria-required='true'" : '' );
 		
 		// the comment form
-		$defaults['comment_field'] = '<div class="InputSet InputSet-Text comment-form_comment"><label for="comment">' . _x( 'Comment', 'noun' ) . '</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-describedby="form-allowed-tags" aria-required="true"></textarea></div>';
+		$defaults['comment_field'] = '<div class="InputSet InputSet-Text comment-form_comment"><label for="comment">' . _x( 'Comment', 'noun' ) . '</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></div>';
 		
-		$defaults['comment_notes_after']  = '<p class="form-allowed-tags" id="form-allowed-tags"><small>' . sprintf( __( 'You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes: %s' ), ' <code>' . allowed_tags() . '</code>' ) . '</small></p>';
+		$defaults['comment_notes_after']  = '';
 		
 		
 		return $defaults;
