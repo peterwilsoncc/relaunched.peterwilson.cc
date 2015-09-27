@@ -1716,10 +1716,6 @@
 			"active": 1,
 			"flagValue": -1
 			},
-		"browserify": {
-			"active": 0,
-			"flagValue": -1
-			},
 		"camelcase": {
 			"active": 0,
 			"flagValue": -1
@@ -1742,10 +1738,6 @@
 			},
 		"dojo": {
 			"active": 0,
-			"flagValue": -1
-			},
-		"elision": {
-			"active": 1,
 			"flagValue": -1
 			},
 		"eqeqeq": {
@@ -1784,10 +1776,6 @@
 			"active": 0,
 			"flagValue": -1
 			},
-		"futurehostile": {
-			"active": 0,
-			"flagValue": -1
-			},
 		"globalstrict": {
 			"active": 0,
 			"flagValue": -1
@@ -1801,10 +1789,6 @@
 			"flagValue": 4
 			},
 		"iterator": {
-			"active": 0,
-			"flagValue": -1
-			},
-		"jasmine": {
 			"active": 0,
 			"flagValue": -1
 			},
@@ -1852,10 +1836,6 @@
 			"active": 0,
 			"flagValue": 4
 			},
-		"mocha": {
-			"active": 0,
-			"flagValue": -1
-			},
 		"mootools": {
 			"active": 0,
 			"flagValue": -1
@@ -1874,10 +1854,6 @@
 			},
 		"noarg": {
 			"active": 1,
-			"flagValue": -1
-			},
-		"nocomma": {
-			"active": 0,
 			"flagValue": -1
 			},
 		"node": {
@@ -1928,10 +1904,6 @@
 			"active": 0,
 			"flagValue": -1
 			},
-		"qunit": {
-			"active": 0,
-			"flagValue": -1
-			},
 		"regexp": {
 			"active": 1,
 			"flagValue": -1
@@ -1949,10 +1921,6 @@
 			"flagValue": -1
 			},
 		"shelljs": {
-			"active": 0,
-			"flagValue": -1
-			},
-		"singleGroups": {
 			"active": 0,
 			"flagValue": -1
 			},
@@ -1978,10 +1946,6 @@
 			},
 		"unused": {
 			"active": 1,
-			"flagValue": -1
-			},
-		"varstmt": {
-			"active": 0,
 			"flagValue": -1
 			},
 		"withstmt": {
