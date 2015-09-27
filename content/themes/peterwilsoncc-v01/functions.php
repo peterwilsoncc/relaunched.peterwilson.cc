@@ -1,6 +1,6 @@
 <?php
 $content_width=1200;
-$pwcc_css_ver = "20150525-01";
+$pwcc_css_ver = "20150927-01";
 $pwcc_js_ver =  "20150814-01";
 
 function pwcc__return_ok($val){

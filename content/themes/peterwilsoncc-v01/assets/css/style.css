@@ -1512,7 +1512,19 @@ so I am breaking the naming convention here to match its HTML.
     clear: left;
     float: none;
     padding-left: 0;
-    padding-right: 0; } }
+    padding-right: 0; }
+
+  .comment-form_comment ~ div:nth-child(2n) {
+    padding-left: 1rem;
+    padding-right: 0; }
+    .Comment .comment-form_comment ~ div:nth-child(2n) {
+      padding-left: 0; }
+
+  .comment-form_comment ~ div:nth-child(2n-1) {
+    padding-right: 1rem;
+    padding-left: 0; }
+    .Comment .comment-form_comment ~ div:nth-child(2n-1) {
+      padding-right: 0; } }
 	/*
 	@media only screen and ( min-width : 35em ) {
 		// This name, email, website on one row for super-massive screen

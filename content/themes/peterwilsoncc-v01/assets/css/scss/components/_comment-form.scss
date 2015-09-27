@@ -63,6 +63,26 @@ so I am breaking the naming convention here to match its HTML.
 			padding-right: 0;
 		}
 		
+		// form structure changes in WP 4.4
+		.comment-form_comment ~ div:nth-child(2n) {
+			padding-left: 1rem;
+			padding-right: 0;
+			
+			.Comment & {
+				padding-left: 0;
+			}
+		}
+
+		.comment-form_comment ~ div:nth-child(2n-1) {
+			padding-right: 1rem;
+			padding-left: 0;
+
+			.Comment & {
+				padding-right: 0;
+			}
+		}
+		
+		
 		
 		
 		
