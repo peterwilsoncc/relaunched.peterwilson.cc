@@ -178,17 +178,20 @@ var console = window.console || {  // jshint ignore:line
 	var faux_guid_characters_length = faux_guid_characters.length;
 	var document = window.document;
 	var pluginName = "pwcc_theme_fns_";
+	var PWCC = window.PWCC;
 	
 	if ( !document.querySelectorAll || !window.addEventListener ) {
 		// you're not a very good browser
 		return;
 	}
 	
-	// document.addEventListener( "DOMContentLoaded", domReadyEvent );
-	domReadyEvent();
+	if ( PWCC.ready ) {
+		domReadyEvent();
+	}
+	document.addEventListener( "DOMContentLoaded", domReadyEvent );
 
 	function domReadyEvent() {
-		// PWCC.hljs( window );
+		PWCC.hljs( window );
 		commentForm();
 		fitVids();
 		fullWidthBlocks();
@@ -523,7 +526,7 @@ var console = window.console || {  // jshint ignore:line
 }( window, PWCC_data ));
 
 /* jshint ignore: start */
-PWCC.hljs = (function( window, undefined ) {
+PWCC.hljs = function( window, undefined ) {
 	var document = window.document;
 
 	if ( document.body.classList.contains("lte8") ) {
@@ -539,7 +542,7 @@ PWCC.hljs = (function( window, undefined ) {
 	
 	window.hljs = hljs;
 
-})(window);
+};
 /* jshint ignore: end */
 
 

@@ -1,7 +1,7 @@
 <?php
 $content_width=1200;
 $pwcc_css_ver = "20150927-01";
-$pwcc_js_ver =  "20150930-01";
+$pwcc_js_ver =  "20150930-02";
 
 function pwcc__return_ok($val){
 return 'ok';
@@ -83,7 +83,7 @@ add_filter('script_loader_tag', 'pwcc_theme_async_scripts', 10, 3);
 function pwcc_async_to_header() {
 	global $wp_scripts;
 	$wp_scripts->add_data( 'picturefill',  'group', 0 );
-	// $wp_scripts->add_data( 'pwcc-scripts', 'group', 0 );
+	$wp_scripts->add_data( 'pwcc-scripts', 'group', 0 );
 }
 add_action( 'wp_enqueue_scripts', 'pwcc_async_to_header', 99 );
 
