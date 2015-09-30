@@ -191,7 +191,7 @@ var console = window.console || {  // jshint ignore:line
 	document.addEventListener( "DOMContentLoaded", domReadyEvent );
 
 	function domReadyEvent() {
-		PWCC.hljs( window );
+		codeHighlighting();
 		commentForm();
 		fitVids();
 		fullWidthBlocks();
@@ -199,6 +199,17 @@ var console = window.console || {  // jshint ignore:line
 		enqueueCss();
 	}
 
+	function codeHighlighting() {
+		var test = function(){
+			return ( 'undefined' !== typeof PWCC.hljs );
+		};
+		
+		var callback = function() {
+			PWCC.hljs( window );
+		};
+
+		wait( test, callback );
+	}
 
 	/*!
 	loadCSS: load a CSS file asynchronously.
@@ -523,6 +534,40 @@ var console = window.console || {  // jshint ignore:line
 	function guid(){
 		return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 	}
+
+	function wait( test, callback, tryFor, tryEvery ) {
+		var testVal;
+		if ( 'function' !== typeof test ) {
+			testVal = test;
+			test = function(){ return testVal; };
+		}
+
+		if ( 'function' !== typeof callback ) {
+			return;
+		}
+
+		if ( undefined === tryFor ) {
+			tryFor = 30000; // 30 seconds
+		}
+		if ( undefined === tryEvery ) {
+			tryEvery = 500; // 0.5 seconds
+		}
+		
+		tryIt();
+		
+		function tryIt() {
+			if ( tryFor >= 0 ) {
+				tryFor = tryFor - tryEvery;
+				if ( true === test() ) {
+					callback();
+				}
+				else {
+					window.setTimeout( tryIt, tryEvery );
+				}
+			}
+		}
+	}
+
 }( window, PWCC_data ));
 
 /* jshint ignore: start */
