@@ -184,10 +184,11 @@ var console = window.console || {  // jshint ignore:line
 		return;
 	}
 	
-	document.addEventListener( "DOMContentLoaded", domReadyEvent );
-	
+	// document.addEventListener( "DOMContentLoaded", domReadyEvent );
+	domReadyEvent();
+
 	function domReadyEvent() {
-		PWCC.hljs( window );
+		// PWCC.hljs( window );
 		commentForm();
 		fitVids();
 		fullWidthBlocks();
@@ -522,7 +523,7 @@ var console = window.console || {  // jshint ignore:line
 }( window, PWCC_data ));
 
 /* jshint ignore: start */
-PWCC.hljs = function( window, undefined ) {
+PWCC.hljs = (function( window, undefined ) {
 	var document = window.document;
 
 	if ( document.body.classList.contains("lte8") ) {
@@ -538,7 +539,7 @@ PWCC.hljs = function( window, undefined ) {
 	
 	window.hljs = hljs;
 
-};
+})(window);
 /* jshint ignore: end */
 
 
