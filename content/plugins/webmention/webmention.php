@@ -1,12 +1,15 @@
 <?php
-/*
- Plugin Name: WebMention
- Plugin URI: https://github.com/pfefferle/wordpress-webmention
- Description: WebMention support for WordPress posts
- Author: pfefferle
- Author URI: http://notizblog.org/
- Version: 2.4.0
-*
+/**
+ * Plugin Name: WebMention
+ * Plugin URI: https://github.com/pfefferle/wordpress-webmention
+ * Description: WebMention support for WordPress posts
+ * Author: pfefferle
+ * Author URI: http://notizblog.org/
+ * Version: 2.5.0
+ * License: MIT
+ * License URI: http://opensource.org/licenses/MIT
+ * Text Domain: webmention
+ */
 
 /**
  * A wrapper for WebMentionPlugin::send_webmention
@@ -22,6 +25,14 @@ function send_webmention( $source, $target ) {
 
 // initialize plugin
 add_action( 'init', array( 'WebMentionPlugin', 'init' ) );
+
+if ( ! defined( 'WEBMENTION_COMMENT_APPROVE' ) ) {
+	define( 'WEBMENTION_COMMENT_APPROVE', 0 );
+}
+
+if ( ! defined( 'WEBMENTION_COMMENT_TYPE' ) ) {
+	define( 'WEBMENTION_COMMENT_TYPE', 'webmention' );
+}
 
 /**
  * WebMention Plugin Class
@@ -40,6 +51,8 @@ class WebMentionPlugin {
 		add_filter( 'query_vars', array( 'WebMentionPlugin', 'query_var' ) );
 		add_action( 'parse_query', array( 'WebMentionPlugin', 'parse_query' ) );
 
+		// admin settings
+		add_action( 'admin_init', array( 'WebMentionPlugin', 'admin_register_settings' ) );
 		add_action( 'admin_comment_types_dropdown', array( 'WebMentionPlugin', 'comment_types_dropdown' ) );
 
 		// endpoint discovery
@@ -57,6 +70,7 @@ class WebMentionPlugin {
 		// default handlers
 		add_filter( 'webmention_title', array( 'WebMentionPlugin', 'default_title_filter' ), 10, 4 );
 		add_filter( 'webmention_content', array( 'WebMentionPlugin', 'default_content_filter' ), 10, 4 );
+		add_filter( 'webmention_check_dupes', array( 'WebMentionPlugin', 'check_dupes' ), 10, 2 );
 		add_action( 'webmention_request', array( 'WebMentionPlugin', 'default_request_handler' ), 10, 3 );
 	}
 
@@ -116,7 +130,7 @@ class WebMentionPlugin {
 		$contents = wp_remote_retrieve_body( $response );
 
 		// check if source really links to target
-		if ( ! strpos( $contents, str_replace( array( 'http://www.', 'http://', 'https://www.', 'https://' ), '', untrailingslashit( preg_replace( '/#.*/', '', $_POST['target'] ) ) ) ) ) {
+		if ( ! strpos( htmlspecialchars_decode( $contents ), str_replace( array( 'http://www.', 'http://', 'https://www.', 'https://' ), '', untrailingslashit( preg_replace( '/#.*/', '', $_POST['target'] ) ) ) ) ) {
 			status_header( 400 );
 			echo "Can't find target link.";
 			exit;
@@ -210,12 +224,10 @@ class WebMentionPlugin {
 		$comment_content = wp_slash( $content );
 
 		// change this if your theme can't handle the WebMentions comment type
-		$webmention_comment_type = defined( 'WEBMENTION_COMMENT_TYPE' ) ? WEBMENTION_COMMENT_TYPE : 'webmention';
-		$comment_type = apply_filters( 'webmention_comment_type', $webmention_comment_type );
+		$comment_type = apply_filters( 'webmention_comment_type', WEBMENTION_COMMENT_TYPE );
 
 		// change this if you want to auto approve your WebMentions
-		$webmention_comment_approve = defined( 'WEBMENTION_COMMENT_APPROVE' ) ? WEBMENTION_COMMENT_APPROVE : 0;
-		$comment_approved = apply_filters( 'webmention_comment_approve', $webmention_comment_approve );
+		$comment_approved = apply_filters( 'webmention_comment_approve', WEBMENTION_COMMENT_APPROVE );
 
 		// filter the parent id
 		$comment_parent = apply_filters( 'webmention_comment_parent', null, $target );
@@ -223,15 +235,7 @@ class WebMentionPlugin {
 		$commentdata = compact( 'comment_post_ID', 'comment_author', 'comment_author_url', 'comment_author_email', 'comment_content', 'comment_type', 'comment_parent', 'comment_approved' );
 
 		// check dupes
-		global $wpdb;
-		$comments = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->comments WHERE comment_post_ID = %d AND comment_author_url = %s", $comment_post_ID, htmlentities( $comment_author_url ) ) );
-
-		// check result
-		if ( ! empty( $comments ) ) {
-			$comment = $comments[0];
-		} else {
-			$comment = null;
-		}
+		$comment = apply_filters( 'webmention_check_dupes', null, $commentdata );
 
 		// disable flood control
 		remove_filter( 'check_comment_flood', 'check_comment_flood_db', 10, 3 );
@@ -239,6 +243,7 @@ class WebMentionPlugin {
 		// update or save webmention
 		if ( $comment ) {
 			$commentdata['comment_ID'] = $comment->comment_ID;
+			$commentdata['comment_approved'] = $comment->comment_approved;
 			// save comment
 			wp_update_comment( $commentdata );
 			$comment_ID = $comment->comment_ID;
@@ -296,6 +301,41 @@ class WebMentionPlugin {
 	}
 
 	/**
+	 * Check if a comment already exists
+	 *
+	 * @param  array      $comment     the filtered comment
+	 * @param  array      $commentdata the comment, created for the webmention data
+	 *
+	 * @return array|null              the dupe or null
+	 */
+	public static function check_dupes( $comment, $commentdata ) {
+		global $wpdb;
+
+		// check if comment is already set
+		$comments = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->comments WHERE comment_post_ID = %d AND comment_author_url = %s", $commentdata['comment_post_ID'], htmlentities( $commentdata['comment_author_url'] ) ) );
+
+		// check result
+		if ( ! empty( $comments ) ) {
+			error_log( print_r( $comments, true ) . PHP_EOL, 3, dirname( __FILE__ ) . '/log.txt' );
+
+			return $comments[0];
+		}
+
+		// check comments sent via salmon are also dupes
+		// or anyone else who can't use comment_author_url as the original link,
+		// but can use a _crossposting_link meta value.
+		// @link https://github.com/pfefferle/wordpress-salmon/blob/master/plugin.php#L192
+		$comments = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->comments INNER JOIN $wpdb->commentmeta USING (comment_ID) WHERE comment_post_ID = %d AND meta_key = '_crossposting_link' AND meta_value = %s", $commentdata['comment_post_ID'], htmlentities( $commentdata['comment_author_url'] ) ) );
+
+		// check result
+		if ( ! empty( $comments ) ) {
+			return $comments[0];
+		}
+
+		return null;
+	}
+
+	/**
 	 * Extend the "filter by comment type" of in the comments section
 	 * of the admin interface with "webmention"
 	 *
@@ -320,7 +360,7 @@ class WebMentionPlugin {
 	 * @return string the filtered title
 	 */
 	public static function default_title_filter( $title, $contents, $target, $source ) {
-		$meta_tags = @get_meta_tags( $source );
+		$meta_tags = get_meta_tags( $source );
 
 		// use meta-author
 		if ( $meta_tags && is_array( $meta_tags ) && array_key_exists( 'author', $meta_tags ) ) {
@@ -349,7 +389,6 @@ class WebMentionPlugin {
 		}
 	}
 
-
 	/**
 	 * Send WebMentions
 	 *
@@ -360,8 +399,15 @@ class WebMentionPlugin {
 	 * @return array of results including HTTP headers
 	 */
 	public static function send_webmention( $source, $target, $post_ID = null ) {
-		// stop selfpings
-		if ( $source == $target ) {
+		// stop selfpings on the same URL
+		if ( ( get_option( 'webmention_disable_selfpings_same_url' ) === '1' ) &&
+			 ( $source === $target ) ) {
+			return false;
+		}
+
+		// stop selfpings on the same domain
+		if ( ( get_option( 'webmention_disable_selfpings_same_domain' ) === '1' ) &&
+			 ( parse_url( $source, PHP_URL_HOST ) === parse_url( $target, PHP_URL_HOST ) ) ) {
 			return false;
 		}
 
@@ -558,7 +604,7 @@ class WebMentionPlugin {
 		libxml_use_internal_errors( true );
 
 		$doc = new DOMDocument();
-		@$doc->loadHTML( $contents );
+		$doc->loadHTML( $contents );
 
 		$xpath = new DOMXPath( $doc );
 
@@ -657,6 +703,39 @@ class WebMentionPlugin {
 		for ( $n = 1; $n > 0; $abs = preg_replace( $re, '/', $abs, -1, $n ) ) { }
 		// absolute URL is ready!
 		return $scheme . '://' . $abs;
+	}
+
+	/**
+	 * Register WebMention admin settings.
+	 */
+	public static function admin_register_settings() {
+		register_setting( 'discussion', 'webmention_disable_selfpings_same_url' );
+		register_setting( 'discussion', 'webmention_disable_selfpings_same_domain' );
+
+		add_settings_field( 'webmention_disucssion_settings', __( 'WebMention Settings', 'webmention' ), array( 'WebMentionPlugin', 'discussion_settings' ), 'discussion', 'default' );
+	}
+
+	/**
+	 * Add WebMention options to the WordPress discussion settings page.
+	 */
+	public static function discussion_settings () {
+?>
+	<fieldset>
+		<label for="webmention_disable_selfpings_same_url">
+			<input type="checkbox" name="webmention_disable_selfpings_same_url" id="webmention_disable_selfpings_same_url" value="1" <?php
+				echo checked( true, get_option( 'webmention_disable_selfpings_same_url' ) );  ?> />
+			<?php _e( 'Disable self-pings on the same URL <small>(for example "http://example.com/?p=123")</small>', 'webmention' ) ?>
+		</label>
+
+		<br />
+
+		<label for="webmention_disable_selfpings_same_domain">
+			<input type="checkbox" name="webmention_disable_selfpings_same_domain" id="webmention_disable_selfpings_same_domain" value="1" <?php
+				echo checked( true, get_option( 'webmention_disable_selfpings_same_domain' ) );  ?> />
+			<?php _e( 'Disable self-pings on the same Domain <small>(for example "example.com")</small>', 'webmention' ) ?>
+		</label>
+	</fieldset>
+<?php
 	}
 }
 
