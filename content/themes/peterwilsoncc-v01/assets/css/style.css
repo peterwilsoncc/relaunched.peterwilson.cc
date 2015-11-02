@@ -1480,7 +1480,7 @@ Breaks the naming convention to fit with WordPress's default classes
  */
 /*
 WordPress's comment form HTML is not nearly as flexible/filterable as I'd like so
-so I am breaking the naming convention here to match its HTML. 
+so I am breaking the naming convention here to match its HTML.
 */
 .comment-form {
   display: block; }
@@ -1524,19 +1524,23 @@ so I am breaking the naming convention here to match its HTML.
     padding-right: 1rem;
     padding-left: 0; }
     .Comment .comment-form_comment ~ div:nth-child(2n-1) {
-      padding-right: 0; } }
+      padding-right: 0; }
+
+  .comment-form_comment ~ :nth-child(2n-1),
+  .comment-form_comment ~ .form-submit {
+    clear: left; } }
 	/*
 	@media only screen and ( min-width : 35em ) {
 		// This name, email, website on one row for super-massive screen
 		.comment-form > div {
 			width: 33.333333333%;
 		}
-		
+
 		.comment-form > div:nth-child(3n-1) {
 			padding-right: 1rem;
 			padding-left: 0;
 		}
-	
+
 		.comment-form > div:nth-child(3n) {
 			padding-left: 1rem;
 			padding-right: 1rem;

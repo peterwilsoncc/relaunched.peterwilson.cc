@@ -4,7 +4,7 @@
 
 /*
 WordPress's comment form HTML is not nearly as flexible/filterable as I'd like so
-so I am breaking the naming convention here to match its HTML. 
+so I am breaking the naming convention here to match its HTML.
 */
 
 .comment-form {
@@ -30,13 +30,13 @@ so I am breaking the naming convention here to match its HTML.
 		.comment-form > div {
 			width: 50%;
 			float: left;
-			
+
 			.Comment & {
 				width: auto;
 				float: none;
 			}
 		}
-		
+
 		.comment-form > div:nth-child(2n) {
 			padding-right: 1rem;
 
@@ -44,14 +44,14 @@ so I am breaking the naming convention here to match its HTML.
 				padding-right: 0;
 			}
 		}
-	
+
 		.comment-form > div:nth-child(2n-1) {
 			padding-left: 1rem;
 			.Comment & {
 				padding-left: 0;
 			}
 		}
-	
+
 		.comment-form > .comment-form_comment.comment-form_comment {
 			/* double selector is specificity hack to override nth-child above */
 			width: auto;
@@ -62,12 +62,12 @@ so I am breaking the naming convention here to match its HTML.
 			padding-left: 0;
 			padding-right: 0;
 		}
-		
+
 		// form structure changes in WP 4.4
 		.comment-form_comment ~ div:nth-child(2n) {
 			padding-left: 1rem;
 			padding-right: 0;
-			
+
 			.Comment & {
 				padding-left: 0;
 			}
@@ -81,12 +81,17 @@ so I am breaking the naming convention here to match its HTML.
 				padding-right: 0;
 			}
 		}
-		
-		
-		
-		
-		
-		
+
+		.comment-form_comment ~ :nth-child(2n-1),
+		.comment-form_comment ~ .form-submit {
+			clear: left;
+		}
+
+
+
+
+
+
 	}
 
 	/*
@@ -95,12 +100,12 @@ so I am breaking the naming convention here to match its HTML.
 		.comment-form > div {
 			width: 33.333333333%;
 		}
-		
+
 		.comment-form > div:nth-child(3n-1) {
 			padding-right: 1rem;
 			padding-left: 0;
 		}
-	
+
 		.comment-form > div:nth-child(3n) {
 			padding-left: 1rem;
 			padding-right: 1rem;

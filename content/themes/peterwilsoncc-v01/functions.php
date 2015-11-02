@@ -1,6 +1,6 @@
 <?php
 $content_width=1200;
-$pwcc_css_ver = "20150927-01";
+$pwcc_css_ver = "20151102-01";
 $pwcc_js_ver =  "20150930-03";
 
 function pwcc__return_ok($val){
@@ -35,9 +35,9 @@ function pwcc_force_canonical_protocol( $canonical ) {
 	if ( !is_admin() ) {
 		$home = get_option( 'home' );
 		$canonical_scheme = parse_url( $home, PHP_URL_SCHEME );
-		
+
 		$canonical_scheme = ( 'https' == $canonical_scheme ) ? 'https' : 'http';
-		
+
 		$canonical = set_url_scheme( $canonical, $canonical_scheme );
 
 	}
@@ -52,10 +52,10 @@ function pwcc_fuckit_redirect_the_front_end() {
 	if ( ! is_admin() ) {
 		$home = get_option( 'home' );
 		$canonical_scheme = parse_url( $home, PHP_URL_SCHEME );
-		
+
 		$ssl_preferred = ( 'https' == $canonical_scheme ) ? true : false;
-		
-		
+
+
 		if ( ( is_ssl() != $ssl_preferred ) && 'wp-login.php' !== $GLOBALS['pagenow'] ) {
 			$redirect_url  = $ssl_preferred ? 'https://' : 'http://';
 			$redirect_url .= $_SERVER['HTTP_HOST'];
@@ -75,7 +75,7 @@ function pwcc_theme_async_scripts($tag, $handle, $src) {
 		case 'devicepx' : // falls through
 			$tag = str_replace('></script>', ' async></script>', $tag );
 	}
-	
+
 	return $tag;
 }
 add_filter('script_loader_tag', 'pwcc_theme_async_scripts', 10, 3);
@@ -91,63 +91,63 @@ add_action( 'wp_enqueue_scripts', 'pwcc_async_to_header', 99 );
 
 
 class PWCC_theme {
-	
-	
+
+
 	function __construct() {
 		add_action( 'after_setup_theme', array( $this, 'action_theme_setup' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'action_enqueue_assets' ) );
 		add_action( 'wp_head', array( $this, 'action_header_javascript' ) );
 		add_action( 'wp_head', array( $this, 'action_favicons' ) );
-		
+
 		add_filter( 'body_class', array( $this, 'filter_body_class' ), 10, 2 );
 		add_filter( 'post_class', array( $this, 'filter_post_class' ), 10, 2 );
 		add_filter( 'comment_class', array( $this, 'filter_comment_class' ), 10, 2 );
 		add_filter( 'nav_menu_css_class', '__return_empty_array' );
-		
+
 		//add_filter( 'single_post_title', array( $this, 'filter_single_post_title' ), 10, 2 );
 		add_filter( 'the_title', array( $this, 'filter_the_title' ), 10, 2  );
 		add_filter( 'wpseo_title', array( $this, 'filter_wpseo_title' ), 10 );
 		add_filter( 'wpseo_twitter_domain', array( &$this, 'filter_wpseo_twitter_domain' ) );
-		
-		
-		
-		
+
+
+
+
 		add_filter( 'get_comment_author_link', array( $this, 'filter_get_comment_author_link' ), 10, 4 );
 		add_filter( 'comment_form_default_fields', array( $this, 'filter_comment_form_default_fields' ) );
 		add_filter( 'comment_form_defaults', array( $this, 'filter_comment_form_defaults' ) );
-		
+
 		add_filter( 'next_posts_link_attributes', array( $this, 'rel_next_attr' ) );
 		add_filter( 'previous_posts_link_attributes', array( $this, 'rel_prev_attr' ) );
-		
+
 		// oh Jetpack, I am sure you're very sweet.
 		add_filter( 'jetpack_implode_frontend_css', '__return_false' );
 		add_action( 'wp_print_styles', array( $this, 'i_only_use_jetpack_stats' ) );
 	}
-	
+
 	function action_theme_setup() {
-		
+
 		// posts and comments feeds
 		add_theme_support( 'automatic-feed-links' );
-		
+
 		// use the WP built in title
 		add_theme_support( 'title-tag' );
-		
+
 		// post thumbnails? sure
 		add_theme_support( 'post-thumbnails' );
 		set_post_thumbnail_size( 1200, 675, true ); // 16:9
-		
+
 		// advanced image compress via ricg responsive images plugin
 		add_theme_support( 'advanced-image-compression' );
-		
+
 		// This theme uses wp_nav_menu() in two locations.
 		register_nav_menus( array(
 			'header'  => __( 'Primary Menu',      'pwcc-theme' ),
 			'footer'  => __( 'Footer Menu', 'pwcc-theme' ),
 		) );
-		
+
 		// post types
 		add_theme_support( 'post-formats', array( 'link', 'status' ) );
-		
+
 		/*
 		 * Switch default core markup for search form, comment form, and comments
 		 * to output valid HTML5.
@@ -155,9 +155,9 @@ class PWCC_theme {
 		add_theme_support( 'html5', array(
 			'search-form', 'comment-form', 'comment-list', 'gallery', 'caption'
 		) );
-		
+
 	}
-	
+
 	function action_enqueue_assets() {
 		global $content_width, $pwcc_css_ver, $pwcc_js_ver, $wp_styles;
 		if ( is_attachment() )
@@ -168,7 +168,7 @@ class PWCC_theme {
 
 
 		$assets = get_template_directory_uri() . '/assets';
-		
+
 		wp_register_style(
 			'pwcc-styles',
 			$assets . '/css/style.min.css',
@@ -184,9 +184,9 @@ class PWCC_theme {
 			// apply_filters( 'stylestyle_loader_src', $css, 'pwcc-styles' )
 			// $loadCss[] = $wp_styles->registered["pwcc-styles"];
 		}
-		
+
 		// print_r( $wp_styles->registered["pwcc-styles"] );
-		
+
 		wp_register_script(
 			'pwcc-scripts',
 			$assets . '/js/min/functions-min.js',
@@ -194,13 +194,13 @@ class PWCC_theme {
 			$pwcc_js_ver,
 			true
 		);
-		
+
 		foreach ( $loadCss as $k => $file ) {
 			$src = add_query_arg( array( 'ver' => $file->ver ), $file->src );
 			$loadCss[$k]->src = apply_filters( 'style_loader_src', $src, $file->handle );
 		}
-		
-		
+
+
 		$js_config = array(
 			'siteHome' => home_url( '/' ),
 			'assetsHome' => untrailingslashit( $assets ) . '/',
@@ -226,33 +226,33 @@ class PWCC_theme {
 			'loadCss' => $loadCss,
 			'cssCookieVal' => $pwcc_css_ver
 		);
-		
+
 		wp_localize_script(
 			'pwcc-scripts',
 			'PWCC_data',
 			$js_config
 		);
-		
+
 		wp_enqueue_script( 'pwcc-scripts' );
-		
+
 		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) && ( 0 < get_comments_number() ) ) {
 			// this will get some false positive (webmentions, pingback)
 			// so double check in comments template when we have comments
 			wp_enqueue_script( 'comment-reply' );
 		}
-		
+
 	}
-	
+
 	function action_header_javascript() {
 		global $pwcc_css_ver;
-		
+
 		if ( !false || !isset( $_COOKIE["pwccsscache"] ) || ( $pwcc_css_ver != $_COOKIE["pwccsscache"] ) ) {
 			echo '<style>';
 			readfile ( get_stylesheet_directory() . '/assets/css/style.min.css' );
 			echo '</style>';
 		}
-		
-		
+
+
 		?>
 		<script id="pwcc-inline-js">
 		<?php
@@ -265,8 +265,8 @@ class PWCC_theme {
 
 	function action_favicons() {
 		$icons = get_template_directory_uri() . '/assets/images/favicons';
-		
-		
+
+
 		echo "<link rel='shortcut icon' href='$icons/favicon.ico'>\n";
 		echo "<link rel='apple-touch-icon' sizes='57x57' href='$icons/apple-touch-icon-57x57.png'>\n";
 		echo "<link rel='apple-touch-icon' sizes='114x114' href='$icons/apple-touch-icon-114x114.png'>\n";
@@ -316,9 +316,9 @@ class PWCC_theme {
 		wp_deregister_style( 'widget-grid-and-list' ); // Top Posts widget
 		wp_deregister_style( 'jetpack-widgets' ); // Widgets
 	}
-	
+
 	function filter_body_class( $classes, $custom_classes ) {
-		
+
 		// I like to kill ALL the body classes!
 		$classes = [];
 
@@ -331,7 +331,7 @@ class PWCC_theme {
 		if ( is_search() ) {
 			$classes[] = 't-List';
 		}
-		
+
 		if ( is_singular() || is_404() ) {
 			$classes[] = 't-Singular';
 			// if ( ( 'post' == get_post_type() ) || ( 'attachment' == get_post_type() ) ) {
@@ -342,42 +342,42 @@ class PWCC_theme {
 		// clearing classes removed the custom classes, redo.
 		// all the tidying & forcing the array has been done
 		$classes = array_merge( $classes, $custom_classes );
-		
+
 		// escape the classes for attributes
 		$classes = array_map( 'esc_attr', $classes );
-		
-		
+
+
 		return $classes;
 	}
 
 	function filter_post_class( $classes, $custom_classes ) {
-		
+
 		// I like to kill all the default classes
 		$classes = [];
-		
+
 		// microformats 1 and 2
 		$classes[] = 'hentry';
 		$classes[] = 'h-entry';
-		
-		// it's an article 
+
+		// it's an article
 		$classes[] = 'Article';
-		
+
 		// clearing classes removed the custom classes, redo.
 		// all the tidying & forcing the array has been done
 		$classes = array_merge( $classes, $custom_classes );
-		
+
 		// escape the classes for attributes
 		$classes = array_map( 'esc_attr', $classes );
-		
-		
+
+
 		return $classes;
 	}
 
 	function filter_single_post_title( $title, $_post ) {
 		// this filters the HTML title of the post
-		
+
 		$title = trim( $title );
-		
+
 		if ( '' == $title ) {
 			$cats = get_the_category( $_post->ID );
 			$num_terms = count( $cats );
@@ -391,17 +391,17 @@ class PWCC_theme {
 				}
 				$title .= '—';
 				$title .= get_the_date( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ) );
-				
+
 			}
-			
+
 		}
-		
+
 		return $title;
 	}
-	
+
 	function filter_the_title( $title, $post_id ) {
 		$post = get_post( $post_id );
-		
+
 		if ( '' == $title ) {
 
 			$cats = get_the_category( $post->ID );
@@ -422,15 +422,15 @@ class PWCC_theme {
 			// Date it
 			$title .= get_the_date( get_option( 'date_format' ), $post->id );
 		}
-		
+
 		return $title;
 	}
-	
+
 	function filter_wpseo_title( $title ) {
 		if ( is_singular() || is_single() ) {
 			global $post;
 			if ( wpseo_replace_vars( '%%page%% %%sep%% %%sitename%%', $post ) == $title ) {
-				
+
 				$pwcc_title = '';
 				$cats = get_the_category( $post->ID );
 				if ( $cats ) {
@@ -443,38 +443,38 @@ class PWCC_theme {
 					}
 					$pwcc_title .= ' ';
 					$pwcc_title .= get_the_date( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ) );
-				
+
 				}
 				else if ( 'pwcc_notes' == $post->post_type ) {
 					$pwcc_title .= 'Noted ';
 					$pwcc_title .= get_the_date( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ) );
 				}
-				
-				
+
+
 				$title = wpseo_replace_vars( $pwcc_title . ' %%page%% %%sep%% %%sitename%%', $post );
 			}
 		}
-		
-		
+
+
 		return $title;
 	}
-	
+
 
 	function filter_comment_class( $classes, $custom_classes ) {
 
 		// I am fussy
 		$classes = [];
-		
+
 		$classes[] = 'Comment';
 		$classes[] = 'p-comment';
 		$classes[] = 'h-entry';
-		
+
 
 		// clearing classes removed the custom classes, redo.
 		// all the tidying & forcing the array has been done
 		$classes = array_merge( $classes, $custom_classes );
 
-		
+
 		// escape the classes for attributes
 		$classes = array_map( 'esc_attr', $classes );
 
@@ -488,22 +488,22 @@ class PWCC_theme {
 			$return = $author;
 		else
 			$return = "<a href='$url' rel='external nofollow' class='url u-url'>$author</a>";
-		
+
 		return $return;
 	}
 
 	function filter_comment_form_default_fields( $fields ) {
-	
+
 		$commenter = wp_get_current_commenter();
 		$user = wp_get_current_user();
 		$user_identity = $user->exists() ? $user->display_name : '';
-	
-		
+
+
 		$html5 = true;
 		$req      = get_option( 'require_name_email' );
 		$aria_req = ( $req ? " aria-required='true'" : '' );
-		
-		
+
+
 		$fields   =  array(
 			'author' => '<div class="InputSet InputSet-Text comment-form-author">' . '<label for="author">' . __( 'Name' ) . ( $req ? ' <span class="required">*</span>' : '' ) . '</label> ' .
 			            '<input id="author" name="author" type="text" value="' . esc_attr( $commenter['comment_author'] ) . '" size="30"' . $aria_req . ' /></div>',
@@ -512,8 +512,8 @@ class PWCC_theme {
 			'url'    => '<div class="InputSet InputSet-Text comment-form-url"><label for="url">' . __( 'Website' ) . '</label> ' .
 			            '<input id="url" name="url" ' . ( $html5 ? 'type="url"' : 'type="text"' ) . ' value="' . esc_attr( $commenter['comment_author_url'] ) . '" size="30" /></div>',
 		);
-		
-		
+
+
 		return $fields;
 	}
 
@@ -523,32 +523,32 @@ class PWCC_theme {
 		$commenter = wp_get_current_commenter();
 		$user = wp_get_current_user();
 		$user_identity = $user->exists() ? $user->display_name : '';
-	
-		
+
+
 		$html5 = true;
 		$req      = get_option( 'require_name_email' );
 		$aria_req = ( $req ? " aria-required='true'" : '' );
-		
+
 		// the comment form
 		$defaults['comment_field'] = '<div class="InputSet InputSet-Text comment-form_comment"><label for="comment">' . _x( 'Comment', 'noun' ) . '</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></div>';
-		
+
 		$defaults['comment_notes_after']  = '';
-		
-		
+
+
 		return $defaults;
 	}
 
 	function rel_next_attr( $attr ) {
-		
+
 		$attr .= ' ' . 'rel="next" ';
-		
+
 		return $attr;
 	}
 
 	function rel_prev_attr( $attr ) {
-		
+
 		$attr .= ' ' . 'rel="prev" ';
-		
+
 		return $attr;
 	}
 
@@ -565,11 +565,11 @@ class PWCC_theme {
 				$title = get_the_archive_title();
 				break;
 		}
-		
+
 		if ( $title ) {
 			$title = "<$hN class='util-SectionTitle'>$title</$hN>";
 		}
-		
+
 		return $title;
 	}
 
@@ -577,14 +577,14 @@ class PWCC_theme {
 		$title = isset( $post->post_title ) ? $post->post_title : '';
 
 		echo '<div class="EntryMeta">';
-		
+
 		// when and where
 		echo '<span class="EntryMeta_Item"> Posted ';
-		
+
 		// the when
 		echo '<time class="EntryMeta_Detail entry-date dt-published published dt-updated updated" datetime="' . esc_attr( get_the_date( 'c' ) ) . '">';
 		echo '<a href="' . esc_attr( get_permalink() ) . '" class="u-url" rel="bookmark">';
-		
+
 		if ( '' == $title ) {
 			// date is in title
 			the_time();
@@ -595,13 +595,13 @@ class PWCC_theme {
 
 		echo '</a>';
 		echo '</time>';
-		
-		// the where 
+
+		// the where
 		$geo_latitude  = get_post_meta( get_the_ID(), 'geo_latitude',  true );
 		$geo_longitude = get_post_meta( get_the_ID(), 'geo_longitude', true );
 		$geo_public    = get_post_meta( get_the_ID(), 'geo_public',    true );
 		$geo_address   = get_post_meta( get_the_ID(), 'geo_address',   true );
-		
+
 		if ( ( $geo_public !== 'false' ) && $geo_latitude && $geo_longitude ) {
 			echo ' from ';
 			echo '<span class="EntryMeta_Detail p-location h-geo">';
@@ -632,10 +632,10 @@ class PWCC_theme {
 			echo '</data>';
 			echo '</span>';
 		}
-		
+
 		// finish the when anad where
 		echo '</span> ';
-		
+
 		// the human
 		if ( ( 'post' == get_post_type() ) || ( 'pwcc_notes' == get_post_type() ) ) {
 			$author_link = ( '' != get_the_author_meta( 'user_url' ) ) ? esc_url( get_the_author_meta('user_url') ) : '';
@@ -647,7 +647,7 @@ class PWCC_theme {
 			else {
 				echo '<span class="fn p-name">';
 			}
-		
+
 
 			echo esc_html( get_the_author_meta( 'display_name' ) );
 			if ( '' != $author_link ) {
@@ -656,11 +656,11 @@ class PWCC_theme {
 			else {
 				echo '</span>';
 			}
-			
+
 			echo '</span>';
 			echo '</span> ';
 		}
-		
+
 		// Categories
 		$cats = get_the_category();
 		$num_terms = count( $cats );
@@ -680,14 +680,14 @@ class PWCC_theme {
 				$out .= esc_html( $term->name );
 				$out .= '</a>' . $seperator;
 			}
-			
+
 			echo trim( $out, $seperator );
 			echo '</span>';
 
 
 		}
-		
-		
+
+
 
 		// Tags
 		$tags = get_the_tags();
@@ -704,18 +704,18 @@ class PWCC_theme {
 				$out .= esc_html( $term->name );
 				$out .= '</a>' . $seperator;
 			}
-			
+
 			echo trim( $out, $seperator );
 			echo '</span>';
 		}
-		
+
 
 		// hidden syndication links
-		
+
 		$twitter_permalink = get_post_meta( $post->ID, 'twitter_permalink', true );
 		$twitter_id = get_post_meta( $post->ID, 'twitter_id', true );
 		$instagram_url = get_post_meta( $post->ID, 'instagram_url', true );
-		
+
 		if ( $twitter_id || $twitter_permalink || $instagram_url ) {
 			echo ' <span class="EntryMeta_Item util-Display-None">Also on ';
 			$seperator = ', ';
@@ -734,14 +734,14 @@ class PWCC_theme {
 				$links .= $this->syn_link( $instagram_url, 'Instagram', 'EntryMeta_Detail');
 				$links .= $seperator;
 			}
-			
+
 			echo trim( $links, $seperator );
 			echo '</span>';
 		}
 
 
-		
-		
+
+
 		echo '</div><!-- //.EntryMeta -->';
 	}
 
@@ -749,7 +749,7 @@ class PWCC_theme {
 		$twitter_permalink = get_post_meta( $post->ID, 'twitter_permalink', true );
 		$twitter_id = get_post_meta( $post->ID, 'twitter_id', true );
 		$instagram_url = get_post_meta( $post->ID, 'instagram_url', true );
-		
+
 		if ( $twitter_id || $twitter_permalink || $instagram_url ) {
 			echo '<div class="EntryMeta EntryMeta-Footer">';
 			echo ' <span class="EntryMeta_Item">Also on ';
@@ -769,7 +769,7 @@ class PWCC_theme {
 				$links .= $this->syn_link( $instagram_url, 'Instagram', 'EntryMeta_Detail');
 				$links .= $seperator;
 			}
-			
+
 			echo trim( $links, $seperator );
 			echo '</span>';
 			echo '</div>';
@@ -780,15 +780,15 @@ class PWCC_theme {
 		if ( ( '' == $url ) || ( '' == $text ) ) {
 			return '';
 		}
-		
-		
+
+
 		$link = '';
 		$link .= '<a href="';
 		$link .= esc_url( $url );
 		$link .= '" rel="syndication" class="';
 		$link .= esc_attr( 'u-syndication ' . $classes );
 		$link .= '">' . esc_html( $text ) . '</a>';
-		
+
 		return $link;
 	}
 
@@ -807,10 +807,10 @@ class PWCC_theme {
 				<div class="Pagination_Direction Pagination_Direction-Previous">
 					<?php next_posts_link( 'Older posts' ); ?>
 				</div>
-				
+
 				<div class="Pagination_Current">
-					Page <?php echo esc_html( $page ); ?> 
-					<span class="Pagination_Total"><abbr class="util-silentAbbr" title="of">/</abbr> 
+					Page <?php echo esc_html( $page ); ?>
+					<span class="Pagination_Total"><abbr class="util-silentAbbr" title="of">/</abbr>
 					<?php echo esc_html( $wp_query->max_num_pages ); ?></span>
 				</div>
 
@@ -844,7 +844,7 @@ class PWCC_theme {
 
 		</nav><!-- .navigation -->
 		<?php
-		
+
 	}
 
 	function comment_template( $comment, $args, $depth ) {
@@ -855,33 +855,33 @@ class PWCC_theme {
 			$tag = 'li';
 			$add_below = 'div-comment';
 		}
-		
+
 		// echo '<pre>';
 		// print_r( $comment );
 		// echo '</pre>';
-		
+
 		if ( ! get_option('show_avatars') ) {
 			$args['avatar_size'] = 0;
 		}
 		$default_avatar = get_template_directory_uri() . '/assets/images/fpo_avatar.png';
-		
-		
+
+
 		$custom_classes = [];
 		$custom_classes[] = 'util-cf';
 		$custom_classes[] = 'util-Clear';
 		$custom_classes[] = empty( $args['has_children'] ) ? '' : 'parent';
 		$custom_classes[] = ( 0 != $args['avatar_size'] ) ? 'Comment-withAvatar' : '';
-		
+
 		?>
 		<<?php echo $tag; ?> <?php comment_class( $custom_classes ) ?> id="comment-<?php comment_ID(); ?>">
 			<div class="Comment_Meta">
 				<div class="vcard h-card p-author">
-					<?php 
+					<?php
 					if ( 0 != $args['avatar_size'] ):
 						echo '<div class="Comment_Avatar">';
 						echo get_avatar( $comment, $args['avatar_size'], $default_avatar, '' );
 						echo '</div>';
-					endif; // ( 0 != $args['avatar_size'] ): 
+					endif; // ( 0 != $args['avatar_size'] ):
 					?>
 					<h4 class="Comment_Name">
 						<cite class="fn p-name">
@@ -897,7 +897,7 @@ class PWCC_theme {
 					</time>
 				</div>
 			</div>
-			
+
 			<div class="Comment_Body e-content" id="div-comment-<?php comment_ID(); ?>">
 				<?php if ( '0' == $comment->comment_approved ) : ?>
 				<p class="Comment_Moderation">
@@ -906,8 +906,8 @@ class PWCC_theme {
 				<?php endif; ?>
 
 
-				
-				
+
+
 				<?php comment_text( get_comment_id(), array_merge( $args, array( 'add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
 			</div>
 
@@ -922,12 +922,12 @@ class PWCC_theme {
 			?>
 
 
-			
+
 		<?php
 	}
 
 	function have_comments() {
-		// this runs in comments template, 
+		// this runs in comments template,
 		if ( 0 == $this->get_comments_number() ) {
 			return false;
 		}
@@ -940,7 +940,7 @@ class PWCC_theme {
 		// Get all comments, match the query made by call to load
 		// the comment template
 		global $user_ID;
-		
+
 		$comment_args = array(
 			'order'   => 'ASC',
 			'orderby' => 'comment_date_gmt',
@@ -951,14 +951,14 @@ class PWCC_theme {
 		$commenter = wp_get_current_commenter();
 		$comment_author_email = $commenter['comment_author_email'];
 
-		
+
 		if ( $user_ID ) {
 			$comment_args['include_unapproved'] = array( $user_ID );
 		} elseif ( ! empty( $comment_author_email ) ) {
 			$comment_args['include_unapproved'] = array( $comment_author_email );
 		}
-		
-		
+
+
 		$my_comments = get_comments( $comment_args );
 		$separate_comments = separate_comments( $my_comments );
 
@@ -967,9 +967,9 @@ class PWCC_theme {
 	}
 
 	function filter_wpseo_twitter_domain( $value ) {
-		
+
 		$value = 'peterwilson.cc';
-		
+
 		return $value;
 	}
 
