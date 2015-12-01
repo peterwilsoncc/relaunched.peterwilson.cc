@@ -53,7 +53,7 @@ class Keyring_Admin_UI {
 		screen_icon( 'ms-admin' );
 		switch ( $screen ) {
 		case 'tokens' :
-			echo '<h2>' . __( 'Keyring: Managed Connections', 'keyring' ) . ' <a href="' . Keyring_Util::admin_url( false, array( 'action' => 'services' ) ) . '" class="add-new-h2">' . __( 'Add New', 'keyring' ) . '</a></h2>';
+			echo '<h2>' . __( 'Keyring: Service Connections', 'keyring' ) . ' <a href="' . Keyring_Util::admin_url( false, array( 'action' => 'services' ) ) . '" class="add-new-h2">' . __( 'Add New', 'keyring' ) . '</a></h2>';
 			break;
 		case 'services' :
 			echo '<h2>' . __( 'Add New Connection', 'keyring' ) . '</h2>';
@@ -68,12 +68,11 @@ class Keyring_Admin_UI {
 
 		// Output any errors if we have them, then stop, and link back to home.
 		if ( $this->keyring->has_errors() ) {
-			echo '<div id="keyring-admin-errors" class="updated"><ul>';
+			echo '<div id="keyring-admin-errors" class="error"><ul>';
 			foreach ( $this->keyring->get_errors() as $error ) {
 				echo "<li>" . esc_html( $error ) . "</li>";
 			}
 			echo '</ul></div>';
-			echo '<p class="submit"><a href="' . Keyring_Util::admin_url( $_REQUEST['service'] ) . '" class="button-primary">' . __( 'Start Again', 'keyring' ) . '</a></p>';
 			return;
 		}
 
@@ -117,10 +116,11 @@ class Keyring_Admin_UI {
 			if ( method_exists( $service, 'test_connection' ) ) {
 				$service->set_token( $this->keyring->get_token_store()->get_token( array( 'id' => $_REQUEST['token'], 'type' => 'request' ) ) );
 
-				if ( $service->test_connection() ) {
-					Keyring::message( __( 'This connection is working correctly.', 'keyring' ) );
+				$test = $service->test_connection();
+				if ( true === $test ) {
+					Keyring::message( __( 'This connection appears to be working.', 'keyring' ) );
 				} else {
-					Keyring::message( __( 'This connection is <strong>NOT</strong> working correctly.', 'keyring' ) );
+					Keyring::error( __( 'This connection is NOT working correctly.', 'keyring' ), $test, false );
 				}
 			} else {
 				Keyring::message( __( 'This service does not currently support connection testing.', 'keyring' ) );
@@ -237,6 +237,7 @@ class Keyring_Connections_List_Table extends WP_List_Table {
 			'avatar'   => __( 'Avatar', 'keyring' ),
 			'id'       => __( 'External ID', 'keyring' ),
 			'name'     => __( 'Name', 'keyring' ),
+			'meta'     => __( 'Meta', 'keyring' ),
 			'actions'  => '&nbsp;'
 		);
 	}
@@ -248,7 +249,7 @@ class Keyring_Connections_List_Table extends WP_List_Table {
 	function column_avatar( $row ) {
 		$picture = $row->get_meta( 'picture' );
 		if ( $picture ) {
-			echo '<img src="' . esc_attr( $picture ) . '" width="40" height="40" border="1" alt="' . __( 'Avatar', 'keyring' ) . '" />';
+			echo '<img src="' . esc_attr( $picture ) . '" width="80" height="80" border="1" alt="' . __( 'Avatar', 'keyring' ) . '" />';
 		} else {
 			echo '-';
 		}
@@ -270,6 +271,15 @@ class Keyring_Connections_List_Table extends WP_List_Table {
 			echo $name;
 		else
 			echo '-';
+	}
+
+	function column_meta( $row ) {
+		echo '<a onclick="jQuery(this).siblings().slideToggle();" style="cursor:pointer;">Show</a>';
+		echo '<div class="keyring-meta" style="display:none;">';
+		foreach( $row->get_meta() as $key => $val ) {
+			echo '<strong>' . $key . '</strong>: ' . $val . '<br />';
+		}
+		echo '</div>';
 	}
 
 	function column_actions( $row ) {
