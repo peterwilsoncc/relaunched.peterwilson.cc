@@ -15,20 +15,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 
 		$base = $this->get_post_type_base( $this->post_type );
 
-		$posts_args = array(
-			'context'               => array(
-				'default'           => 'view',
-			),
-			'page'                  => array(
-				'default'           => 1,
-				'sanitize_callback' => 'absint',
-			),
-			'per_page'              => array(
-				'default'           => 10,
-				'sanitize_callback' => 'absint',
-			),
-			'filter'                => array(),
-		);
+		$posts_args = $this->get_collection_params();
 
 		register_rest_route( 'wp/v2', '/' . $base, array(
 			array(
@@ -88,6 +75,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		$args                   = array();
 		$args['paged']          = $request['page'];
 		$args['posts_per_page'] = $request['per_page'];
+		$args['post_parent']    = $request['parent'];
 
 		if ( is_array( $request['filter'] ) ) {
 			$args = array_merge( $args, $request['filter'] );
@@ -263,8 +251,8 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		if ( is_wp_error( $post ) ) {
 			return $post;
 		}
-
-		$post_id = wp_update_post( $post, true );
+		// convert the post object to an array, otherwise wp_update_post will expect non-escaped input
+		$post_id = wp_update_post( (array) $post, true );
 		if ( is_wp_error( $post_id ) ) {
 			if ( in_array( $post_id->get_error_code(), array( 'db_update_error' ) ) ) {
 				$post_id->add_data( array( 'status' => 500 ) );
@@ -947,6 +935,11 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 			return true;
 		}
 
+		$post_status_obj = get_post_status_object( $post->post_status );
+		if ( $post_status_obj && $post_status_obj->public ) {
+			return true;
+		}
+
 		// Can we read the parent if we're inheriting?
 		if ( 'inherit' === $post->post_status && $post->post_parent > 0 ) {
 			$parent = get_post( $post->post_parent );
@@ -1212,22 +1205,22 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		// If we have a featured image, add that.
 		if ( $featured_image = get_post_thumbnail_id( $post->ID ) ) {
 			$image_url = rest_url( 'wp/v2/media/' . $featured_image );
-			$links['http://api.w.org/featuredmedia'] = array(
+			$links['https://api.w.org/featuredmedia'] = array(
 				'href'       => $image_url,
 				'embeddable' => true,
 			);
 		}
 		if ( ! in_array( $post->post_type, array( 'attachment', 'nav_menu_item', 'revision' ) ) ) {
 			$attachments_url = rest_url( 'wp/v2/media' );
-			$attachments_url = add_query_arg( 'post_parent', $post->ID, $attachments_url );
-			$links['http://api.w.org/attachment'] = array(
+			$attachments_url = add_query_arg( 'parent', $post->ID, $attachments_url );
+			$links['https://api.w.org/attachment'] = array(
 				'href'       => $attachments_url,
 			);
 		}
 
 		$taxonomies = get_object_taxonomies( $post->post_type );
 		if ( ! empty( $taxonomies ) ) {
-			$links['http://api.w.org/term'] = array();
+			$links['https://api.w.org/term'] = array();
 
 			foreach ( $taxonomies as $tax ) {
 				$taxonomy_obj = get_taxonomy( $tax );
@@ -1239,7 +1232,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 				$tax_base = ! empty( $taxonomy_obj->rest_base ) ? $taxonomy_obj->rest_base : $tax;
 				$terms_url = rest_url( trailingslashit( $base ) . $post->ID . '/terms/' . $tax_base );
 
-				$links['http://api.w.org/term'][] = array(
+				$links['https://api.w.org/term'][] = array(
 					'href'       => $terms_url,
 					'taxonomy'   => $tax,
 					'embeddable' => true,
@@ -1248,7 +1241,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		}
 
 		if ( post_type_supports( $post->post_type, 'custom-fields' ) ) {
-			$links['http://api.w.org/meta'] = array(
+			$links['https://api.w.org/meta'] = array(
 				'href' => rest_url( trailingslashit( $base ) . $post->ID . '/meta' ),
 				'embeddable' => true,
 			);
@@ -1542,6 +1535,17 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		}
 
 		return $this->add_additional_fields_schema( $schema );
+	}
+
+	/**
+	 * Get the query params for collections of attachments.
+	 *
+	 * @return array
+	 */
+	public function get_collection_params() {
+		$params = parent::get_collection_params();
+		$params['filter'] = array();
+		return $params;
 	}
 
 }

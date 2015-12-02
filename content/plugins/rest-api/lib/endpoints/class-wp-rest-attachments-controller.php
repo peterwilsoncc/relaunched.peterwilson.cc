@@ -330,6 +330,9 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 		// Get the content-type
 		$type = array_shift( $headers['content_type'] );
 
+		/** Include admin functions to get access to wp_tempnam() and wp_handle_sideload() */
+		require_once ABSPATH . 'wp-admin/includes/admin.php';
+
 		// Save the file
 		$tmpfname = wp_tempnam( $filename );
 
@@ -362,6 +365,22 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 		}
 
 		return $sideloaded;
+	}
+
+	/**
+	 * Get the query params for collections of attachments.
+	 *
+	 * @return array
+	 */
+	public function get_collection_params() {
+		$params = parent::get_collection_params();
+		$params['parent']        = array(
+			'description'        => 'Limit results to attachments from a specified parent.',
+			'type'               => 'integer',
+			'default'            => null,
+			'sanitize_callback'  => 'absint',
+			);
+		return $params;
 	}
 
 	/**

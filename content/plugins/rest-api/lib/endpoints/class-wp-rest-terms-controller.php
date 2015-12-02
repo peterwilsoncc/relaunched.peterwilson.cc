@@ -138,7 +138,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	public function get_item( $request ) {
 
 		$term = get_term_by( 'term_taxonomy_id', (int) $request['id'], $this->taxonomy );
-		if ( ! $term ) {
+		if ( ! $term || $term->taxonomy !== $this->taxonomy ) {
 			return new WP_Error( 'rest_term_invalid', __( "Term doesn't exist." ), array( 'status' => 404 ) );
 		}
 		if ( is_wp_error( $term ) ) {
@@ -202,7 +202,10 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 			'id' => $term['term_taxonomy_id'],
 		 ) );
 
-		return rest_ensure_response( $response );
+		$response = rest_ensure_response( $response );
+		$response->set_status( 201 );
+		$response->header( 'Location', rest_url( '/wp/v2/terms/' . $this->get_taxonomy_base( $this->taxonomy ) . '/' . $term['term_taxonomy_id'] ) );
+		return $response;
 	}
 
 	/**
