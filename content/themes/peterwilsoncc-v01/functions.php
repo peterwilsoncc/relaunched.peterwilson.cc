@@ -177,13 +177,13 @@ class PWCC_theme {
 		);
 		$loadCss = array();
 
-		if ( false && isset( $_COOKIE["pwccsscache"] ) && ( $pwcc_css_ver == $_COOKIE["pwccsscache"] ) ) {
+		// if ( false && isset( $_COOKIE["pwccsscache"] ) && ( $pwcc_css_ver == $_COOKIE["pwccsscache"] ) ) {
 			wp_enqueue_style( 'pwcc-styles' );
-		}
-		else {
+		// }
+		// else {
 			// apply_filters( 'stylestyle_loader_src', $css, 'pwcc-styles' )
 			// $loadCss[] = $wp_styles->registered["pwcc-styles"];
-		}
+		// }
 
 		// print_r( $wp_styles->registered["pwcc-styles"] );
 
@@ -195,10 +195,10 @@ class PWCC_theme {
 			true
 		);
 
-		foreach ( $loadCss as $k => $file ) {
-			$src = add_query_arg( array( 'ver' => $file->ver ), $file->src );
-			$loadCss[$k]->src = apply_filters( 'style_loader_src', $src, $file->handle );
-		}
+		// foreach ( $loadCss as $k => $file ) {
+		// 	$src = add_query_arg( array( 'ver' => $file->ver ), $file->src );
+		// 	$loadCss[$k]->src = apply_filters( 'style_loader_src', $src, $file->handle );
+		// }
 
 
 		$js_config = array(
@@ -247,9 +247,9 @@ class PWCC_theme {
 		global $pwcc_css_ver;
 
 		if ( !false || !isset( $_COOKIE["pwccsscache"] ) || ( $pwcc_css_ver != $_COOKIE["pwccsscache"] ) ) {
-			echo '<style>';
-			readfile ( get_stylesheet_directory() . '/assets/css/style.min.css' );
-			echo '</style>';
+			// echo '<style>';
+			// readfile ( get_stylesheet_directory() . '/assets/css/style.min.css' );
+			// echo '</style>';
 		}
 
 
