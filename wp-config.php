@@ -1,4 +1,5 @@
 <?php
+define('WP_CACHE', true); // Added by WP Rocket
 // ===================================================
 // Load database info and local development parameters
 // ===================================================
