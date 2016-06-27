@@ -22,7 +22,7 @@ class BackWPup_File {
 			else
 				return trailingslashit( str_replace( '\\', '/', WP_CONTENT_DIR ) );
 		} else {
-			$upload_dir = wp_upload_dir();
+			$upload_dir = wp_upload_dir( null, false, true );
 			return trailingslashit( str_replace( '\\', '/', $upload_dir[ 'basedir' ] ) );
 		}
 
@@ -79,7 +79,7 @@ class BackWPup_File {
 
 		if ( $dir = opendir( $folder ) ) {
 			while ( FALSE !== ( $file = readdir( $dir ) ) ) {
-				if ( in_array( $file, array( '.', '..' ) ) || is_link( $folder . '/' . $file ) ) {
+				if ( in_array( $file, array( '.', '..' ), true ) || is_link( $folder . '/' . $file ) ) {
 					continue;
 				}
 				if ( $deep && is_dir( $folder . '/' . $file ) ) {

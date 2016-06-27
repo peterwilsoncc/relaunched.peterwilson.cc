@@ -17,16 +17,11 @@ final class BackWPup_Option {
 		//job default
 		add_site_option( 'backwpup_jobs', array() );
 		//general
-		add_site_option( 'backwpup_cfg_showadminbar', 1 );
-		add_site_option( 'backwpup_cfg_showfoldersize', 0 );
-		add_site_option( 'backwpup_cfg_protectfolders', 1 );
+		add_site_option( 'backwpup_cfg_showadminbar', false );
+		add_site_option( 'backwpup_cfg_showfoldersize', false );
+		add_site_option( 'backwpup_cfg_protectfolders', true );
 		//job
-		$max_execution_time = 0;
-		if ( strstr( PHP_SAPI, 'cgi' ) ) {
-			$max_execution_time = (int) ini_get( 'max_execution_time' );
-		}
-		add_site_option( 'backwpup_cfg_jobmaxexecutiontime', $max_execution_time );
-		add_site_option( 'backwpup_cfg_jobziparchivemethod', '' );
+		add_site_option( 'backwpup_cfg_jobmaxexecutiontime', 30 );
 		add_site_option( 'backwpup_cfg_jobstepretry', 3 );
 		add_site_option( 'backwpup_cfg_jobrunauthkey', substr( md5( BackWPup::get_plugin_data( 'hash' ) ), 11, 8 ) );
 		add_site_option( 'backwpup_cfg_loglevel', 'normal_translated' );
@@ -35,7 +30,7 @@ final class BackWPup_Option {
 		//Logs
 		add_site_option( 'backwpup_cfg_maxlogs', 30 );
 		add_site_option( 'backwpup_cfg_gzlogs', 0 );
-		$upload_dir   = wp_upload_dir();
+		$upload_dir   = wp_upload_dir( null, false, true );
 		$logs_dir     = trailingslashit( str_replace( '\\', '/', $upload_dir['basedir'] ) ) . 'backwpup-' . BackWPup::get_plugin_data( 'hash' ) . '-logs/';
 		$content_path = trailingslashit( str_replace( '\\', '/', WP_CONTENT_DIR ) );
 		$logs_dir     = str_replace( $content_path, '', $logs_dir );
@@ -46,6 +41,31 @@ final class BackWPup_Option {
 
 	}
 
+	/**
+	 *
+	 * Update a BackWPup option
+	 *
+	 * @param int $jobid the job id
+	 * @param string $option Option key
+	 * @param mixed $value the value to store
+	 *
+	 * @return bool if option save or not
+	 */
+	public static function update( $jobid, $option, $value ) {
+
+		$jobid  = (int) $jobid;
+		$option = sanitize_key( trim( $option ) );
+
+		if ( empty( $jobid ) || empty( $option ) ) {
+			return false;
+		}
+
+		//Update option
+		$jobs_options                      = self::jobs_options( false );
+		$jobs_options[ $jobid ][ $option ] = $value;
+
+		return self::update_jobs_options( $jobs_options );
+	}
 
 	/**
 	 *
@@ -90,6 +110,35 @@ final class BackWPup_Option {
 		return update_site_option( 'backwpup_jobs', $options );
 	}
 
+	/**
+	 *
+	 * Get a BackWPup Option
+	 *
+	 * @param int $jobid Option the job id
+	 * @param string $option Option key
+	 * @param mixed $default returned if no value, if null the the default BackWPup option will get
+	 * @param bool $use_cache USe the cache
+	 *
+	 * @return bool|mixed        false if nothing can get else the option value
+	 */
+	public static function get( $jobid, $option, $default = null, $use_cache = true ) {
+
+		$jobid  = (int) $jobid;
+		$option = sanitize_key( trim( $option ) );
+
+		if ( empty( $jobid ) || empty( $option ) ) {
+			return false;
+		}
+
+		$jobs_options = self::jobs_options( $use_cache );
+		if ( ! isset( $jobs_options[ $jobid ][ $option ] ) && isset( $default ) ) {
+			return $default;
+		} elseif ( ! isset( $jobs_options[ $jobid ][ $option ] ) ) {
+			return self::defaults_job( $option );
+		} else {
+			return $jobs_options[ $jobid ][ $option ];
+		}
+	}
 
 	/**
 	 *
@@ -118,7 +167,7 @@ final class BackWPup_Option {
 		$default['mailaddresssenderlog']  = 'BackWPup ' . get_bloginfo( 'name' ) . ' <' . sanitize_email( get_bloginfo( 'admin_email' ) ) . '>';
 		$default['mailerroronly']         = true;
 		$default['backuptype']            = 'archive';
-		$default['archiveformat']         = '.tar.gz';
+		$default['archiveformat']         = '.zip';
 		$default['archivename']           = 'backwpup_' . BackWPup::get_plugin_data( 'hash' ) . '_%Y-%m-%d_%H-%i-%s';
 		//defaults vor destinations
 		foreach ( BackWPup::get_registered_destinations() as $dest_key => $dest ) {
@@ -141,63 +190,6 @@ final class BackWPup_Option {
 			return $default[ $key ];
 		} else {
 			return false;
-		}
-	}
-
-	/**
-	 *
-	 * Update a BackWPup option
-	 *
-	 * @param int $jobid the job id
-	 * @param string $option Option key
-	 * @param mixed $value the value to store
-	 *
-	 * @return bool if option save or not
-	 */
-	public static function update( $jobid, $option, $value ) {
-
-		$jobid  = (int) $jobid;
-		$option = sanitize_key( trim( $option ) );
-
-		if ( empty( $jobid ) || empty( $option ) ) {
-			return false;
-		}
-
-		//Update option
-		$jobs_options                      = self::jobs_options( false );
-		$jobs_options[ $jobid ][ $option ] = $value;
-
-		return self::update_jobs_options( $jobs_options );
-	}
-
-
-	/**
-	 *
-	 * Get a BackWPup Option
-	 *
-	 * @param int $jobid Option the job id
-	 * @param string $option Option key
-	 * @param mixed $default returned if no value, if null the the default BackWPup option will get
-	 * @param bool $use_cache USe the cache
-	 *
-	 * @return bool|mixed        false if nothing can get else the option value
-	 */
-	public static function get( $jobid, $option, $default = null, $use_cache = true ) {
-
-		$jobid  = (int) $jobid;
-		$option = sanitize_key( trim( $option ) );
-
-		if ( empty( $jobid ) || empty( $option ) ) {
-			return false;
-		}
-
-		$jobs_options = self::jobs_options( $use_cache );
-		if ( ! isset( $jobs_options[ $jobid ][ $option ] ) && isset( $default ) ) {
-			return $default;
-		} elseif ( ! isset( $jobs_options[ $jobid ][ $option ] ) ) {
-			return self::defaults_job( $option );
-		} else {
-			return $jobs_options[ $jobid ][ $option ];
 		}
 	}
 
@@ -296,7 +288,7 @@ final class BackWPup_Option {
 		$new_option_job_ids = array();
 		foreach ( $jobs_options as $id => $option ) {
 			if ( isset( $option[ $key ] ) && $value == $option[ $key ] ) {
-				$new_option_job_ids[] = $id;
+				$new_option_job_ids[] = (int) $id;
 			}
 		}
 		sort( $new_option_job_ids );

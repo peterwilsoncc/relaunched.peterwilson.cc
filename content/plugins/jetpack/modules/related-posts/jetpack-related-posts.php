@@ -72,6 +72,10 @@ class Jetpack_RelatedPosts {
 
 		add_action( 'admin_init', array( $this, 'action_admin_init' ) );
 		add_action( 'wp', array( $this, 'action_frontend_init' ) );
+
+		if ( ! class_exists( 'Jetpack_Media_Summary' ) ) {
+			jetpack_require_lib( 'class.media-summary' );
+		}
 	}
 
 	/**
@@ -357,6 +361,11 @@ EOT;
 
 		// only dislay the Related Posts JavaScript on the Reading Settings Admin Page
 		$current_screen =  get_current_screen();
+
+		if ( is_null( $current_screen ) ) {
+			return;
+		}
+
 		if( 'options-reading' != $current_screen->id )
 			return;
 

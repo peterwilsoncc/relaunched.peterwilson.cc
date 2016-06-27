@@ -9,18 +9,16 @@ class BackWPup_Install {
 	 */
 	public static function activate() {
 
-		//convert inactive version to active
-		if ( $incative_version = get_site_option( 'backwpup_version' ) ) {
-			update_site_option( 'backwpup_version', str_replace( '-inactive', '', $incative_version ) );
-		}
+		$version_db = get_site_option( 'backwpup_version' );
 
 		//changes for version before 3.0.0
-		if ( ! get_site_option( 'backwpup_version' ) && get_option( 'backwpup' ) && get_option( 'backwpup_jobs' ) )
+		if ( ! $version_db && get_option( 'backwpup' ) && get_option( 'backwpup_jobs' ) ) {
 			self::upgrade_from_version_two();
+		}
 
 		//changes for version before 3.0.14
-		if ( version_compare( '3.0.13', get_site_option( 'backwpup_version' ), '>' ) && version_compare( '3.0', get_site_option( 'backwpup_version' ), '<' ) ) {
-			$upload_dir = wp_upload_dir();
+		if ( version_compare( '3.0.13', $version_db, '>' ) && version_compare( '3.0', $version_db, '<' ) ) {
+			$upload_dir = wp_upload_dir( null, false, true );
 			$logfolder = get_site_option( 'backwpup_cfg_logfolder' );
 			if ( empty( $logfolder ) ) {
 				$old_log_folder = trailingslashit( str_replace( '\\', '/',$upload_dir[ 'basedir' ] ) ) . 'backwpup-' . substr( md5( md5( SECURE_AUTH_KEY ) ), 9, 5 ) . '-logs/';
@@ -35,6 +33,8 @@ class BackWPup_Install {
 			update_site_option( 'backwpup_cfg_loglevel', 'normal' );
 			delete_site_option( 'backwpup_cfg_jobnotranslate' );
 		}
+
+		delete_site_option( 'backwpup_cfg_jobziparchivemethod' );
 
 		//create new options
 		if ( is_multisite() ) {
@@ -60,9 +60,10 @@ class BackWPup_Install {
 			}
 		}
 
-		//add check Cleanup schedule
-		wp_clear_scheduled_hook( 'backwpup_check_cleanup' );
-		wp_schedule_event( time(), 'twicedaily', 'backwpup_check_cleanup' );
+		//add Cleanup schedule
+		if ( ! wp_next_scheduled( 'backwpup_check_cleanup' ) ) {
+			wp_schedule_event( time(), 'twicedaily', 'backwpup_check_cleanup' );
+		}
 
 		//add capabilities to administrator role
 		$role = get_role( 'administrator' );
@@ -127,36 +128,12 @@ class BackWPup_Install {
 
 		//update version
 		update_site_option( 'backwpup_version', BackWPup::get_plugin_data( 'Version' ) );
-	}
 
-	/**
-	 *
-	 * Cleanup on Plugin deactivation
-	 *
-	 * @return void
-	 */
-	public static function deactivate() {
-
-		wp_clear_scheduled_hook( 'backwpup_cron' );
-		$activejobs = BackWPup_Option::get_job_ids( 'activetype', 'wpcron' );
-		if ( ! empty( $activejobs ) ) {
-			foreach ( $activejobs as $id ) {
-				wp_clear_scheduled_hook( 'backwpup_cron', array( 'id' => $id ) );
-			}
+		if ( ! $version_db ) {
+			wp_redirect( network_admin_url( 'admin.php' ) . '?page=backwpupabout' );
+			die();
 		}
-		wp_clear_scheduled_hook( 'backwpup_check_cleanup' );
-
-		$activejobs = BackWPup_Option::get_job_ids( 'activetype', 'easycron' );
-		if ( ! empty( $activejobs ) ) {
-			foreach ( $activejobs as $id ) {
-				BackWPup_EasyCron::delete( $id );
-			}
-		}
-
-		//to reschedule on activation and so on
-		update_site_option( 'backwpup_version', get_site_option( 'backwpup_version' ) .'-inactive' );
 	}
-
 
 	private static function upgrade_from_version_two() {
 
@@ -228,7 +205,7 @@ class BackWPup_Install {
 				$jobvalue[ 'destinations' ][ ] = 'SUGARSYNC';
 			if ( ! empty( $jobvalue[ 'awsAccessKey' ] ) && ! empty( $jobvalue[ 'awsSecretKey' ] ) && ! empty( $jobvalue[ 'awsBucket' ] ) )
 				$jobvalue[ 'destinations' ][ ] = 'S3';
-			if ( ! empty( $jobvalue[ 'GStorageAccessKey' ] ) and ! empty( $jobvalue[ 'GStorageSecret' ] ) && ! empty( $jobvalue[ 'GStorageBucket' ] ) && !in_array( 'S3', $jobvalue[ 'destinations' ] ) )
+			if ( ! empty( $jobvalue[ 'GStorageAccessKey' ] ) and ! empty( $jobvalue[ 'GStorageSecret' ] ) && ! empty( $jobvalue[ 'GStorageBucket' ] ) && !in_array( 'S3', $jobvalue[ 'destinations' ], true ) )
 				$jobvalue[ 'destinations' ][ ] = 'S3';
 			if ( ! empty( $jobvalue[ 'rscUsername' ] ) && ! empty( $jobvalue[ 'rscAPIKey' ] ) && ! empty( $jobvalue[ 'rscContainer' ] ) )
 				$jobvalue[ 'destinations' ][ ] = 'RSC';
@@ -321,6 +298,52 @@ class BackWPup_Install {
 			foreach ( $jobvalue as $jobvaluename => $jobvaluevalue )
 				BackWPup_Option::update( $jobvalue[ 'jobid' ], $jobvaluename, $jobvaluevalue );
 		}
-		set_site_transient( 'backwpup_upgrade_from_version_two', TRUE, 3600*24*7);
+
+	}
+
+	/**
+	 *
+	 * Cleanup on Plugin deactivation
+	 *
+	 * @return void
+	 */
+	public static function deactivate() {
+
+		wp_clear_scheduled_hook( 'backwpup_cron' );
+		$activejobs = BackWPup_Option::get_job_ids( 'activetype', 'wpcron' );
+		if ( ! empty( $activejobs ) ) {
+			foreach ( $activejobs as $id ) {
+				wp_clear_scheduled_hook( 'backwpup_cron', array( 'id' => $id ) );
+			}
+		}
+		wp_clear_scheduled_hook( 'backwpup_check_cleanup' );
+
+		$activejobs = BackWPup_Option::get_job_ids( 'activetype', 'easycron' );
+		if ( ! empty( $activejobs ) ) {
+			foreach ( $activejobs as $id ) {
+				BackWPup_EasyCron::delete( $id );
+			}
+		}
+
+		//remove roles
+		remove_role( 'backwpup_admin' );
+		remove_role( 'backwpup_helper' );
+		remove_role( 'backwpup_check' );
+
+		//remove capabilities to administrator role
+		$role = get_role( 'administrator' );
+		if ( is_object( $role ) && method_exists( $role, 'remove_cap' ) ) {
+			$role->remove_cap( 'backwpup' );
+			$role->remove_cap( 'backwpup_jobs' );
+			$role->remove_cap( 'backwpup_jobs_edit' );
+			$role->remove_cap( 'backwpup_jobs_start' );
+			$role->remove_cap( 'backwpup_backups' );
+			$role->remove_cap( 'backwpup_backups_download' );
+			$role->remove_cap( 'backwpup_backups_delete' );
+			$role->remove_cap( 'backwpup_logs' );
+			$role->remove_cap( 'backwpup_logs_delete' );
+			$role->remove_cap( 'backwpup_settings' );
+		}
+
 	}
 }

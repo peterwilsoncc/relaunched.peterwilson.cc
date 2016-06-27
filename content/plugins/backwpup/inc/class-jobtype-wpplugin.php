@@ -12,9 +12,9 @@ class BackWPup_JobType_WPPlugin extends BackWPup_JobTypes {
 		$this->info[ 'ID' ]          = 'WPPLUGIN';
 		$this->info[ 'name' ]        = __( 'Plugins', 'backwpup' );
 		$this->info[ 'description' ] = __( 'Installed plugins list', 'backwpup' );
-		$this->info[ 'URI' ]         = translate( BackWPup::get_plugin_data( 'PluginURI' ), 'backwpup' );
-		$this->info[ 'author' ]      = BackWPup::get_plugin_data( 'Author' );
-		$this->info[ 'authorURI' ]   = translate( BackWPup::get_plugin_data( 'AuthorURI' ), 'backwpup' );
+		$this->info[ 'URI' ]         = __( 'http://backwpup.com', 'backwpup' );
+		$this->info[ 'author' ]      = 'Inpsyde GmbH';
+		$this->info[ 'authorURI' ]   = __( 'http://inpsyde.com', 'backwpup' );
 		$this->info[ 'version' ]     = BackWPup::get_plugin_data( 'Version' );
 
 	}
@@ -42,27 +42,29 @@ class BackWPup_JobType_WPPlugin extends BackWPup_JobTypes {
 		?>
 		<table class="form-table">
 			<tr>
-				<th scope="row"><label for="idpluginlistfile"><?php _e( 'Plugin list file name', 'backwpup' ) ?></label></th>
+				<th scope="row"><label for="idpluginlistfile"><?php esc_html_e( 'Plugin list file name', 'backwpup' ) ?></label></th>
 				<td>
 					<input name="pluginlistfile" type="text" id="idpluginlistfile"
-						   value="<?php echo BackWPup_Option::get( $jobid, 'pluginlistfile' );?>"
+						   value="<?php echo esc_attr( BackWPup_Option::get( $jobid, 'pluginlistfile' ) );?>"
 						   class="medium-text code"/>.txt
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php _e( 'File compression', 'backwpup' ) ?></th>
+				<th scope="row"><?php esc_html_e( 'File compression', 'backwpup' ) ?></th>
 				<td>
 					<fieldset>
 						<?php
-						echo '<label for="idpluginlistfilecompression"><input class="radio" type="radio"' . checked( '', BackWPup_Option::get( $jobid, 'pluginlistfilecompression' ), FALSE ) . ' name="pluginlistfilecompression"  id="idpluginlistfilecompression" value="" /> ' . __( 'none', 'backwpup' ). '</label><br />';
-						if ( function_exists( 'gzopen' ) )
-							echo '<label for="idpluginlistfilecompression-gz"><input class="radio" type="radio"' . checked( '.gz', BackWPup_Option::get( $jobid, 'pluginlistfilecompression' ), FALSE ) . ' name="pluginlistfilecompression" id="idpluginlistfilecompression-gz" value=".gz" /> ' . __( 'GZip', 'backwpup' ). '</label><br />';
-						else
-							echo '<label for="idpluginlistfilecompression-gz"><input class="radio" type="radio"' . checked( '.gz', BackWPup_Option::get( $jobid, 'pluginlistfilecompression' ), FALSE ) . ' name="pluginlistfilecompression" id="idpluginlistfilecompression-gz" value=".gz" disabled="disabled" /> ' . __( 'GZip', 'backwpup' ). '</label><br />';
-						if ( function_exists( 'bzopen' ) )
-							echo '<label for="idpluginlistfilecompression-bz2"><input class="radio" type="radio"' . checked( '.bz2', BackWPup_Option::get( $jobid, 'pluginlistfilecompression' ), FALSE ) . ' name="pluginlistfilecompression" id="idpluginlistfilecompression-bz2" value=".bz2" /> ' . __( 'BZip2', 'backwpup' ). '</label><br />';
-						else
-							echo '<label for="idpluginlistfilecompression-bz2"><input class="radio" type="radio"' . checked( '.bz2', BackWPup_Option::get( $jobid, 'pluginlistfilecompression' ), FALSE ) . ' name="pluginlistfilecompression" id="idpluginlistfilecompression-bz2" value=".bz2" disabled="disabled" /> ' . __( 'BZip2', 'backwpup' ). '</label><br />';
+						echo '<label for="idpluginlistfilecompression"><input class="radio" type="radio"' . checked( '', BackWPup_Option::get( $jobid, 'pluginlistfilecompression' ), FALSE ) . ' name="pluginlistfilecompression"  id="idpluginlistfilecompression" value="" /> ' . esc_html__( 'none', 'backwpup' ). '</label><br />';
+						if ( function_exists( 'gzopen' ) ) {
+							echo '<label for="idpluginlistfilecompression-gz"><input class="radio" type="radio"' . checked( '.gz', BackWPup_Option::get( $jobid, 'pluginlistfilecompression' ), FALSE ) . ' name="pluginlistfilecompression" id="idpluginlistfilecompression-gz" value=".gz" /> ' . esc_html__( 'GZip', 'backwpup' ). '</label><br />';
+						} else {
+							echo '<label for="idpluginlistfilecompression-gz"><input class="radio" type="radio"' . checked( '.gz', BackWPup_Option::get( $jobid, 'pluginlistfilecompression' ), FALSE ) . ' name="pluginlistfilecompression" id="idpluginlistfilecompression-gz" value=".gz" disabled="disabled" /> ' . esc_html__( 'GZip', 'backwpup' ). '</label><br />';
+						}
+						if ( function_exists( 'bzopen' ) ) {
+							echo '<label for="idpluginlistfilecompression-bz2"><input class="radio" type="radio"' . checked( '.bz2', BackWPup_Option::get( $jobid, 'pluginlistfilecompression' ), FALSE ) . ' name="pluginlistfilecompression" id="idpluginlistfilecompression-bz2" value=".bz2" /> ' . esc_html__( 'BZip2', 'backwpup' ). '</label><br />';
+						} else {
+							echo '<label for="idpluginlistfilecompression-bz2"><input class="radio" type="radio"' . checked( '.bz2', BackWPup_Option::get( $jobid, 'pluginlistfilecompression' ), FALSE ) . ' name="pluginlistfilecompression" id="idpluginlistfilecompression-bz2" value=".bz2" disabled="disabled" /> ' . esc_html__( 'BZip2', 'backwpup' ). '</label><br />';
+						}
 						?>
 					</fieldset>
 				</td>
@@ -77,9 +79,10 @@ class BackWPup_JobType_WPPlugin extends BackWPup_JobTypes {
 	 */
 	public function edit_form_post_save( $id ) {
 
-		BackWPup_Option::update( $id, 'pluginlistfile', BackWPup_Job::sanitize_file_name( $_POST[ 'pluginlistfile' ] ) );
-		if ( $_POST[ 'pluginlistfilecompression' ] == '' || $_POST[ 'pluginlistfilecompression' ] == '.gz' || $_POST[ 'pluginlistfilecompression' ] == '.bz2' )
+		BackWPup_Option::update( $id, 'pluginlistfile', sanitize_text_field( $_POST[ 'pluginlistfile' ] ) );
+		if ( $_POST[ 'pluginlistfilecompression' ] === '' || $_POST[ 'pluginlistfilecompression' ] === '.gz' || $_POST[ 'pluginlistfilecompression' ] === '.bz2' ) {
 			BackWPup_Option::update( $id, 'pluginlistfilecompression', $_POST[ 'pluginlistfilecompression' ] );
+		}
 	}
 
 	/**
@@ -106,7 +109,7 @@ class BackWPup_JobType_WPPlugin extends BackWPup_JobTypes {
 			//open file
 			$header = "------------------------------------------------------------" . PHP_EOL;
 			$header .= "  Plugin list generated with BackWPup version: " . BackWPup::get_plugin_data( 'Version' ) . PHP_EOL;
-			$header .= "  " . translate( BackWPup::get_plugin_data( 'pluginuri' ), 'backwpup' ) . PHP_EOL;
+			$header .= "  http://backwpup.com" . PHP_EOL;
 			$header .= "  Blog Name: " . get_bloginfo( 'name' ) . PHP_EOL;
 			$header .= "  Blog URL: " . get_bloginfo( 'url' ) . PHP_EOL;
 			$header .= "  Generated on: " . date( 'Y-m-d H:i.s', current_time( 'timestamp' ) ) . PHP_EOL;
@@ -125,12 +128,12 @@ class BackWPup_JobType_WPPlugin extends BackWPup_JobTypes {
 			fwrite( $handle, PHP_EOL . __( 'Active plugins:', 'backwpup' ) . PHP_EOL . '------------------------------' . PHP_EOL );
 
 			foreach ( $plugins as $key => $plugin ) {
-				if ( in_array( $key, $plugins_active ) )
+				if ( in_array( $key, $plugins_active, true ) )
 					fwrite( $handle, $plugin[ 'Name' ] . PHP_EOL );
 			}
 			fwrite( $handle, PHP_EOL . __( 'Inactive plugins:', 'backwpup' ) . PHP_EOL . '------------------------------' . PHP_EOL );
 			foreach ( $plugins as $key => $plugin ) {
-				if ( ! in_array( $key, $plugins_active ) )
+				if ( ! in_array( $key, $plugins_active, true ) )
 					fwrite( $handle, $plugin[ 'Name' ] . PHP_EOL );
 			}
 			fclose( $handle );

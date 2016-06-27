@@ -48,9 +48,6 @@ final class BackWPup_Admin {
 		add_action( 'edit_user_profile',  array( $this, 'user_profile_fields' ) );
 		add_action( 'profile_update',  array( $this, 'save_profile_update' ) );
 
-		//Change Backup message on core updates
-		add_filter( 'gettext', array( $this, 'gettext' ), 10, 3 );
-
 		new BackWPup_EasyCron();
 	}
 
@@ -66,7 +63,109 @@ final class BackWPup_Admin {
 		return self::$instance;
 	}
 
-	private function __clone() {}
+	/**
+	 * Admin init function
+	 */
+	public static function admin_css() {
+
+		//register js and css for BackWPup
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			wp_enqueue_style( 'backwpup', BackWPup::get_plugin_data( 'URL' ) . '/assets/css/backwpup.css', array(), time(), 'screen' );
+		} else {
+			wp_enqueue_style( 'backwpup', BackWPup::get_plugin_data( 'URL' ) . '/assets/css/backwpup.min.css', array(), BackWPup::get_plugin_data( 'Version' ), 'screen' );
+		}
+	}
+
+	/**
+	 * Load for all BackWPup pages
+	 */
+	public static function init_general() {
+
+		add_thickbox();
+
+		//register js and css for BackWPup
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			wp_register_script( 'backwpupgeneral', BackWPup::get_plugin_data( 'URL' ) . '/assets/js/general.js', array( 'jquery' ), time(), false );
+		} else {
+			wp_register_script( 'backwpupgeneral', BackWPup::get_plugin_data( 'URL' ) . '/assets/js/general.min.js', array( 'jquery' ), BackWPup::get_plugin_data( 'Version' ), false );
+		}
+
+		//add Help
+		BackWPup_Help::help();
+	}
+
+	/**
+	 * Add Message (across site loadings)
+	 *
+	 * @param $message string Message test
+	 * @param $error bool ist it a error message
+	 */
+	public static function message( $message, $error = FALSE ) {
+
+		if ( empty( $message ) ) {
+			return;
+		}
+
+		$saved_message = self::get_messages();
+
+		if ( $error )
+			$saved_message[ 'error' ][] = $message;
+		else
+			$saved_message[ 'updated' ][] = $message;
+
+		update_site_option( 'backwpup_messages', $saved_message );
+	}
+
+	/**
+	 * Get all Message that not displayed
+	 *
+	 * @return array
+	 */
+	public static function get_messages() {
+
+		return get_site_option( 'backwpup_messages', array() );
+	}
+
+	/**
+	 * Display Messages
+	 *
+	 * @param bool $echo
+	 * @return string
+	 */
+	public static function display_messages( $echo = TRUE ) {
+
+		$message_updated= '';
+		$message_error	= '';
+		$saved_message 	= self::get_messages();
+		$message_id 	= ' id="message"';
+
+		if( empty( $saved_message ) )
+			return '';
+
+		if ( ! empty( $saved_message[ 'updated' ] ) ) {
+			foreach( $saved_message[ 'updated' ] as $msg )
+				$message_updated .= '<p>' .  $msg  . '</p>';
+		}
+		if ( ! empty( $saved_message[ 'error' ] ) ) {
+			foreach( $saved_message[ 'error' ] as $msg )
+				$message_error .= '<p>' .  $msg  . '</p>';
+		}
+
+		update_site_option( 'backwpup_messages', array() );
+
+		if ( ! empty( $message_updated ) ) {
+			$message_updated = '<div' . $message_id . ' class="updated">' . $message_updated . '</div>';
+			$message_id = '';
+		}
+		if ( ! empty( $message_error ) ) {
+			$message_error = '<div' . $message_id . ' class="error">' . $message_error . '</div>';
+		}
+
+		if ( $echo )
+			echo $message_updated . $message_error;
+
+		return $message_updated . $message_error;
+	}
 
 	/**
 	 * Admin init function
@@ -95,25 +194,6 @@ final class BackWPup_Admin {
 			}
 		}
 
-		//display about page after Update
-		if ( ! defined( 'DOING_AJAX' ) && ! get_site_option( 'backwpup_about_page', FALSE ) && ! isset( $_GET['activate-multi'] ) ) {
-			update_site_option( 'backwpup_about_page', TRUE );
-			wp_redirect( network_admin_url( 'admin.php' ) . '?page=backwpupabout' );
-			exit();
-		}
-	}
-
-	/**
-	 * Admin init function
-	 */
-	public static function admin_css() {
-
-		//register js and css for BackWPup
-		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-			wp_enqueue_style( 'backwpup', BackWPup::get_plugin_data( 'URL' ) . '/assets/css/backwpup.css', array(), time(), 'screen' );
-		} else {
-			wp_enqueue_style( 'backwpup', BackWPup::get_plugin_data( 'URL' ) . '/assets/css/backwpup.min.css', array(), BackWPup::get_plugin_data( 'Version' ), 'screen' );
-		}
 	}
 
 	/**
@@ -127,12 +207,7 @@ final class BackWPup_Admin {
 	public function plugin_links( $links, $file ) {
 
 		if ( $file == plugin_basename( BackWPup::get_plugin_data( 'MainFile' ) ) ) {
-			$links[ ] = '<a href="' . __( 'https://marketpress.com/documentation/backwpup-pro/', 'backwpup' ) . '">' . __( 'Documentation', 'backwpup' ) . '</a>';
-			if ( class_exists( 'BackWPup_Pro', FALSE ) )
-				$links[ ] = '<a href="' . __( 'https://marketpress.com/support/forum/plugins/backwpup-pro/', 'backwpup' ) . '">' . __( 'Pro Support', 'backwpup' ) . '</a>';
-			else
-				$links[ ] = '<a href="' . __( 'http://wordpress.org/support/plugin/backwpup/', 'backwpup' ) . '">' . __( 'Support', 'backwpup' ) . '</a>';
-
+			$links[ ] = '<a href="' . esc_attr__( 'http://docs.backwpup.com', 'backwpup' ) . '">' . __( 'Documentation', 'backwpup' ) . '</a>';
 		}
 
 		return $links;
@@ -143,17 +218,16 @@ final class BackWPup_Admin {
 	 */
 	public function admin_menu() {
 
-		add_menu_page( BackWPup::get_plugin_data( 'name' ), BackWPup::get_plugin_data( 'name' ), 'backwpup', 'backwpup', array( 'BackWPup_Page_Backwpup', 'page' ), 'div' );
-		$this->page_hooks[ 'backwpup' ] = add_submenu_page( 'backwpup', __( 'BackWPup Dashboard', 'backwpup' ), __( 'Dashboard', 'backwpup' ), 'backwpup', 'backwpup', array( 'BackWPup_Page_Backwpup', 'page' ) );
+		add_menu_page( BackWPup::get_plugin_data( 'name' ), BackWPup::get_plugin_data( 'name' ), 'backwpup', 'backwpup', array( 'BackWPup_Page_BackWPup', 'page' ), 'div' );
+		$this->page_hooks[ 'backwpup' ] = add_submenu_page( 'backwpup', __( 'BackWPup Dashboard', 'backwpup' ), __( 'Dashboard', 'backwpup' ), 'backwpup', 'backwpup', array( 'BackWPup_Page_BackWPup', 'page' ) );
 		add_action( 'load-' . $this->page_hooks[ 'backwpup' ], array( 'BackWPup_Admin', 'init_general' ) );
-		add_action( 'load-' . $this->page_hooks[ 'backwpup' ], array( 'BackWPup_Page_Backwpup', 'load' ) );
-		add_action( 'admin_print_scripts-' . $this->page_hooks[ 'backwpup' ], array( 'BackWPup_Page_Backwpup', 'admin_print_scripts' ) );
+		add_action( 'load-' . $this->page_hooks[ 'backwpup' ], array( 'BackWPup_Page_BackWPup', 'load' ) );
+		add_action( 'admin_print_scripts-' . $this->page_hooks[ 'backwpup' ], array( 'BackWPup_Page_BackWPup', 'admin_print_scripts' ) );
 
 		//Add pages form plugins
 		$this->page_hooks = apply_filters( 'backwpup_admin_pages' ,$this->page_hooks );
 
 	}
-
 
 	/**
 	 * @param $page_hooks
@@ -242,35 +316,13 @@ final class BackWPup_Admin {
 		return $page_hooks;
 	}
 
-
-	/**
-	 * Load for all BackWPup pages
-	 */
-	public static function init_general() {
-
-		add_thickbox();
-
-		//register js and css for BackWPup
-		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-			wp_register_script( 'backwpuptiptip', BackWPup::get_plugin_data( 'URL' ) . '/assets/js/jquery.tipTip.js', array( 'jquery' ), '1.3.1', TRUE );
-			wp_register_script( 'backwpupgeneral', BackWPup::get_plugin_data( 'URL' ) . '/assets/js/general.js', array( 'jquery', 'backwpuptiptip' ), time(), TRUE );
-		} else {
-			wp_register_script( 'backwpuptiptip', BackWPup::get_plugin_data( 'URL' ) . '/assets/js/jquery.tipTip.min.js', array( 'jquery' ), '1.3.1', TRUE );
-			wp_register_script( 'backwpupgeneral', BackWPup::get_plugin_data( 'URL' ) . '/assets/js/general.min.js', array( 'jquery', 'backwpuptiptip' ), BackWPup::get_plugin_data( 'Version' ), TRUE );
-		}
-
-		//add Help
-		BackWPup_Help::help();
-	}
-
-
 	/**
 	 * Called on save form. Only POST allowed.
 	 */
 	public function save_post_form() {
 
 		//Allowed Pages
-		if ( ! in_array( $_POST[ 'page' ], array ( 'backwpupeditjob', 'backwpupinformation', 'backwpupsettings' ) ) )
+		if ( ! in_array( $_POST[ 'page' ], array ( 'backwpupeditjob', 'backwpupinformation', 'backwpupsettings' ), true ) )
 			wp_die( __( 'Cheating, huh?', 'backwpup' ) );
 
 		//nonce check
@@ -309,79 +361,6 @@ final class BackWPup_Admin {
 	}
 
 	/**
-	 * Add Message (across site loadings)
-	 *
-	 * @param $message string Message test
-	 * @param $error bool ist it a error message
-	 */
-	public static function message( $message, $error = FALSE ) {
-
-		if ( empty( $message ) ) {
-			return;
-		}
-
-		$saved_message = self::get_messages();
-
-		if ( $error )
-			$saved_message[ 'error' ][] = $message;
-		else
-			$saved_message[ 'updated' ][] = $message;
-
-		update_site_option( 'backwpup_messages', $saved_message );
-	}
-
-	/**
-	 * Get all Message that not displayed
-	 *
-	 * @return array
-	 */
-	public static function get_messages() {
-
-		return get_site_option( 'backwpup_messages', array() );
-	}
-
-	/**
-	 * Display Messages
-	 *
-	 * @param bool $echo
-	 * @return string
-	 */
-	public static function display_messages( $echo = TRUE ) {
-
-		$message_updated= '';
-		$message_error	= '';
-		$saved_message 	= self::get_messages();
-		$message_id 	= ' id="message"';
-
-		if( empty( $saved_message ) )
-			return '';
-
-		if ( ! empty( $saved_message[ 'updated' ] ) ) {
-			foreach( $saved_message[ 'updated' ] as $msg )
-				$message_updated .= '<p>' .  $msg  . '</p>';
-		}
-		if ( ! empty( $saved_message[ 'error' ] ) ) {
-			foreach( $saved_message[ 'error' ] as $msg )
-				$message_error .= '<p>' .  $msg  . '</p>';
-		}
-
-		update_site_option( 'backwpup_messages', array() );
-
-		if ( ! empty( $message_updated ) ) {
-			$message_updated = '<div' . $message_id . ' class="updated">' . $message_updated . '</div>';
-			$message_id = '';
-		}
-		if ( ! empty( $message_error ) ) {
-			$message_error = '<div' . $message_id . ' class="error">' . $message_error . '</div>';
-		}
-
-		if ( $echo )
-			echo $message_updated . $message_error;
-
-		return $message_updated . $message_error;
-	}
-
-	/**
 	 * Overrides WordPress text in Footer
 	 *
 	 * @param $admin_footer_text string
@@ -392,9 +371,9 @@ final class BackWPup_Admin {
 		$default_text = $admin_footer_text;
 
 		if ( isset( $_REQUEST[ 'page' ] ) && strstr( $_REQUEST[ 'page' ], 'backwpup' ) ) {
-			$admin_footer_text = '<a href="' . __( 'http://marketpress.com', 'backwpup' ) . '" class="mp_logo" title="' . __( 'MarketPress', 'backwpup' ) . '">' . __( 'MarketPress', 'backwpup' ) . '</a>';
+			$admin_footer_text = '<a href="http://inpsyde.com" class="inpsyde_logo" title="Inpsyde GmbH">Inpsyde GmbH</a>';
 			if ( ! class_exists( 'BackWPup_Pro', FALSE ) ) {
-				$admin_footer_text .= sprintf( __( '<a class="backwpup-get-pro" href="%s">Get BackWPup Pro now.</a>', 'backwpup' ), translate( BackWPup::get_plugin_data( 'PluginURI' ), 'backwpup' ) );
+				$admin_footer_text .= sprintf( __( '<a class="backwpup-get-pro" href="%s">Get BackWPup Pro now.</a>', 'backwpup' ), __( 'http://backwpup.com', 'backwpup' ) );
 			}
 
 			return $admin_footer_text . $default_text;
@@ -414,14 +393,13 @@ final class BackWPup_Admin {
 		$default_text = $update_footer_text;
 
 		if ( isset( $_REQUEST[ 'page' ] ) && strstr( $_REQUEST[ 'page' ], 'backwpup') ) {
-			$update_footer_text  = '<span class="backwpup-update-footer"><a href="' . translate( BackWPup::get_plugin_data( 'PluginURI' ), 'backwpup' ) . '">' . BackWPup::get_plugin_data( 'Name' ) . '</a> '. sprintf( __( 'version %s' ,'backwpup'), BackWPup::get_plugin_data( 'Version' ) ) . '</span>';
+			$update_footer_text  = '<span class="backwpup-update-footer"><a href="' . __( 'http://backwpup.com', 'backwpup' ) . '">' . BackWPup::get_plugin_data( 'Name' ) . '</a> '. sprintf( __( 'version %s' ,'backwpup'), BackWPup::get_plugin_data( 'Version' ) ) . '</span>';
 
 			return $update_footer_text . $default_text;
 		}
 
 		return $update_footer_text;
 	}
-
 
 	/**
 	 *  Add filed for selecting user role in user section
@@ -450,7 +428,7 @@ final class BackWPup_Admin {
 		}
 
 		//only if user has other than backwpup role
-		if ( ! empty( $user->roles[ 0 ] ) && in_array( $user->roles[ 0 ], array_keys( $backwpup_roles ) ) ) {
+		if ( ! empty( $user->roles[ 0 ] ) && in_array( $user->roles[ 0 ], array_keys( $backwpup_roles ), true ) ) {
 			return;
 		}
 
@@ -527,38 +505,13 @@ final class BackWPup_Admin {
 		}
 
 		//add new role to user if it not the actual
-		if ( $backwpup_role && in_array( $backwpup_role, $backwpup_roles ) ) {
+		if ( $backwpup_role && in_array( $backwpup_role, $backwpup_roles, true ) ) {
 			$user->add_role( $backwpup_role );
 		}
 
 		return;
 	}
 
-	/**
-	 * Replace some text strings to add backup notify
-	 *
-	 * @param $translations
-	 * @param $text
-	 * @param $domain
-	 *
-	 * @return string
-	 */
-	public function gettext( $translations, $text, $domain ) {
-
-		if ( strstr( $text, '<a href="http://codex.wordpress.org/WordPress_Backups">back up your database and files</a>' ) ) {
-			return sprintf( __( '<strong>Important:</strong> before updating, please <a href="%1$s">back up your database and files</a> with <a href="http://marketpress.de/product/backwpup-pro/">%2$s</a>. For help with updates, visit the <a href="http://codex.wordpress.org/Updating_WordPress">Updating WordPress</a> Codex page.', 'backwpup' ), network_admin_url( 'admin.php?page=backwpupjobs' ), BackWPup::get_plugin_data( 'name' ) );
-		}
-
-		if ( strstr( $text, 'This plugin has <strong>not been tested</strong> with your current version of WordPress.' ) ) {
-			return $translations . '</p></div><div class="updated"><p>' .sprintf( __( '<strong>Important:</strong> before installing this plugin, please <a href="%1$s">back up your database and files</a> with <a href="http://marketpress.de/product/backwpup-pro/">%2$s</a>.', 'backwpup' ), network_admin_url( 'admin.php?page=backwpupjobs' ), BackWPup::get_plugin_data( 'name' ) );
-		}
-
-		if ( strstr( $text, 'This plugin has <strong>not been marked as compatible</strong> with your version of WordPress.' ) ) {
-			return $translations . '</p></div><div class="updated"><p>' .sprintf( __( '<strong>Important:</strong> before installing this plugin, please <a href="%1$s">back up your database and files</a> with <a href="http://marketpress.de/product/backwpup-pro/">%2$s</a>.', 'backwpup' ), network_admin_url( 'admin.php?page=backwpupjobs' ), BackWPup::get_plugin_data( 'name' ) );
-		}
-
-		return $translations;
-	}
-
+	private function __clone() {}
 
 }

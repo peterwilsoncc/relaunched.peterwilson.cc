@@ -1,9 +1,9 @@
-=== BackWPup Free - WordPress Backup Plugin ===
+=== BackWPup - WordPress Backup Plugin ===
 Contributors: inpsyde, danielhuesken, Bueltge, nullbyte
 Tags: Amazon, Amazon S3, back up, backup, chinese, cloud, cloud files, database, db backup, dropbox, dump, file, french, ftp, ftps, german, migrate, multisite, russian, schedule, sftp, storage, S3, time, upload, xml
 Requires at least: 3.8
-Tested up to: 4.4.2
-Stable tag: 3.2.5
+Tested up to: 4.5.2
+Stable tag: 3.3.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -11,7 +11,8 @@ Schedule complete automatic backups of your WordPress installation. Decide which
 
 == Description ==
 
-The **backup plugin** **[BackWPup Free](http://marketpress.com/product/backwpup-pro/)** can be used to save your complete installation including /wp-content/ and push them to an external Backup Service, like **Dropbox**, **S3**, **FTP** and many more, see list below. With a single backup .zip file you are able to easily restore an installation. Please understand: this free version will not be supported as good as the [BackWPup Pro version](http://marketpress.com/product/backwpup-pro/).
+The **backup plugin** **[BackWPup](http://backwpup.com/)** can be used to save your complete installation including /wp-content/ and push them to an external Backup Service, like **Dropbox**, **S3**, **FTP** and many more, see list below. With a single backup .zip file you are able to easily restore an installation. Please understand: this free version will not be supported as good as the [BackWPup Pro version](http://backwpup.com). With our premium version you get first class support and more features.
+
 
 * Database Backup  *(needs mysqli)*
 * WordPress XML Export
@@ -23,7 +24,7 @@ The **backup plugin** **[BackWPup Free](http://marketpress.com/product/backwpup-
 * Store backup to directory
 * Store backup to FTP server *(needs ftp)*
 * Store backup to Dropbox *(needs curl)*
-* Store backup to S3 services *(needs curl)*
+* Store backup to S3 services *(needs PHP 5.3.3, needs curl)*
 * Store backup to Microsoft Azure (Blob) *(needs PHP 5.3.2, curl)*
 * Store backup to RackSpaceCloud *(needs PHP 5.3.2, curl)*
 * Store backup to SugarSync *(needs curl)*
@@ -31,7 +32,7 @@ The **backup plugin** **[BackWPup Free](http://marketpress.com/product/backwpup-
 * PRO: Store backup to Google Drive *(needs PHP 5.3.3, curl)*
 * Send logs and backups by email
 * Multi-site support only as network admin
-* Pro version and support available - [BackWPup Pro](http://marketpress.com/product/backwpup-pro/)
+* Pro version and support available - [BackWPup Pro](http://backwpup.com)
 
 = Requirements =
 * WordPress 3.8 and PHP 5.2.7 required!
@@ -48,11 +49,9 @@ https://www.youtube.com/watch?v=pECMkLE27QQ&w=532&rel=0
 
 **Remember: The most expensive backup is the one you never did! And please test your backups!**
 
-Get the [BackWPup Pro](http://marketpress.com/product/backwpup-pro/) Version with more features on [MarketPress.com](http://marketpress.com/product/backwpup-pro/)
+Get the [BackWPup Pro](http://backwpup.com) Version with more features.
 
 **Made by [Inpsyde](http://inpsyde.com) &middot; We love WordPress**
-
-Have a look at our other premium plugins at [MarketPress.com](http://marketpress.com).
 
 == Frequently Asked Questions ==
 
@@ -101,7 +100,7 @@ Please set CHMOD 775 on the /wp-content/ directory and refresh the BackWPup dash
 
 
 = How do I restore a backup? =
-Up to now, there is no feature in BackWPup to restore a backup. You can follow [these instructions from the WordPress Codex](http://codex.wordpress.org/Restoring_Your_Database_From_Backup) or [this tutorial (also Codex)](http://codex.wordpress.org/WordPress_Backups) for more detailed information on cPanel, Plesk, vDeck and others.
+Up to now, there is no feature in BackWPup to restore a backup. But we are eagerly working on a restore functionality, which is in beta right now. If you like to participate to test the restore feature, please [write an email](mailto:info@inpsyde.com). Meanwhile you can follow [these instructions from the WordPress Codex](http://codex.wordpress.org/Restoring_Your_Database_From_Backup) or [this tutorial (also Codex)](http://codex.wordpress.org/WordPress_Backups) for more detailed information on cPanel, Plesk, vDeck and others.
 
 
 = When I edit a job the Files tab loads forever. =
@@ -152,24 +151,52 @@ Yes. You need to have writing access to the wp-config.php file (usually residing
 5. Dashboard
 
 == Upgrade Notice ==
-= After an upgrade from version 2 =
-
-Please check all settings after the update:
-
-* Dropbox authentication must be done again
-* SugarSync authentication must be done again
-* S3 Settings
-* Google Storage is now in S3
-* Check all your passwords
 
 == Installation ==
 
-1. Download the BackWPup plugin.
-2. Decompress the ZIP file and upload the contents of the archive into `/wp-content/plugins/`.
-3. Activate the plugin through the 'Plugins' menu in WordPress
-
+[You can find a detailed tutorial in the BackWPup documentation.](http://docs.backwpup.com/article/118-install-backwpup)
 
 == Changelog ==
+= Version 3.3.3 =
+* Removed admin notices
+
+= Version 3.3.2 =
+* Notice: For MSAzure requires PHP 5.5 in next BackWPup Version
+* Changed: Colors of Warning and Error messages
+* Changed: Display Blog url in log again
+* Changed: Dreamhost url in S3 destination
+* Changed: Adminbar menu disabled by default
+* Removed: Adminbar plugin name for smaller size
+* Improved: Signal handling more again
+* Fixed: English log with WP 4.6
+
+= Version 3.3.1 =
+* Fixed: Security exploit in getting working data
+* Fixed: Bug in log mail sending
+* Improved: Signal handling again
+* Improved: Restarts on getting folder list
+* Improved: Text Color in log files
+* Changed: URLs to MarketPress and Documentation
+* Changed: Save file list cache for one year
+* Changed: Use WordPress ca-bundle.crt
+* Removed: Server callback check on job start now it is only in Settings > Tab: Information
+
+= Version 3.3 =
+* Improved: Texts removed or rewritten
+* Improved: Security
+* Improved: Response test
+* Changed: Response test to work more as before
+* Changed: Remove user roles on deactivation not on uninstall
+* Removed: PCLZip selection setting
+* Removed: Help tooltips now uses the WordPress way
+* Removed: Old AWS SDK for using backups to S3 with PHP Version lower than 5.3
+* Updated: AWS SDK to Version 2.8.28
+* Updated: MSAZURE SDK to Version 0.4.1
+* Updated: RSC SDK to Version 1.12.2
+* Updated: SwiftMailer to Version 5.2.2
+* Pro Updated: Google SDK to Version 1.1.7
+* Pro Fixed: Glacier will be only display 10 Vaults
+
 = Version 3.2.5 =
 * Fixed: two stored XSS issues
 

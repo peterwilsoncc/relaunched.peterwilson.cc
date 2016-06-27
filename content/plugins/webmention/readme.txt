@@ -1,18 +1,18 @@
-=== WebMention ===
-Contributors: pfefferle
+=== Webmention ===
+Contributors: pfefferle, dshanske
 Donate link: http://14101978.de
 Tags: webmention, pingback, trackback, linkback
-Requires at least: 2.7
-Tested up to: 4.4
-Stable tag: 2.5.0
+Requires at least: 4.5
+Tested up to: 4.5.2
+Stable tag: 2.6.0
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
-WebMention for WordPress!
+Webmention for WordPress!
 
 == Description ==
 
-[WebMention](http://webmention.org/) is a simple and modern alternative to the Pingback/Trackback protocol.
+[Webmention](http://webmention.org/) is a simple and modern alternative to the Pingback/Trackback protocol.
 
 [vimeo https://vimeo.com/85217592]
 -- Video by [Andy Sylvester](http://andysylvester.com/2014/01/27/working-with-webmention-video/)
@@ -25,21 +25,21 @@ From the [spec](http://webmention.org/):
 
 == Frequently Asked Questions ==
 
-= What are WebMentions? =
+= What are Webmentions? =
 
-[WebMention](http://webmention.org) is a simple way to automatically notify any URL when you link to it on your site. From the receivers perpective, it's a way to request notification when other sites link to it.
+[Webmention](http://webmention.org) is a simple way to automatically notify any URL when you link to it on your site. From the receivers perpective, it's a way to request notification when other sites link to it.
 
 It’s a modern alternative to Pingback and other forms of Linkback.
 
-= How can I send WebMentions =
+= How can I send Webmentions =
 
-Activate sending WebMentions by checking the "Attempt to notify any blogs linked to from the article" option on the Settings --> Discussion page in WordPress.
+Activate sending Webmentions by checking the "Attempt to notify any blogs linked to from the article" option on the Settings --> Discussion page in WordPress.
 
 You can use the `send_webmention($source, $target)` function and pass a source and a target or you can fire an action like `do_action('send_webmention', $source, $target)`.
 
-= How can I handle Homepage-WebMentions =
+= How can I handle Homepage-Webmentions =
 
-WebMentions should be allowed on all URLs of a blog. The plugin currently supports only WebMentions on
+Webmentions should be allowed on all URLs of a blog. The plugin currently supports only Webmentions on
 posts or pages, but it is very simple to add support for other types like homepages or archive pages.
 The easiest way is to provide some kind of a default post/page to show collect all mentions that are no
 comments on a post or a page. The plugin provides a simple filter for that:
@@ -61,6 +61,12 @@ If you want to add a more complex request handler, you should take a look at the
 == Changelog ==
 
 Project maintined on github at [pfefferle/wordpress-webmention](https://github.com/pfefferle/wordpress-webmention).
+
+= 2.6.0 =
+
+* removed duplicate request for HTML via get_meta_tags
+* refactoring
+* limits to same domain
 
 = 2.5.0 =
 
@@ -122,7 +128,7 @@ Project maintined on github at [pfefferle/wordpress-webmention](https://github.c
 
 = 2.1.1 =
 
-* nicer feedback for the WebMention endpoint
+* nicer feedback for the Webmention endpoint
 
 = 2.1.0 =
 
