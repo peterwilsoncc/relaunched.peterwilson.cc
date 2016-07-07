@@ -1,10 +1,10 @@
 === Webmention ===
 Contributors: pfefferle, dshanske
 Donate link: http://14101978.de
-Tags: webmention, pingback, trackback, linkback
+Tags: webmention, pingback, trackback, linkback, indieweb
 Requires at least: 4.5
 Tested up to: 4.5.2
-Stable tag: 2.6.0
+Stable tag: 2.6.1
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
@@ -17,17 +17,17 @@ Webmention for WordPress!
 [vimeo https://vimeo.com/85217592]
 -- Video by [Andy Sylvester](http://andysylvester.com/2014/01/27/working-with-webmention-video/)
 
-From the [spec](http://webmention.org/):
+From the [spec](https://www.w3.org/TR/webmention/):
 
-> Webmention is a simple way to automatically notify any URL when you link to it on your site.
-> From the receivers perpective, it's a way to request notification when other sites link to it.
-> It’s a modern alternative to Pingback and other forms of Linkback.
+> Webmention is a simple way to notify any URL when you link to it on your site.
+> From the receiver's perspective, it's a way to request notifications when other
+> sites link to it.
 
 == Frequently Asked Questions ==
 
 = What are Webmentions? =
 
-[Webmention](http://webmention.org) is a simple way to automatically notify any URL when you link to it on your site. From the receivers perpective, it's a way to request notification when other sites link to it.
+[Webmention](https://www.w3.org/TR/webmention/) is a simple way to automatically notify any URL when you link to it on your site. From the receivers perpective, it's a way to request notification when other sites link to it.
 
 It’s a modern alternative to Pingback and other forms of Linkback.
 
@@ -61,6 +61,10 @@ If you want to add a more complex request handler, you should take a look at the
 == Changelog ==
 
 Project maintined on github at [pfefferle/wordpress-webmention](https://github.com/pfefferle/wordpress-webmention).
+
+= 2.6.1 =
+
+* small fixes
 
 = 2.6.0 =
 

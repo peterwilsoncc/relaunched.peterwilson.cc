@@ -5,7 +5,7 @@
  * Description: Webmention support for WordPress posts
  * Author: pfefferle
  * Author URI: http://notizblog.org/
- * Version: 2.6.0
+ * Version: 2.6.1
  * License: MIT
  * License URI: http://opensource.org/licenses/MIT
  * Text Domain: webmention
@@ -26,7 +26,7 @@ class Webmention_Plugin {
 	/**
 	 * Initialize Webmention Plugin
 	 */
-	public function init() {
+	public static function init() {
 		require_once( dirname( __FILE__ ) . '/includes/functions.php' );
 
 		// initialize Webmention Sender
